@@ -1,0 +1,188 @@
+# ==============================================================================
+# Legatio AI — .gitignore
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Python
+# ------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.tox/
+.nox/
+htmlcov/
+nosetests.xml
+
+# Type checkers / linters
+.mypy_cache/
+.dmypy_cache/
+dmypy.cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+# Jupyter
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# ------------------------------------------------------------------------------
+# Django
+# ------------------------------------------------------------------------------
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+/static_collected/
+instance/
+.webassets-cache
+
+# ------------------------------------------------------------------------------
+# Environment files (NEVER commit secrets)
+# ------------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+# But keep the example file:
+!.env.example
+
+# ------------------------------------------------------------------------------
+# Node / Frontend
+# ------------------------------------------------------------------------------
+node_modules/
+/frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+
+# Build outputs
+/frontend/dist/
+dist/
+dist-ssr/
+*.local
+
+# Vite
+.vite/
+*.tsbuildinfo
+
+# Coverage (frontend)
+/frontend/coverage/
+coverage/
+
+# ------------------------------------------------------------------------------
+# IDEs & Editors
+# ------------------------------------------------------------------------------
+# Zed
+.zed/
+
+# VSCode
+.vscode/
+*.code-workspace
+# (optional: keep shared settings)
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains (PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Sublime / Vim / Emacs
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*~
+.\#*
+\#*\#
+
+# ------------------------------------------------------------------------------
+# Operating Systems
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ------------------------------------------------------------------------------
+# Docker
+# ------------------------------------------------------------------------------
+docker-compose.override.yml
+
+# ------------------------------------------------------------------------------
+# Logs & Temp
+# ------------------------------------------------------------------------------
+logs/
+*.log
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+
+# ------------------------------------------------------------------------------
+# Secrets & Keys (CRITICAL for a trust/authorization project)
+# ------------------------------------------------------------------------------
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials.json
+
+# ------------------------------------------------------------------------------
+# Legatio-specific
+# ------------------------------------------------------------------------------
+# Local agreement exports / generated artifacts
+exports/
+*.export.json

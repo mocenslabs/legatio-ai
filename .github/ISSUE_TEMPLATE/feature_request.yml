@@ -1,0 +1,115 @@
+name: 💡 Feature Request
+description: Suggest a new feature or improvement for Legatio AI
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! 🏛️
+        Please describe the problem you're trying to solve, not just the solution.
+        For significant features, we recommend starting a [Discussion](../../discussions) first.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? Who experiences it?
+      placeholder: |
+        As a user/developer, I struggle with...
+        When I try to..., I can't...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe how you'd like this to work. Be specific if possible.
+      placeholder: |
+        I'd like to be able to...
+        This could work by...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches did you consider? Why were they insufficient?
+      placeholder: |
+        I considered..., but...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature Area
+      description: Which part of Legatio would this affect?
+      options:
+        - Policy Engine
+        - Constitution / Rules
+        - Negotiation
+        - Human Approval
+        - Agreement / Signing
+        - Audit Trail
+        - API (backend)
+        - Frontend (Vue)
+        - WebSockets / real-time
+        - A2A / MCP integration
+        - Developer experience / SDK
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      description: How large is this feature?
+      options:
+        - Small — minor enhancement, quick to implement
+        - Medium — new capability, moderate effort
+        - Large — significant feature, needs design discussion
+        - Architectural — changes core design, needs an ADR
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: How would we know this feature is complete? List testable criteria.
+      placeholder: |
+        - [ ] User can...
+        - [ ] Policy Engine returns...
+        - [ ] Audit event is created when...
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, mockups, or references.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: alignment
+    attributes:
+      label: Architecture Alignment
+      description: |
+        Legatio has strict architectural invariants. Please confirm your proposal respects them.
+      options:
+        - label: This feature does NOT allow an LLM to make authorization decisions.
+          required: true
+        - label: This feature does NOT bypass the Policy Engine.
+          required: true
+        - label: This feature preserves auditability (state changes produce AuditEvents).
+          required: true
+        - label: I understand significant features require a design discussion / ADR.
+          required: false

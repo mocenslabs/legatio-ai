@@ -1,10 +1,15 @@
 # Legatio AI — Data Model Specification
 
 > **Version:** 1.0
+
 > **Status:** Approved
+
 > **Date:** August 19, 2026
+
 > **Author:** Architecture Team
-> **Repository:** `legatio-ai/legatio`
+
+> **Repository:** `mocenslabs/legatio-ai`
+
 > **Depends on:** `01-PRD.md` (v1.0), `02-ARCHITECTURE.md` (v1.0)
 
 ---
@@ -1340,6 +1345,6 @@ ExternalProtocolBinding
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 1.0 | 2026-08-19 | Architecture Team | Initial approved version. |
+| 1.0 | 2026-08-19 | Mauro Vicens | Initial approved version. |
 
 ---

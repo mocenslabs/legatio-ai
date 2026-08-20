@@ -1,10 +1,14 @@
 # Legatio AI — Architecture Decision Record (ADR)
 
 > **Version:** 1.0
+
 > **Status:** Approved
+
 > **Date:** August 19, 2026
-> **Author:** Architecture Team
-> **Repository:** `legatio-ai/legatio`
+
+> **Author:** Mauro Vicens
+
+> **Repository:** `mocenslabs/legatio-ai`
 > **Depends on:** `01-PRD.md` (v1.0)
 
 ---
@@ -1294,6 +1298,6 @@ These are NOT part of the MVP but are documented for future reference.
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 1.0 | 2026-08-19 | Architecture Team | Initial approved version. |
+| 1.0 | 2026-08-19 | Mauro Vicens | Initial approved version. |
 
 ---

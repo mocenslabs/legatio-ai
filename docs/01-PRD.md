@@ -1,10 +1,14 @@
 # Legatio AI — Product Requirements Document (PRD)
 
 > **Version:** 1.0
+
 > **Status:** Approved for development
+
 > **Date:** August 19, 2026
-> **Author:** Product Team
-> **Repository:** `legatio-ai/legatio`
+
+> **Author:** Mauro Vicens
+
+> **Repository:** `mocenslabs/legatio-ai`
 
 ---
 
@@ -1226,6 +1230,6 @@ audit.event               // Audit event
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 1.0 | 2026-08-19 | Product Team | Initial approved version. |
+| 1.0 | 2026-08-19 | Mauro Vicens | Initial approved version. |
 
 ---

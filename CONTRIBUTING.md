@@ -73,16 +73,16 @@ Before contributing, make sure you have installed:
 
 ```bash
 # 1. Fork the repository on GitHub, then clone your fork
-git clone https://github.com/YOUR_USERNAME/legatio-ai.git
+git clone https://github.com/mocenslabs/legatio-ai.git
 cd legatio-ai
 
 # 2. Add the upstream remote
-git remote add upstream https://github.com/ORIGINAL_OWNER/legatio-ai.git
+git remote add upstream https://github.com/mocenslabs/legatio-ai.git
 
 # 3. Verify remotes
 git remote -v
-# origin    https://github.com/YOUR_USERNAME/legatio-ai.git (fetch)
-# upstream  https://github.com/ORIGINAL_OWNER/legatio-ai.git (fetch)
+# origin    https://github.com/mocenslabs/legatio-ai.git (fetch)
+# upstream  https://github.com/mocenslabs/legatio-ai.git (fetch)
 ```
 
 ---

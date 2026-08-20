@@ -294,7 +294,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution workflo
 
 Legatio AI handles authorization decisions for AI agents. Security is not a feature — it's the product.
 
-- **Report vulnerabilities privately:** security@legatio.ai (or use GitHub's private vulnerability reporting).
+- **Report vulnerabilities privately:** mocenslabs@gmail.com (or use GitHub's private vulnerability reporting).
 - **Do NOT open public issues for security bugs.**
 - See [SECURITY.md](SECURITY.md) for our full security policy.
 

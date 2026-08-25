@@ -172,7 +172,7 @@ If you need a project with faster response times or synchronous collaboration, w
 
 ---
 
-**Maintainer:** [Mauro Vicens / @mocenslabs]  
-**Timezone:** GMT-3 (Argentina)  
-**Availability:** Mon-Fri, 9:30-11:00 AM  
+**Maintainer:** [Mauro Vicens / @mocenslabs]
+**Timezone:** GMT-3 (Argentina)
+**Availability:** Mon-Fri, 9:30-11:00 AM
 **Last updated:** August 20, 2026

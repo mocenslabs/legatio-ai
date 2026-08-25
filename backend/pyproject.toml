@@ -1,0 +1,29 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow star imports in Django settings (standard pattern)
+"legatio/settings/*.py" = ["F403", "F405"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+plugins = [
+    "mypy_django_plugin.main",
+    "mypy_drf_plugin.main",
+]
+
+[tool.django-stubs]
+django_settings_module = "legatio.settings.development"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "legatio.settings.development"
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --cov=apps --cov-report=term-missing"

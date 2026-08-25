@@ -182,13 +182,13 @@ Set up the project infrastructure so that all subsequent phases can focus on bus
 
 ### 4.4 Acceptance Criteria
 
-- [ ] `docker-compose up` starts all services successfully.
+- [x] `docker-compose up` starts all services successfully.
 - [ ] Django admin accessible at `localhost:8000/admin`.
 - [ ] Vue dev server accessible at `localhost:5173`.
 - [ ] `pytest` runs with 0 tests (but framework configured).
 - [ ] `npm run build` produces production bundle without errors.
 - [ ] GitHub Actions pipeline passes on first push.
-- [ ] All 5 documentation files exist in `/docs`.
+- [x] All 5 documentation files exist in `/docs`.
 - [ ] A new developer can set up the project in < 10 minutes using README.
 
 ### 4.5 Dependencies

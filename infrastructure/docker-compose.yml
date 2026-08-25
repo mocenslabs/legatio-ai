@@ -1,0 +1,140 @@
+services:
+  # ──────────────────────────────────────────────
+  # PostgreSQL Database
+  # ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: legatio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-legatio}
+      POSTGRES_USER: ${DB_USER:-legatio}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-legatio}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-legatio} -d ${DB_NAME:-legatio}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────────────
+  # Redis (Cache + Message Broker)
+  # ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: legatio-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────────────
+  # Django Backend (Development with hot reload)
+  # ──────────────────────────────────────────────
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    container_name: legatio-backend
+    restart: unless-stopped
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      DJANGO_SETTINGS_MODULE: legatio.settings.development
+      SECRET_KEY: ${SECRET_KEY:-django-insecure-dev-only-key-change-in-production}
+      DEBUG: "True"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
+      DB_NAME: ${DB_NAME:-legatio}
+      DB_USER: ${DB_USER:-legatio}
+      DB_PASSWORD: ${DB_PASSWORD:-legatio}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ──────────────────────────────────────────────
+  # Celery Worker (Async task processing)
+  # ──────────────────────────────────────────────
+  celery-worker:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    container_name: legatio-celery-worker
+    restart: unless-stopped
+    command: celery -A legatio worker --loglevel=info --concurrency=2
+    environment:
+      DJANGO_SETTINGS_MODULE: legatio.settings.development
+      SECRET_KEY: ${SECRET_KEY:-django-insecure-dev-only-key-change-in-production}
+      DEBUG: "True"
+      DB_NAME: ${DB_NAME:-legatio}
+      DB_USER: ${DB_USER:-legatio}
+      DB_PASSWORD: ${DB_PASSWORD:-legatio}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    volumes:
+      - ../backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ──────────────────────────────────────────────
+  # Celery Beat (Scheduled tasks)
+  # ──────────────────────────────────────────────
+  celery-beat:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    container_name: legatio-celery-beat
+    restart: unless-stopped
+    command: celery -A legatio beat --loglevel=info
+    environment:
+      DJANGO_SETTINGS_MODULE: legatio.settings.development
+      SECRET_KEY: ${SECRET_KEY:-django-insecure-dev-only-key-change-in-production}
+      DEBUG: "True"
+      DB_NAME: ${DB_NAME:-legatio}
+      DB_USER: ${DB_USER:-legatio}
+      DB_PASSWORD: ${DB_PASSWORD:-legatio}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    volumes:
+      - ../backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

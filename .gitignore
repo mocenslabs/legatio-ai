@@ -1,10 +1,6 @@
-# ==============================================================================
-# Legatio AI — .gitignore
-# ==============================================================================
-
-# ------------------------------------------------------------------------------
-# Python
-# ------------------------------------------------------------------------------
+# ============================================================
+# Python / Django
+# ============================================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -16,173 +12,93 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
 var/
 wheels/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
 # Virtual environments
 venv/
 .venv/
 env/
 ENV/
-env.bak/
-venv.bak/
 
-# Testing / coverage
-.pytest_cache/
-.coverage
-.coverage.*
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.tox/
-.nox/
-htmlcov/
-nosetests.xml
-
-# Type checkers / linters
-.mypy_cache/
-.dmypy_cache/
-dmypy.cache/
-.ruff_cache/
-.pyre/
-.pytype/
-
-# Jupyter
-.ipynb_checkpoints/
-profile_default/
-ipython_config.py
-
-# ------------------------------------------------------------------------------
 # Django
-# ------------------------------------------------------------------------------
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-/media/
-/staticfiles/
-/static_collected/
-instance/
-.webassets-cache
+/media
+/staticfiles
+/static
 
-# ------------------------------------------------------------------------------
-# Environment files (NEVER commit secrets)
-# ------------------------------------------------------------------------------
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+
+# ============================================================
+# Node / Frontend
+# ============================================================
+node_modules/
+frontend/dist/
+frontend/.output/
+.npm
+.eslintcache
+*.local
+
+# ============================================================
+# Environment variables (NEVER commit secrets)
+# ============================================================
 .env
 .env.local
 .env.*.local
-.env.production
-.env.staging
-# But keep the example file:
-!.env.example
+infrastructure/.env
 
-# ------------------------------------------------------------------------------
-# Node / Frontend
-# ------------------------------------------------------------------------------
-node_modules/
-/frontend/node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-.pnpm-store/
-
-# Build outputs
-/frontend/dist/
-dist/
-dist-ssr/
-*.local
-
-# Vite
-.vite/
-*.tsbuildinfo
-
-# Coverage (frontend)
-/frontend/coverage/
-coverage/
-
-# ------------------------------------------------------------------------------
-# IDEs & Editors
-# ------------------------------------------------------------------------------
-# Zed
-.zed/
-
-# VSCode
+# ============================================================
+# IDE / Editors
+# ============================================================
 .vscode/
-*.code-workspace
-# (optional: keep shared settings)
-!.vscode/extensions.json
-!.vscode/settings.json
-
-# JetBrains (PyCharm, WebStorm, etc.)
 .idea/
-*.iml
-*.ipr
-*.iws
-out/
-
-# Sublime / Vim / Emacs
-*.sublime-workspace
-*.sublime-project
 *.swp
 *.swo
 *~
-.\#*
-\#*\#
+.project
+.settings/
 
-# ------------------------------------------------------------------------------
-# Operating Systems
-# ------------------------------------------------------------------------------
+# ============================================================
+# OS files
+# ============================================================
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
 Thumbs.db
-desktop.ini
+ehthumbs.db
 
-# ------------------------------------------------------------------------------
-# Docker
-# ------------------------------------------------------------------------------
-docker-compose.override.yml
+# ============================================================
+# Docker volumes (local)
+# ============================================================
+infrastructure/postgres_data/
+infrastructure/redis_data/
 
-# ------------------------------------------------------------------------------
-# Logs & Temp
-# ------------------------------------------------------------------------------
-logs/
-*.log
-tmp/
-temp/
-*.tmp
-*.bak
-*.swp
-
-# ------------------------------------------------------------------------------
-# Secrets & Keys (CRITICAL for a trust/authorization project)
-# ------------------------------------------------------------------------------
-*.pem
-*.key
-*.crt
-*.p12
-*.pfx
-secrets/
-credentials.json
-
-# ------------------------------------------------------------------------------
-# Legatio-specific
-# ------------------------------------------------------------------------------
-# Local agreement exports / generated artifacts
-exports/
-*.export.json
+# ============================================================
+# Misc
+# ============================================================
+*.pid
+*.seed
+*.pid.lock

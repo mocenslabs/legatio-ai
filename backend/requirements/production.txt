@@ -1,0 +1,17 @@
+-r base.txt
+
+# Production Server
+gunicorn==21.2.0
+uvicorn[standard]==0.27.0
+
+# Security
+django-csp==3.7
+
+# Performance
+django-redis==5.4.0
+
+# Monitoring
+prometheus-client==0.19.0
+
+# Logging
+python-json-logger==2.0.7

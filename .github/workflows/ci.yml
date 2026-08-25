@@ -1,0 +1,100 @@
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # ──────────────────────────────────────────────
+  # Backend: Lint + Test
+  # ──────────────────────────────────────────────
+  backend:
+    name: Backend (lint + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: legatio
+          POSTGRES_USER: legatio
+          POSTGRES_PASSWORD: legatio
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements/base.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/development.txt
+
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Check formatting with black
+        run: black --check --line-length=100 .
+
+      - name: Type check with mypy
+        run: mypy . || true  # Non-blocking until mypy config stabilizes
+
+      - name: Run tests with pytest
+        env:
+          DJANGO_SETTINGS_MODULE: legatio.settings.development
+          SECRET_KEY: ci-test-secret-key
+          DB_HOST: localhost
+          DB_PORT: "5432"
+          DB_NAME: legatio
+          DB_USER: legatio
+          DB_PASSWORD: legatio
+          REDIS_HOST: localhost
+          REDIS_PORT: "6379"
+        run: pytest
+
+  # ──────────────────────────────────────────────
+  # Pre-commit hooks
+  # ──────────────────────────────────────────────
+  pre-commit:
+    name: Pre-commit hooks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1

@@ -1,0 +1,1 @@
+"""Legatio AI Settings Package."""

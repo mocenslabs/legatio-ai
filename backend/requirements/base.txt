@@ -1,0 +1,53 @@
+# Core Django
+Django==5.0.1
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+djangorestframework-simplejwt==5.3.1
+
+# Database
+psycopg2-binary==2.9.9
+
+# Async & WebSocket
+channels==4.0.0
+channels-redis==4.2.0
+daphne==4.0.0
+
+# Task Queue
+celery==5.3.6
+redis==5.0.1
+
+# Authentication
+django-allauth==0.60.1
+PyJWT==2.8.0
+pyotp==2.9.0
+
+# Encryption
+django-cryptography==1.1
+
+# Data Validation
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Utilities
+python-decouple==3.8
+python-dateutil==2.8.2
+
+# API Documentation
+drf-spectacular==0.27.0
+
+# Monitoring
+sentry-sdk==1.39.2
+
+# Testing
+pytest==7.4.4
+pytest-django==4.7.0
+pytest-cov==4.1.0
+pytest-asyncio==0.23.3
+factory-boy==3.3.0
+faker==22.5.1
+
+# Code Quality
+ruff==0.1.14
+mypy==1.8.0
+django-stubs==4.2.7
+djangorestframework-stubs==3.14.5

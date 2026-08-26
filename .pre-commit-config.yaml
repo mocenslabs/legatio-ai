@@ -41,3 +41,26 @@ repos:
           - djangorestframework-stubs==3.14.5
         args: ['--ignore-missing-imports']
         files: ^backend/
+
+  # ──────────────────────────────────────────────
+  # Frontend: Prettier (formatting)
+  # ──────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types_or: [javascript, jsx, ts, tsx, vue, css, json, yaml]
+        files: ^frontend/
+
+  # ──────────────────────────────────────────────
+  # Frontend: ESLint (linting)
+  # ──────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        entry: bash -c 'cd frontend && npm run lint'
+        language: system
+        types_or: [javascript, jsx, ts, tsx, vue]
+        files: ^frontend/
+        pass_filenames: false

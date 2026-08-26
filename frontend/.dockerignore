@@ -1,0 +1,31 @@
+# Dependencies (rebuilt inside container)
+node_modules/
+npm-debug.log*
+
+# Build output
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files (local only)
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+LICENSE
+
+# Tests (not needed in dev container for now)
+coverage/

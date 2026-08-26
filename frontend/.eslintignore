@@ -1,0 +1,23 @@
+cd /home/blackeagle/projects/legatio-ai/frontend
+cat > .eslintignore << 'EOF'
+# Build output
+dist/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.d.ts
+*.d.ts.map
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# shadcn-vue generated components (optional - uncomment if you want to skip linting them)
+# src/components/ui/
+EOF

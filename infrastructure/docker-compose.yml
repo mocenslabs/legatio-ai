@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   # ──────────────────────────────────────────────
   # PostgreSQL Database
@@ -132,6 +134,37 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+
+  # ──────────────────────────────────────────────
+  # Vue Frontend (Development with HMR)
+  # ──────────────────────────────────────────────
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.dev
+    container_name: legatio-frontend
+    restart: unless-stopped
+    command: npm run dev -- --host 0.0.0.0
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+      VITE_WS_URL: ws://localhost:8000/ws
+      VITE_APP_ENV: development
+    ports:
+      - "5173:5173"
+    volumes:
+      # Mount source code for hot-reload, but exclude node_modules
+      - ../frontend/src:/app/src
+      - ../frontend/public:/app/public
+      - ../frontend/index.html:/app/index.html
+      - ../frontend/vite.config.ts:/app/vite.config.ts
+      - ../frontend/tailwind.config.js:/app/tailwind.config.js
+      - ../frontend/tsconfig.json:/app/tsconfig.json
+      - ../frontend/tsconfig.app.json:/app/tsconfig.app.json
+      - ../frontend/tsconfig.node.json:/app/tsconfig.node.json
+      - ../frontend/components.json:/app/components.json
+      # node_modules is managed inside the container
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

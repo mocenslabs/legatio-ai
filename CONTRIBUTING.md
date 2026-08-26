@@ -190,7 +190,6 @@ We enforce style automatically. **Do not fight the formatter.**
 
 | Tool | Purpose |
 |------|---------|
-| `black` | Code formatting (line length 88) |
 | `ruff` | Linting and import sorting |
 | `mypy` | Static type checking (strict) |
 | `pytest` | Testing framework |
@@ -228,7 +227,6 @@ def evaluate_policy(
 
 ```bash
 cd backend
-black .
 ruff check --fix .
 mypy .
 ```

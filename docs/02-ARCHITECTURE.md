@@ -341,7 +341,7 @@ Each significant architectural decision is recorded as an ADR. These are immutab
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| Python | 3.11+ | Runtime |
+| Python | 3.12+ | Runtime |
 | Django | 5.0+ | Web framework |
 | Django REST Framework | 3.14+ | REST APIs |
 | Django Channels | 4.0+ | WebSockets |
@@ -353,7 +353,6 @@ Each significant architectural decision is recorded as an ADR. These are immutab
 | Pydantic | 2.5+ | Data validation |
 | pytest | 7.4+ | Testing framework |
 | pytest-django | 4.7+ | Django test integration |
-| black | 24.0+ | Code formatting |
 | ruff | 0.1+ | Linting |
 | mypy | 1.8+ | Type checking |
 | uvicorn | 0.27+ | ASGI server |

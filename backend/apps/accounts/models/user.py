@@ -10,15 +10,12 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 
 
-class UserManager(BaseUserManager):
+class UserManager(BaseUserManager["User"]):
     """Custom manager for User model with email as unique identifier."""
 
     def create_user(
-        self,
-        email: str,
-        password: str | None = None,
-        **extra_fields
-    ) -> 'User':
+        self, email: str, password: str | None = None, **extra_fields: object
+    ) -> "User":
         """
         Create and return a regular user with an email and password.
 
@@ -34,7 +31,7 @@ class UserManager(BaseUserManager):
             ValueError: If email is not provided.
         """
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
@@ -43,11 +40,8 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(
-        self,
-        email: str,
-        password: str | None = None,
-        **extra_fields
-    ) -> 'User':
+        self, email: str, password: str | None = None, **extra_fields: object
+    ) -> "User":
         """
         Create and return a superuser with an email and password.
 
@@ -59,15 +53,15 @@ class UserManager(BaseUserManager):
         Returns:
             The created superuser instance.
         """
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('is_verified', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_verified", True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
 
         return self.create_user(email, password, **extra_fields)
 
@@ -90,49 +84,49 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         max_length=255,
         db_index=True,
-        help_text='User email address (used as login identifier)',
+        help_text="User email address (used as login identifier)",
     )
     first_name: models.CharField = models.CharField(  # type: ignore[assignment]
         max_length=100,
         blank=True,
-        default='',
+        default="",
     )
     last_name: models.CharField = models.CharField(  # type: ignore[assignment]
         max_length=100,
         blank=True,
-        default='',
+        default="",
     )
     is_active: models.BooleanField = models.BooleanField(  # type: ignore[assignment]
         default=True,
-        help_text='Designates whether this user should be treated as active.',
+        help_text="Designates whether this user should be treated as active.",
     )
     is_staff: models.BooleanField = models.BooleanField(  # type: ignore[assignment]
         default=False,
-        help_text='Designates whether the user can log into the admin site.',
+        help_text="Designates whether the user can log into the admin site.",
     )
     is_verified: models.BooleanField = models.BooleanField(  # type: ignore[assignment]
         default=False,
-        help_text='Designates whether the user has verified their email.',
+        help_text="Designates whether the user has verified their email.",
     )
     two_factor_enabled: models.BooleanField = models.BooleanField(  # type: ignore[assignment]
         default=False,
-        help_text='Designates whether the user has 2FA enabled.',
+        help_text="Designates whether the user has 2FA enabled.",
     )
     totp_secret: models.CharField = models.CharField(  # type: ignore[assignment]
         max_length=32,
         null=True,
         blank=True,
-        help_text='Encrypted TOTP secret for 2FA.',
+        help_text="Encrypted TOTP secret for 2FA.",
     )
     preferred_language: models.CharField = models.CharField(  # type: ignore[assignment]
         max_length=10,
-        default='en',
-        help_text='User preferred language (ISO 639-1).',
+        default="en",
+        help_text="User preferred language (ISO 639-1).",
     )
     preferred_timezone: models.CharField = models.CharField(  # type: ignore[assignment]
         max_length=50,
-        default='UTC',
-        help_text='User preferred timezone (IANA timezone).',
+        default="UTC",
+        help_text="User preferred timezone (IANA timezone).",
     )
     last_login: models.DateTimeField = models.DateTimeField(  # type: ignore[assignment]
         null=True,
@@ -140,33 +134,46 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     date_joined: models.DateTimeField = models.DateTimeField(  # type: ignore[assignment]
         auto_now_add=True,
-        help_text='Timestamp when the user was created.',
+        help_text="Timestamp when the user was created.",
     )
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     class Meta:
-        db_table = 'legatio_accounts_user'
-        verbose_name = 'user'
-        verbose_name_plural = 'users'
-        ordering = ['-date_joined']
+        db_table = "legatio_accounts_user"
+        verbose_name = "user"
+        verbose_name_plural = "users"
+        ordering = ["-date_joined"]
         indexes = [
-            models.Index(fields=['email'], name='idx_user_email'),
-            models.Index(fields=['-date_joined'], name='idx_user_date_joined'),
+            models.Index(fields=["email"], name="idx_user_email"),
+            models.Index(fields=["-date_joined"], name="idx_user_date_joined"),
         ]
 
     def __str__(self) -> str:
         """Return string representation of the user."""
-        return self.email
+        return str(self.email)
 
     def get_full_name(self) -> str:
-        """Return the first_name plus the last_name, with a space in between."""
-        full_name = f'{self.first_name} {self.last_name}'.strip()
-        return full_name or self.email
+        """Return the first_name plus the last_name, with a space in between.
+
+        If both names are empty, falls back to the user's email.
+        """
+        first = str(self.first_name or "").strip()
+        last = str(self.last_name or "").strip()
+        full_name = f"{first} {last}".strip()
+        if full_name:
+            return full_name
+        return str(self.email or "")
 
     def get_short_name(self) -> str:
-        """Return the short name for the user."""
-        return self.first_name or self.email
+        """Return the short name for the user.
+
+        Uses first_name if available, otherwise falls back to email.
+        """
+        first = str(self.first_name or "").strip()
+        if first:
+            return first
+        return str(self.email or "")

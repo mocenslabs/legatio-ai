@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -166,9 +165,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "avatar_url",
-                    models.URLField(
-                        blank=True, help_text="URL to user avatar image.", null=True
-                    ),
+                    models.URLField(blank=True, help_text="URL to user avatar image.", null=True),
                 ),
                 (
                     "notification_preferences",

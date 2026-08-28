@@ -1,5 +1,3 @@
-cd /home/blackeagle/projects/legatio-ai/frontend
-cat > .eslintignore << 'EOF'
 # Build output
 dist/
 
@@ -17,7 +15,3 @@ coverage/
 # Logs
 *.log
 npm-debug.log*
-
-# shadcn-vue generated components (optional - uncomment if you want to skip linting them)
-# src/components/ui/
-EOF

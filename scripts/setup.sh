@@ -1,111 +1,140 @@
 #!/usr/bin/env bash
-# ============================================================
-# Legatio AI - One-Command Development Setup
-# ============================================================
-# This script sets up the complete development environment.
-# Usage: ./scripts/setup.sh
-# ============================================================
+# ==============================================================================
+# Legatio AI — One-Command Development Setup
+#
+# Prepares the local Python/Node environments, starts Docker infrastructure,
+# applies migrations, and runs the Phase 0 quality gate.
+# ===============================================================================
 
 set -euo pipefail
 
-# ──────────────────────────────────────────────
-# Colors & helpers
-# ──────────────────────────────────────────────
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-log()   { echo -e "${BLUE}[$(date +%H:%M:%S)]${NC} $1"; }
-ok()    { echo -e "${GREEN}[$(date +%H:%M:%S)]${NC} ✅ $1"; }
-warn()  { echo -e "${YELLOW}[$(date +%H:%M:%S)]${NC} ⚠️  $1"; }
-fail()  { echo -e "${RED}[$(date +%H:%M:%S)]${NC} ❌ $1"; exit 1; }
+log()  { printf '%b[%s]%b %s\n' "$BLUE" "$(date +%H:%M:%S)" "$NC" "$1"; }
+ok()   { printf '%b[%s]%b ✅ %s\n' "$GREEN" "$(date +%H:%M:%S)" "$NC" "$1"; }
+warn() { printf '%b[%s]%b ⚠️  %s\n' "$YELLOW" "$(date +%H:%M:%S)" "$NC" "$1"; }
+fail() { printf '%b[%s]%b ❌ %s\n' "$RED" "$(date +%H:%M:%S)" "$NC" "$1"; exit 1; }
 
-# Project root is one level up from this script
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BACKEND_DIR="$PROJECT_ROOT/backend"
+FRONTEND_DIR="$PROJECT_ROOT/frontend"
+COMPOSE_FILE="$PROJECT_ROOT/infrastructure/docker-compose.yml"
+PYTHON_BIN="$BACKEND_DIR/.venv/bin/python"
+
 cd "$PROJECT_ROOT"
 
-echo ""
-echo "═══════════════════════════════════════════════"
-echo "   Legatio AI — Development Environment Setup"
-echo "═══════════════════════════════════════════════"
-echo ""
+printf '\n'
+printf '%s\n' '═══════════════════════════════════════════════'
+printf '%s\n' '   Legatio AI — Development Environment Setup'
+printf '%s\n' '═══════════════════════════════════════════════'
+printf '\n'
 
-# ──────────────────────────────────────────────
-# Step 1: Verify Docker
-# ──────────────────────────────────────────────
-log "[1/6] Verifying Docker..."
-command -v docker >/dev/null 2>&1 || fail "Docker is not installed. Visit https://docs.docker.com/get-docker/"
-docker compose version >/dev/null 2>&1 || fail "Docker Compose is not installed."
-ok "Docker $(docker --version | awk '{print $3}' | tr -d ',')"
-ok "Docker Compose $(docker compose version --short)"
+# ------------------------------------------------------------------------------
+# 1. Required tools
+# ------------------------------------------------------------------------------
+log '[1/8] Verifying required tools...'
+command -v python3.12 >/dev/null 2>&1 || fail 'Python 3.12 is required.'
+command -v node >/dev/null 2>&1 || fail 'Node.js is required.'
+command -v npm >/dev/null 2>&1 || fail 'npm is required.'
+command -v docker >/dev/null 2>&1 || fail 'Docker is required.'
+docker compose version >/dev/null 2>&1 || fail 'Docker Compose is required.'
 
-# ──────────────────────────────────────────────
-# Step 2: Verify .env files
-# ──────────────────────────────────────────────
-log "[2/6] Verifying environment files..."
-if [ ! -f "infrastructure/.env" ]; then
-    warn "infrastructure/.env not found — creating from defaults"
-    cat > infrastructure/.env <<EOF
+PYTHON_VERSION="$(python3.12 --version 2>&1)"
+NODE_VERSION="$(node --version)"
+ok "$PYTHON_VERSION"
+ok "Node.js $NODE_VERSION"
+ok "$(docker compose version --short | sed 's/^/Docker Compose /')"
+
+# ------------------------------------------------------------------------------
+# 2. Backend virtual environment and dependencies
+# ------------------------------------------------------------------------------
+log '[2/8] Preparing backend virtual environment...'
+if [ ! -x "$PYTHON_BIN" ]; then
+    python3.12 -m venv "$BACKEND_DIR/.venv"
+    ok 'Created backend/.venv'
+else
+    ok 'backend/.venv already exists'
+fi
+
+"$PYTHON_BIN" -m pip install --upgrade pip
+"$PYTHON_BIN" -m pip install -r "$BACKEND_DIR/requirements/development.txt"
+ok 'Backend dependencies installed'
+
+# ------------------------------------------------------------------------------
+# 3. Frontend dependencies
+# ------------------------------------------------------------------------------
+log '[3/8] Installing frontend dependencies...'
+cd "$FRONTEND_DIR"
+npm ci
+cd "$PROJECT_ROOT"
+ok 'Frontend dependencies installed'
+
+# ------------------------------------------------------------------------------
+# 4. Pre-commit
+# ------------------------------------------------------------------------------
+log '[4/8] Installing pre-commit hooks...'
+"$PYTHON_BIN" -m pre_commit install
+ok 'Pre-commit hooks installed'
+
+# ------------------------------------------------------------------------------
+# 5. Environment files
+# ------------------------------------------------------------------------------
+log '[5/8] Verifying environment files...'
+if [ ! -f "$PROJECT_ROOT/infrastructure/.env" ]; then
+    warn 'infrastructure/.env not found; creating development defaults'
+    cat > "$PROJECT_ROOT/infrastructure/.env" <<'ENVEOF'
 DB_NAME=legatio
 DB_USER=legatio
 DB_PASSWORD=legatio
 SECRET_KEY=django-insecure-dev-only-key-change-in-production
 DEBUG=True
-EOF
+ENVEOF
 fi
-ok "Environment files ready"
 
-# ──────────────────────────────────────────────
-# Step 3: Start infrastructure (PostgreSQL + Redis)
-# ──────────────────────────────────────────────
-log "[3/6] Starting infrastructure (PostgreSQL + Redis)..."
-cd infrastructure
-docker compose up -d postgres redis
-cd "$PROJECT_ROOT"
+if [ ! -f "$BACKEND_DIR/.env" ]; then
+    cp "$BACKEND_DIR/.env.example" "$BACKEND_DIR/.env"
+fi
 
-log "Waiting for services to become healthy..."
-sleep 5
-ok "PostgreSQL and Redis are up"
+if [ ! -f "$FRONTEND_DIR/.env" ]; then
+    cp "$FRONTEND_DIR/.env.example" "$FRONTEND_DIR/.env"
+fi
+ok 'Environment files ready'
 
-# ──────────────────────────────────────────────
-# Step 4: Build & start backend
-# ──────────────────────────────────────────────
-log "[4/6] Building and starting backend..."
-cd infrastructure
-docker compose build backend
-docker compose up -d backend celery-worker celery-beat
-cd "$PROJECT_ROOT"
-ok "Backend services started"
+# ------------------------------------------------------------------------------
+# 6. Docker services
+# ------------------------------------------------------------------------------
+log '[6/8] Starting Docker services...'
+docker compose -f "$COMPOSE_FILE" up -d --build
+ok 'Docker services started'
 
-# ──────────────────────────────────────────────
-# Step 5: Run migrations
-# ──────────────────────────────────────────────
-log "[5/6] Running database migrations..."
-cd infrastructure
-docker compose exec -T backend python manage.py migrate
-cd "$PROJECT_ROOT"
-ok "Migrations applied"
+# ------------------------------------------------------------------------------
+# 7. Database and Django checks
+# ------------------------------------------------------------------------------
+log '[7/8] Applying migrations and checking Django...'
+docker compose -f "$COMPOSE_FILE" exec -T backend python manage.py migrate
+"$PYTHON_BIN" "$BACKEND_DIR/manage.py" check
+"$PYTHON_BIN" "$BACKEND_DIR/manage.py" makemigrations --check --dry-run
+ok 'Django checks and migrations passed'
 
-# ──────────────────────────────────────────────
-# Step 6: Verify health
-# ──────────────────────────────────────────────
-log "[6/6] Verifying services..."
-cd infrastructure
-docker compose ps
-cd "$PROJECT_ROOT"
+# ------------------------------------------------------------------------------
+# 8. Phase 0 quality gate
+# ------------------------------------------------------------------------------
+log '[8/8] Running Phase 0 quality gate...'
+make --no-print-directory check
 
-echo ""
-echo "═══════════════════════════════════════════════"
-ok "Setup complete!"
-echo "═══════════════════════════════════════════════"
-echo ""
-echo "  Django admin:    http://localhost:8000/admin"
-echo "  API docs:        http://localhost:8000/api/docs/"
-echo ""
-echo "  Useful commands:"
-echo "    View logs:      cd infrastructure && docker compose logs -f"
-echo "    Stop services:  cd infrastructure && docker compose down"
-echo "    Restart all:    cd infrastructure && docker compose restart"
-echo ""
+printf '\n'
+printf '%s\n' '═══════════════════════════════════════════════'
+ok 'Legatio AI development environment is ready.'
+printf '%s\n' '═══════════════════════════════════════════════'
+printf '\n'
+printf '%s\n' '  Django admin: http://localhost:8000/admin'
+printf '%s\n' '  Frontend:     http://localhost:5173'
+printf '\n'
+printf '%s\n' '  Stop services: make down'
+printf '%s\n' '  View logs:     make logs'
+printf '%s\n' '  Run checks:    make check'
+printf '%s\n' '  Pre-commit:    make pre-commit'

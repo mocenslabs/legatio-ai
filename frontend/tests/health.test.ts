@@ -18,14 +18,18 @@ describe('Frontend Health Checks', () => {
     expect(result).toBe('success')
   })
 
-  it('can use ES2020+ features', () => {
-    // Nullish coalescing
-    const value = null ?? 'default'
+  it('supports nullish coalescing', () => {
+    // Use a typed variable so TypeScript knows it can be null
+    const maybeValue: string | null = null
+    const value = maybeValue ?? 'default'
     expect(value).toBe('default')
+  })
 
-    // Optional chaining
-    const obj = { nested: { value: 42 } }
-    expect(obj?.nested?.value).toBe(42)
-    expect(obj?.missing?.value).toBeUndefined()
+  it('supports optional chaining', () => {
+    // Type the object so optional properties are valid
+    type Shape = { nested?: { value: number }; missing?: { value: number } }
+    const obj: Shape = { nested: { value: 42 } }
+    expect(obj.nested?.value).toBe(42)
+    expect(obj.missing?.value).toBeUndefined()
   })
 })

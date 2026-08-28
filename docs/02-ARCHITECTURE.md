@@ -346,14 +346,14 @@ Each significant architectural decision is recorded as an ADR. These are immutab
 | Django REST Framework | 3.14+ | REST APIs |
 | Django Channels | 4.0+ | WebSockets |
 | Django Allauth | 0.60+ | Authentication (email, social, 2FA) |
-| Django Cryptography | 9.0+ | Encryption at rest |
+| Application-level encryption | Phase 0 foundation; implementation defined before sensitive data is persisted | Encryption at rest |
 | Celery | 5.3+ | Async task queue |
 | Redis | 7.0+ | Cache, broker, rate limiting |
 | PostgreSQL | 16+ | Primary database |
 | Pydantic | 2.5+ | Data validation |
 | pytest | 7.4+ | Testing framework |
 | pytest-django | 4.7+ | Django test integration |
-| ruff | 0.1+ | Linting |
+| ruff | 0.1+ | Linting and formatting |
 | mypy | 1.8+ | Type checking |
 | uvicorn | 0.27+ | ASGI server |
 | daphne | 4.0+ | ASGI server (WebSocket) |
@@ -1016,7 +1016,7 @@ system.maintenance
 ### 12.4 CI Pipeline
 
 ```text
-push → lint (ruff, black, mypy)
+push → lint (ruff, mypy) + format (ruff)
      → unit tests
      → integration tests
      → build Docker images
@@ -1105,7 +1105,7 @@ Deploy to production (blue/green)
 
 ### 14.1 Python (Backend)
 
-- **Style:** PEP 8, enforced by `black` and `ruff`.
+- **Style:** PEP 8, enforced by `ruff check` and `ruff format`.
 - **Type hints:** Mandatory for all function signatures.
 - **Docstrings:** Google-style for all public functions.
 - **Imports:** Absolute imports; grouped (stdlib, third-party, local).

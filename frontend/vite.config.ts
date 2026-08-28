@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
+
 import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,15 +17,5 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
-  },
-  test: {
-    globals: true,
-    environment: 'happy-dom',
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/main.ts', 'src/vite-env.d.ts', '**/*.d.ts'],
-    },
-    include: ['tests/**/*.{test,spec}.{js,ts}'],
   },
 })

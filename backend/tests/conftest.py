@@ -8,7 +8,7 @@ import pytest
 
 
 @pytest.fixture
-def sample_user_data():
+def sample_user_data() -> dict[str, str]:
     """
     Provide sample user data for tests.
 

@@ -1,48 +1,57 @@
-# ============================================================
-# Legatio AI - Backend Makefile
-# ============================================================
-# Common commands for development workflow
-# Usage: make <command>
-# ============================================================
+# ==============================================================================
+# Legatio AI — Backend Makefile
+# Run from backend/ with the project virtual environment activated or present.
+# ===============================================================================
 
-.PHONY: help install test lint format check migrate makemigrations runserver shell
+.DEFAULT_GOAL := help
+SHELL := /bin/bash
+PYTHON := .venv/bin/python
 
-# Default target
-help: ## Show this help message
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+.PHONY: help install test test-cov lint format format-check typecheck check \
+	migrate makemigrations runserver shell dbshell superuser
 
-install: ## Install all dependencies
-	pip install -r requirements/development.txt
+help: ## Show available backend commands
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-test: ## Run tests with coverage
-	pytest --cov=apps --cov-report=term-missing
+install: ## Install backend development dependencies
+	$(PYTHON) -m pip install -r requirements/development.txt
 
-lint: ## Run linters (ruff)
-	ruff check .
+test: ## Run backend tests with coverage
+	$(PYTHON) -m pytest
 
-format: ## Format code (ruff fix)
+test-cov: ## Run backend tests with an explicit coverage report
+	$(PYTHON) -m pytest --cov=apps --cov=services --cov-report=term-missing
 
-	ruff check --fix .
+lint: ## Run Ruff linting and Mypy
+	$(PYTHON) -m ruff check .
+	$(PYTHON) -m mypy .
 
-typecheck: ## Run type checker (mypy)
-	mypy .
+format: ## Format Python code with Ruff Formatter
+	$(PYTHON) -m ruff format .
 
-check: lint typecheck test ## Run all checks (lint + typecheck + test)
+format-check: ## Check Python formatting without modifying files
+	$(PYTHON) -m ruff format --check .
 
-makemigrations: ## Create new migrations
-	python manage.py makemigrations
+typecheck: ## Run Mypy type checking
+	$(PYTHON) -m mypy .
 
-migrate: ## Apply migrations
-	python manage.py migrate
+check: format-check lint test ## Run the backend quality gate
 
-runserver: ## Start development server
-	python manage.py runserver 0.0.0.0:8000
+migrate: ## Apply Django migrations
+	$(PYTHON) manage.py migrate
+
+makemigrations: ## Create Django migrations
+	$(PYTHON) manage.py makemigrations
+
+runserver: ## Start Django development server
+	$(PYTHON) manage.py runserver 0.0.0.0:8000
 
 shell: ## Open Django shell
-	python manage.py shell
+	$(PYTHON) manage.py shell
 
 dbshell: ## Open database shell
-	python manage.py dbshell
+	$(PYTHON) manage.py dbshell
 
-superuser: ## Create superuser
-	python manage.py createsuperuser
+superuser: ## Create a Django superuser
+	$(PYTHON) manage.py createsuperuser

@@ -10,6 +10,7 @@ Reference: 02-ARCHITECTURE.md Section 5.1 (ADR-006)
 import os
 
 from celery import Celery
+from celery.app.task import Task
 
 # Set the default Django settings module
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legatio.settings.development")
@@ -27,7 +28,7 @@ app.autodiscover_tasks()
 
 
 @app.task(bind=True, ignore_result=True)
-def debug_task(self) -> None:
+def debug_task(self: Task) -> None:
     """
     Debug task to verify Celery is working correctly.
 

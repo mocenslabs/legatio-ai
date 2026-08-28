@@ -27,24 +27,24 @@ class UserProfile(models.Model):
     user: models.OneToOneField = models.OneToOneField(  # type: ignore[assignment]
         User,
         on_delete=models.CASCADE,
-        related_name='profile',
-        help_text='The user this profile belongs to.',
+        related_name="profile",
+        help_text="The user this profile belongs to.",
     )
     display_name: models.CharField = models.CharField(  # type: ignore[assignment]
         max_length=100,
         null=True,
         blank=True,
-        help_text='Display name shown in the UI.',
+        help_text="Display name shown in the UI.",
     )
     avatar_url: models.URLField = models.URLField(  # type: ignore[assignment]
         null=True,
         blank=True,
-        help_text='URL to user avatar image.',
+        help_text="URL to user avatar image.",
     )
     notification_preferences: models.JSONField = models.JSONField(  # type: ignore[assignment]
         default=dict,
         blank=True,
-        help_text='Notification channel preferences.',
+        help_text="Notification channel preferences.",
     )
     created_at: models.DateTimeField = models.DateTimeField(  # type: ignore[assignment]
         auto_now_add=True,
@@ -55,10 +55,10 @@ class UserProfile(models.Model):
     )
 
     class Meta:
-        db_table = 'legatio_accounts_userprofile'
-        verbose_name = 'user profile'
-        verbose_name_plural = 'user profiles'
+        db_table = "legatio_accounts_userprofile"
+        verbose_name = "user profile"
+        verbose_name_plural = "user profiles"
 
     def __str__(self) -> str:
         """Return string representation of the profile."""
-        return f'Profile for {self.user.email}'
+        return f"Profile for {self.user.email}"

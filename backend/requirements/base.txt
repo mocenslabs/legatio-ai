@@ -21,8 +21,6 @@ django-allauth==0.60.1
 PyJWT==2.8.0
 pyotp==2.9.0
 
-# Encryption
-django-cryptography==1.1
 
 # Data Validation
 pydantic==2.5.3
@@ -48,6 +46,6 @@ faker==22.5.1
 
 # Code Quality
 ruff==0.1.14
-mypy==1.8.0
-django-stubs==4.2.7
+mypy==1.10.0
+django-stubs==5.0.2
 djangorestframework-stubs==3.14.5

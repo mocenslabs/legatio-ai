@@ -177,7 +177,7 @@ Set up the project infrastructure so that all subsequent phases can focus on bus
 | 0.6 | Documentation structure | `/docs` folder with all 5 documents |
 | 0.7 | Development environment script | `scripts/setup.sh` for one-command setup |
 | 0.8 | Seed script skeleton | `scripts/seed.sh` placeholder |
-| 0.9 | Pre-commit hooks | black, ruff, mypy, eslint |
+| 0.9 | Pre-commit hooks | ruff (lint + format), mypy, eslint, prettier |
 | 0.10 | README | Project overview, setup instructions, badges |
 
 ### 4.4 Acceptance Criteria
@@ -1083,7 +1083,7 @@ Every phase is considered "done" when ALL of the following are true:
 - [ ] Integration tests pass.
 - [ ] No critical or high-severity bugs open.
 - [ ] Code reviewed by at least 1 other developer.
-- [ ] Linting passes (ruff, black, mypy, eslint).
+- [ ] Linting and formatting pass (ruff, mypy, eslint, prettier).
 - [ ] Type hints present on all function signatures.
 
 ### 20.2 Documentation

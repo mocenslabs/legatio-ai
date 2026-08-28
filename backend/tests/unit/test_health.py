@@ -5,7 +5,7 @@ Health check tests to verify the testing framework is working.
 import pytest
 
 
-def test_framework_is_configured():
+def test_framework_is_configured() -> None:
     """
     Verify pytest is properly configured.
 
@@ -17,7 +17,7 @@ def test_framework_is_configured():
 
 
 @pytest.mark.django_db
-def test_database_connection():
+def test_database_connection() -> None:
     """
     Verify the database connection is working.
 

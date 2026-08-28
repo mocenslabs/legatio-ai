@@ -1,0 +1,2 @@
+# Production compose configuration is intentionally deferred.
+# Local development uses docker-compose.yml.

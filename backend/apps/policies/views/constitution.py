@@ -13,7 +13,7 @@ from apps.constitutions.models import Constitution
 from apps.policies.serializers import ConstitutionSerializer
 
 
-class ConstitutionViewSet(viewsets.ModelViewSet[Constitution]):
+class ConstitutionViewSet(viewsets.ModelViewSet):
     """ViewSet for Constitution model.
 
     Provides list, retrieve, create, update, and delete operations

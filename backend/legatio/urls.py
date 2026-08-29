@@ -1,14 +1,20 @@
+"""Legatio project URL configuration.
+
+This module defines the root URL routing for the Legatio project.
 """
-URL configuration for Legatio AI project.
-"""
+
+from __future__ import annotations
 
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
+    # Admin
     path("admin/", admin.site.urls),
+    # API Documentation
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
-    path("api/v1/", include("apps.accounts.urls", namespace="accounts")),
+    # Apps
+    path("api/policies/", include("apps.policies.urls")),
 ]

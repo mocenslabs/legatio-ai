@@ -13,7 +13,7 @@ from apps.policies.models import PolicyRule
 from apps.policies.serializers import PolicyRuleSerializer
 
 
-class PolicyRuleViewSet(viewsets.ModelViewSet[PolicyRule]):
+class PolicyRuleViewSet(viewsets.ModelViewSet):
     """ViewSet for PolicyRule model.
 
     Provides list, retrieve, create, update, and delete operations

@@ -1,12 +1,26 @@
+"""Policies API URLs.
+
+This module defines the URL routing for the policies app API endpoints.
 """
-URL configuration for the policies app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-app_name = "policies"
+from apps.policies.views import (
+    ConstitutionViewSet,
+    PolicyEvaluationView,
+    PolicyRuleViewSet,
+)
 
-urlpatterns: list[URLPattern] = [
-    # Policy rule endpoints will be added here
+# Create router and register viewsets
+router = DefaultRouter()
+router.register(r"constitutions", ConstitutionViewSet, basename="constitution")
+router.register(r"rules", PolicyRuleViewSet, basename="policyrule")
+
+# URL patterns
+urlpatterns = [
+    path("", include(router.urls)),
+    path("evaluate/", PolicyEvaluationView.as_view(), name="policy-evaluate"),
 ]

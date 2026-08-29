@@ -3,6 +3,7 @@
 Exposes core domain types and evaluation functions for policy evaluation.
 """
 
+from apps.policies.engine.core import assess_risk, evaluate_policy
 from apps.policies.engine.evaluator import (
     EvaluationResult,
     evaluate_condition,
@@ -21,6 +22,8 @@ __all__ = [
     "PolicyDecision",
     "ProposedAction",
     "RiskLevel",
+    "assess_risk",
     "evaluate_condition",
+    "evaluate_policy",
     "safe_evaluate",
 ]

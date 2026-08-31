@@ -1,12 +1,15 @@
+"""Proposals API URLs.
+
+This module defines the URL routing for the proposals app API endpoints.
 """
-URL configuration for the proposals app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from rest_framework.routers import DefaultRouter
 
-app_name = "proposals"
+from apps.proposals.views import ProposalViewSet
 
-urlpatterns: list[URLPattern] = [
-    # Proposal endpoints will be added here
-]
+router = DefaultRouter()
+router.register(r"", ProposalViewSet, basename="proposal")
+
+urlpatterns = router.urls

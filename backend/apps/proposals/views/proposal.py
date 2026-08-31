@@ -6,9 +6,12 @@ including lifecycle actions (submit, execute, cancel).
 
 from __future__ import annotations
 
+from typing import Any
+
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import BaseSerializer
@@ -19,13 +22,34 @@ from apps.proposals.serializers import (
     ProposalDetailSerializer,
     ProposalSerializer,
 )
-from apps.proposals.services import InvalidTransitionError, ProposalService, ProposalServiceError
+from apps.proposals.services import (
+    InvalidTransitionError,
+    ProposalService,
+    ProposalServiceError,
+)
 
 
 class ProposalViewSet(viewsets.ModelViewSet):
-    # ... (resto del código igual) ...
+    """ViewSet for Proposal model.
 
-    def get_serializer_class(self) -> type[BaseSerializer]:
+    Provides CRUD operations plus lifecycle actions (submit, execute, cancel).
+
+    Permissions:
+        - IsAuthenticated: All operations require authentication.
+
+    Actions:
+        - submit: Submit a draft proposal for policy evaluation.
+        - execute: Execute an approved proposal.
+        - cancel: Cancel a proposal.
+
+    Filters:
+        - status: Filter by status (query param: ?status=DRAFT)
+    """
+
+    queryset = Proposal.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self) -> type[BaseSerializer[Any]]:
         """Return the appropriate serializer based on action.
 
         Returns:
@@ -52,13 +76,37 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    def perform_create(self, serializer: BaseSerializer) -> None:
+    def perform_create(self, serializer: BaseSerializer[Any]) -> None:
         """Inject the authenticated user as the proposal creator.
 
         Args:
             serializer: The validated serializer instance.
         """
         serializer.save(created_by=self.request.user)
+
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        """Create a new proposal and return the detail representation.
+
+        Args:
+            request: The HTTP request.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            Response with the created proposal using ProposalDetailSerializer.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        # Return detail serializer to include status, created_by, etc.
+        detail_serializer = ProposalDetailSerializer(serializer.instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            detail_serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+        )
 
     @action(detail=True, methods=["post"])
     def submit(self, request: Request, pk: str | None = None) -> Response:

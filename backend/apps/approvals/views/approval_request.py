@@ -21,11 +21,11 @@ from apps.approvals.serializers import ApprovalRequestSerializer, ResolveApprova
 from apps.proposals.services import InvalidTransitionError, ProposalService, ProposalServiceError
 
 
-class ApprovalRequestViewSet(viewsets.ModelViewSet):
+class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
     """ViewSet for ApprovalRequest model.
 
-    Provides list/retrieve operations plus the resolve action. Creation
-    and deletion are handled by the service layer, not directly via API.
+    Provides list/retrieve operations plus the resolve action. Creation,
+    update, and deletion are handled exclusively by the service layer.
 
     Permissions:
         - IsAuthenticated: All operations require authentication.
@@ -42,7 +42,6 @@ class ApprovalRequestViewSet(viewsets.ModelViewSet):
     queryset = ApprovalRequest.objects.all()
     serializer_class = ApprovalRequestSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ["get", "post", "head", "options"]
 
     def get_queryset(self) -> QuerySet[ApprovalRequest]:
         """Filter queryset based on query parameters.
@@ -52,17 +51,14 @@ class ApprovalRequestViewSet(viewsets.ModelViewSet):
         """
         queryset = super().get_queryset()
 
-        # Filter by status
         status_param = self.request.query_params.get("status")
         if status_param is not None:
             queryset = queryset.filter(status=status_param)
 
-        # Filter by proposal
         proposal_id = self.request.query_params.get("proposal")
         if proposal_id is not None:
             queryset = queryset.filter(proposal_id=proposal_id)
 
-        # Filter by required_role
         required_role = self.request.query_params.get("required_role")
         if required_role is not None:
             queryset = queryset.filter(required_role=required_role)
@@ -82,7 +78,6 @@ class ApprovalRequestViewSet(viewsets.ModelViewSet):
         """
         approval_request = self.get_object()
 
-        # Validate input
         input_serializer = ResolveApprovalSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
 

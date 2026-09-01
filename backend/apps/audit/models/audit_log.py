@@ -35,6 +35,14 @@ class AuditAction(models.TextChoices):
     POLICY_RULE_UPDATED = "POLICY_RULE_UPDATED", _("Policy Rule Updated")
     POLICY_RULE_DELETED = "POLICY_RULE_DELETED", _("Policy Rule Deleted")
 
+    # Agreement actions
+    AGREEMENT_CREATED = "AGREEMENT_CREATED", _("Agreement Created")
+    AGREEMENT_ACTIVATED = "AGREEMENT_ACTIVATED", _("Agreement Activated")
+    AGREEMENT_SUSPENDED = "AGREEMENT_SUSPENDED", _("Agreement Suspended")
+    AGREEMENT_COMPLETED = "AGREEMENT_COMPLETED", _("Agreement Completed")
+    AGREEMENT_TERMINATED = "AGREEMENT_TERMINATED", _("Agreement Terminated")
+    AGREEMENT_AMENDED = "AGREEMENT_AMENDED", _("Agreement Amended")
+
 
 class AuditLog(models.Model):
     """Immutable audit log entry.

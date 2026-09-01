@@ -23,6 +23,9 @@ class NotificationType(models.TextChoices):
     PROPOSAL_DENIED = "PROPOSAL_DENIED", _("Proposal Denied")
     PROPOSAL_EXECUTED = "PROPOSAL_EXECUTED", _("Proposal Executed")
     PROPOSAL_CANCELLED = "PROPOSAL_CANCELLED", _("Proposal Cancelled")
+    AGREEMENT_ACTIVATED = "AGREEMENT_ACTIVATED", _("Agreement Activated")
+    AGREEMENT_COMPLETED = "AGREEMENT_COMPLETED", _("Agreement Completed")
+    AGREEMENT_TERMINATED = "AGREEMENT_TERMINATED", _("Agreement Terminated")
     SYSTEM = "SYSTEM", _("System")
 
 

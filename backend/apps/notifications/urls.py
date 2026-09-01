@@ -1,12 +1,15 @@
+"""Notifications API URLs.
+
+This module defines the URL routing for the notifications app API endpoints.
 """
-URL configuration for the notifications app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from rest_framework.routers import DefaultRouter
 
-app_name = "notifications"
+from apps.notifications.views import NotificationViewSet
 
-urlpatterns: list[URLPattern] = [
-    # Notification endpoints will be added here
-]
+router = DefaultRouter()
+router.register(r"", NotificationViewSet, basename="notification")
+
+urlpatterns = router.urls

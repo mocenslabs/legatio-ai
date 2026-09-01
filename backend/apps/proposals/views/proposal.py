@@ -6,7 +6,8 @@ including lifecycle actions (submit, execute, cancel).
 
 from __future__ import annotations
 
-from typing import Any
+import uuid
+from typing import Any, cast
 
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
@@ -121,7 +122,9 @@ class ProposalViewSet(viewsets.ModelViewSet):
         """
         proposal = self.get_object()
         try:
-            updated = ProposalService.submit_proposal(proposal.id)
+            updated = ProposalService.submit_proposal(
+                proposal.id, actor_id=cast(uuid.UUID, self.request.user.id)
+            )
         except InvalidTransitionError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except ProposalServiceError as e:
@@ -143,7 +146,9 @@ class ProposalViewSet(viewsets.ModelViewSet):
         """
         proposal = self.get_object()
         try:
-            updated = ProposalService.execute_proposal(proposal.id)
+            updated = ProposalService.execute_proposal(
+                proposal.id, actor_id=cast(uuid.UUID, self.request.user.id)
+            )
         except InvalidTransitionError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except ProposalServiceError as e:
@@ -165,7 +170,9 @@ class ProposalViewSet(viewsets.ModelViewSet):
         """
         proposal = self.get_object()
         try:
-            updated = ProposalService.cancel_proposal(proposal.id)
+            updated = ProposalService.cancel_proposal(
+                proposal.id, actor_id=cast(uuid.UUID, self.request.user.id)
+            )
         except InvalidTransitionError as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except ProposalServiceError as e:

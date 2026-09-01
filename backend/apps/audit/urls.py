@@ -1,12 +1,15 @@
+"""Audit API URLs.
+
+This module defines the URL routing for the audit app API endpoints.
 """
-URL configuration for the audit app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from rest_framework.routers import DefaultRouter
 
-app_name = "audit"
+from apps.audit.views import AuditLogViewSet
 
-urlpatterns: list[URLPattern] = [
-    # Audit endpoints will be added here
-]
+router = DefaultRouter()
+router.register(r"", AuditLogViewSet, basename="auditlog")
+
+urlpatterns = router.urls

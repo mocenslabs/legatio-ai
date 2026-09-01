@@ -152,6 +152,16 @@ class Notification(models.Model):
             self.read_at = timezone.now()
             self.save(update_fields=["status", "read_at", "updated_at"])
 
+    def archive(self) -> None:
+        """Archive the notification.
+
+        Sets the status to ARCHIVED. Archived notifications are hidden
+        from default views but preserved for history.
+        """
+        if self.status != NotificationStatus.ARCHIVED:
+            self.status = NotificationStatus.ARCHIVED
+            self.save(update_fields=["status", "updated_at"])
+
     @classmethod
     def notify(
         cls,

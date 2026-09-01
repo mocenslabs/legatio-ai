@@ -1,12 +1,15 @@
+"""Approvals API URLs.
+
+This module defines the URL routing for the approvals app API endpoints.
 """
-URL configuration for the approvals app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from rest_framework.routers import DefaultRouter
 
-app_name = "approvals"
+from apps.approvals.views import ApprovalRequestViewSet
 
-urlpatterns: list[URLPattern] = [
-    # Approval endpoints will be added here
-]
+router = DefaultRouter()
+router.register(r"", ApprovalRequestViewSet, basename="approvalrequest")
+
+urlpatterns = router.urls

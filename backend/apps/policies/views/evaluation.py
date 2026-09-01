@@ -52,12 +52,15 @@ class PolicyEvaluationView(APIView):
     """
 
     permission_classes = [IsAuthenticated]
+    serializer_class = PolicyEvaluationRequestSerializer
 
-    def post(self, request: Request) -> Response:
+    def post(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Evaluate a proposed action against active policies.
 
         Args:
             request: The HTTP request containing action details.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
 
         Returns:
             Response with the policy decision.

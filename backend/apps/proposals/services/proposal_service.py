@@ -2,8 +2,8 @@
 
 This module orchestrates the proposal lifecycle: creation, policy evaluation,
 approval request generation, and final execution. It integrates the pure
-Policy Engine with the Proposal and ApprovalRequest models, and records
-audit events for every state transition.
+Policy Engine with the Proposal and ApprovalRequest models, records audit
+events for every state transition, and sends notifications to relevant users.
 """
 
 from __future__ import annotations
@@ -17,6 +17,7 @@ from django.utils import timezone
 from apps.approvals.models import ApprovalRequest, ApprovalStatus
 from apps.audit.models import AuditAction
 from apps.audit.services import AuditService
+from apps.notifications.services import NotificationService
 from apps.policies.engine.types import DecisionOutcome
 from apps.policies.services import PolicyEngineService
 from apps.proposals.models import Proposal, ProposalStatus
@@ -41,7 +42,8 @@ class ProposalService:
     5. Resolve approvals and finalize status
     6. Execute approved proposals
 
-    All state transitions are recorded in the audit log.
+    All state transitions are recorded in the audit log, and relevant
+    notifications are sent to the proposal creator.
     """
 
     @staticmethod
@@ -152,6 +154,12 @@ class ProposalService:
                 new_state={"status": proposal.status},
                 metadata={"decision": decision.reason},
             )
+            NotificationService.notify_proposal_denied(
+                proposal_id=proposal.id,
+                recipient_id=proposal.created_by_id,
+                proposal_title=proposal.title,
+                reason=decision.reason,
+            )
             return proposal
 
         if decision.outcome == DecisionOutcome.ERROR:
@@ -165,6 +173,12 @@ class ProposalService:
                 old_state=old_state,
                 new_state={"status": proposal.status},
                 metadata={"decision": decision.reason, "error": True},
+            )
+            NotificationService.notify_proposal_denied(
+                proposal_id=proposal.id,
+                recipient_id=proposal.created_by_id,
+                proposal_title=proposal.title,
+                reason="An error occurred during policy evaluation.",
             )
             return proposal
 
@@ -195,6 +209,11 @@ class ProposalService:
             new_state={"status": proposal.status},
             metadata={"decision": decision.reason},
         )
+        NotificationService.notify_proposal_approved(
+            proposal_id=proposal.id,
+            recipient_id=proposal.created_by_id,
+            proposal_title=proposal.title,
+        )
         return proposal
 
     @staticmethod
@@ -222,6 +241,15 @@ class ProposalService:
                 actor_id=actor_id,
                 new_state={"status": approval.status, "required_role": role},
                 metadata={"proposal_id": str(proposal.id)},
+            )
+            # Notify the proposal creator that approvals are required.
+            # Note: Role-to-user mapping will be implemented in a later phase.
+            NotificationService.notify_approval_requested(
+                approval_id=approval.id,
+                proposal_id=proposal.id,
+                recipient_id=proposal.created_by_id,
+                required_role=role,
+                proposal_title=proposal.title,
             )
 
     @staticmethod
@@ -328,6 +356,12 @@ class ProposalService:
                 new_state={"status": proposal.status},
                 metadata={"reason": "Approval rejected"},
             )
+            NotificationService.notify_proposal_denied(
+                proposal_id=proposal.id,
+                recipient_id=proposal.created_by_id,
+                proposal_title=proposal.title,
+                reason="An approval request was rejected.",
+            )
             return
 
         # All must be approved to approve the proposal
@@ -346,6 +380,11 @@ class ProposalService:
                 old_state=old_state,
                 new_state={"status": proposal.status},
                 metadata={"reason": "All approvals granted"},
+            )
+            NotificationService.notify_proposal_approved(
+                proposal_id=proposal.id,
+                recipient_id=proposal.created_by_id,
+                proposal_title=proposal.title,
             )
 
     @staticmethod
@@ -390,6 +429,11 @@ class ProposalService:
             actor_id=actor_id,
             old_state=old_state,
             new_state={"status": proposal.status},
+        )
+        NotificationService.notify_proposal_executed(
+            proposal_id=proposal.id,
+            recipient_id=proposal.created_by_id,
+            proposal_title=proposal.title,
         )
 
         return proposal
@@ -453,6 +497,11 @@ class ProposalService:
             actor_id=actor_id,
             old_state=old_state,
             new_state={"status": proposal.status},
+        )
+        NotificationService.notify_proposal_cancelled(
+            proposal_id=proposal.id,
+            recipient_id=proposal.created_by_id,
+            proposal_title=proposal.title,
         )
 
         return proposal

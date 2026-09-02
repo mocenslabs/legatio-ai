@@ -26,6 +26,12 @@ class NotificationType(models.TextChoices):
     AGREEMENT_ACTIVATED = "AGREEMENT_ACTIVATED", _("Agreement Activated")
     AGREEMENT_COMPLETED = "AGREEMENT_COMPLETED", _("Agreement Completed")
     AGREEMENT_TERMINATED = "AGREEMENT_TERMINATED", _("Agreement Terminated")
+    NEGOTIATION_STARTED = "NEGOTIATION_STARTED", _("Negotiation Started")
+    NEGOTIATION_AGREED = "NEGOTIATION_AGREED", _("Negotiation Agreed")
+    OFFER_RECEIVED = "OFFER_RECEIVED", _("Offer Received")
+    OFFER_ACCEPTED = "OFFER_ACCEPTED", _("Offer Accepted")
+    OFFER_REJECTED = "OFFER_REJECTED", _("Offer Rejected")
+    COMMENT_ADDED = "COMMENT_ADDED", _("Comment Added")
     SYSTEM = "SYSTEM", _("System")
 
 

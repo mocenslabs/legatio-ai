@@ -1,12 +1,16 @@
+"""Agreements API URLs.
+
+This module defines the URL routing for the agreements app API endpoints.
 """
-URL configuration for the agreements app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from rest_framework.routers import DefaultRouter
 
-app_name = "agreements"
+from apps.agreements.views import AgreementVersionViewSet, AgreementViewSet
 
-urlpatterns: list[URLPattern] = [
-    # Agreement endpoints will be added here
-]
+router = DefaultRouter()
+router.register(r"versions", AgreementVersionViewSet, basename="agreementversion")
+router.register(r"", AgreementViewSet, basename="agreement")
+
+urlpatterns = router.urls

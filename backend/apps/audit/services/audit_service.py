@@ -149,3 +149,35 @@ class AuditService:
             new_state=new_state,
             metadata=metadata,
         )
+
+    @staticmethod
+    def log_agreement_event(
+        action: str,
+        agreement_id: uuid.UUID,
+        actor_id: uuid.UUID | None = None,
+        old_state: dict[str, Any] | None = None,
+        new_state: dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> AuditLog:
+        """Record an agreement-related audit event.
+
+        Args:
+            action: The agreement action performed.
+            agreement_id: The UUID of the agreement.
+            actor_id: The UUID of the user who performed the action.
+            old_state: Previous agreement state.
+            new_state: New agreement state.
+            metadata: Additional context about the action.
+
+        Returns:
+            The created AuditLog instance.
+        """
+        return AuditService._log(
+            action=action,
+            entity_type="Agreement",
+            entity_id=agreement_id,
+            actor_id=actor_id,
+            old_state=old_state,
+            new_state=new_state,
+            metadata=metadata,
+        )

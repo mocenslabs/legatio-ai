@@ -1,12 +1,21 @@
+"""Negotiations API URLs.
+
+This module defines the URL routing for the negotiations app API endpoints.
 """
-URL configuration for the negotiations app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from rest_framework.routers import DefaultRouter
 
-app_name = "negotiations"
+from apps.negotiations.views import (
+    CommentViewSet,
+    NegotiationOfferViewSet,
+    NegotiationViewSet,
+)
 
-urlpatterns: list[URLPattern] = [
-    # Negotiation endpoints will be added here
-]
+router = DefaultRouter()
+router.register(r"comments", CommentViewSet, basename="comment")
+router.register(r"offers", NegotiationOfferViewSet, basename="negotiationoffer")
+router.register(r"", NegotiationViewSet, basename="negotiation")
+
+urlpatterns = router.urls

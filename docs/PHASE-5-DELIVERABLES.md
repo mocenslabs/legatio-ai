@@ -131,15 +131,25 @@ All agreement lifecycle events are recorded and notified:
 ### 7. Key Features
 
 ✅ **Formal Agreement Model**: Binding outcomes of approved proposals
+
 ✅ **Immutable Versioning**: Full history of terms and amendments
+
 ✅ **Sequential Version Numbers**: Unique per agreement, auto-incremented
+
 ✅ **Generation from Proposals**: Seamless bridge from execution to agreement
+
 ✅ **Complete Lifecycle**: DRAFT → ACTIVE → COMPLETED/TERMINATED/SUSPENDED
+
 ✅ **Effective Date Handling**: Auto-set on activation, preserved if pre-set
+
 ✅ **Amendment Tracking**: Every change creates a version with reason
+
 ✅ **Audit Integration**: All events recorded with actor and state snapshots
+
 ✅ **Notification Integration**: Users informed of lifecycle changes
+
 ✅ **REST API**: Full lifecycle management via HTTP endpoints
+
 ✅ **Read-Only Versions**: Version history protected from modification
 
 ## API Usage Examples

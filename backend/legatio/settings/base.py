@@ -188,7 +188,18 @@ ACCOUNT_UNIQUE_EMAIL = True
 # API Documentation
 SPECTACULAR_SETTINGS = {
     "TITLE": "Legatio AI API",
-    "DESCRIPTION": "AI-powered negotiation platform with deterministic policy enforcement",
-    "VERSION": "1.0.0",
+    "DESCRIPTION": "AI-powered governance platform with policy engine, proposals, and agreements.",
+    "VERSION": "0.5.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "ENUM_NAME_OVERRIDES": {
+        "ProposalStatusEnum": "apps.proposals.models.proposal.ProposalStatus",
+        "ApprovalStatusEnum": "apps.approvals.models.approval_request.ApprovalStatus",
+        "NotificationStatusEnum": "apps.notifications.models.notification.NotificationStatus",
+        "NotificationTypeEnum": "apps.notifications.models.notification.NotificationType",
+        "AgreementStatusEnum": "apps.agreements.models.agreement.AgreementStatus",
+        "AuditActionEnum": "apps.audit.models.audit_log.AuditAction",
+        "RuleActionTypeEnum": "apps.policies.models.policy_rule.RuleActionType",
+        "DecisionOutcomeEnum": "apps.policies.engine.types.DecisionOutcome",
+        "RiskLevelEnum": "apps.policies.engine.types.RiskLevel",
+    },
 }

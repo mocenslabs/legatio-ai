@@ -181,3 +181,67 @@ class AuditService:
             new_state=new_state,
             metadata=metadata,
         )
+
+    @staticmethod
+    def log_negotiation_event(
+        action: str,
+        negotiation_id: uuid.UUID,
+        actor_id: uuid.UUID | None = None,
+        old_state: dict[str, Any] | None = None,
+        new_state: dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> AuditLog:
+        """Record a negotiation-related audit event.
+
+        Args:
+            action: The negotiation action performed.
+            negotiation_id: The UUID of the negotiation.
+            actor_id: The UUID of the user who performed the action.
+            old_state: Previous negotiation state.
+            new_state: New negotiation state.
+            metadata: Additional context about the action.
+
+        Returns:
+            The created AuditLog instance.
+        """
+        return AuditService._log(
+            action=action,
+            entity_type="Negotiation",
+            entity_id=negotiation_id,
+            actor_id=actor_id,
+            old_state=old_state,
+            new_state=new_state,
+            metadata=metadata,
+        )
+
+    @staticmethod
+    def log_comment_event(
+        action: str,
+        comment_id: uuid.UUID,
+        actor_id: uuid.UUID | None = None,
+        old_state: dict[str, Any] | None = None,
+        new_state: dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> AuditLog:
+        """Record a comment-related audit event.
+
+        Args:
+            action: The comment action performed.
+            comment_id: The UUID of the comment.
+            actor_id: The UUID of the user who performed the action.
+            old_state: Previous comment state.
+            new_state: New comment state.
+            metadata: Additional context about the action.
+
+        Returns:
+            The created AuditLog instance.
+        """
+        return AuditService._log(
+            action=action,
+            entity_type="Comment",
+            entity_id=comment_id,
+            actor_id=actor_id,
+            old_state=old_state,
+            new_state=new_state,
+            metadata=metadata,
+        )

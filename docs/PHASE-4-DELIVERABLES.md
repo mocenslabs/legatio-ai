@@ -125,15 +125,25 @@ The ProposalService now automatically records audit events and sends notificatio
 ### 7. Key Features
 
 ✅ **Complete Audit Trail**: Every state transition recorded immutably
+
 ✅ **Actor Tracking**: Know who performed each action
+
 ✅ **State Snapshots**: Old and new state captured for every transition
+
 ✅ **Automatic Notifications**: Users informed about relevant events
+
 ✅ **Notification Lifecycle**: UNREAD → READ / ARCHIVED
+
 ✅ **Transactional Consistency**: Logs/notifications created atomically with business operations
+
 ✅ **Read-Only APIs**: Audit and notification data protected from modification
+
 ✅ **Polymorphic Entity References**: Audit any entity type via entity_type + entity_id
+
 ✅ **Request Tracing**: IP address and user agent captured
+
 ✅ **Authentication Required**: All endpoints secured
+
 
 ## API Usage Examples
 

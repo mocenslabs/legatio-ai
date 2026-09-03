@@ -201,5 +201,8 @@ SPECTACULAR_SETTINGS = {
         "RuleActionTypeEnum": "apps.policies.models.policy_rule.RuleActionType",
         "DecisionOutcomeEnum": "apps.policies.engine.types.DecisionOutcome",
         "RiskLevelEnum": "apps.policies.engine.types.RiskLevel",
+        "CommentEntityTypeEnum": "apps.negotiations.models.comment.CommentEntityType",
+        "NegotiationStatusEnum": "apps.negotiations.models.negotiation.NegotiationStatus",
+        "OfferStatusEnum": "apps.negotiations.models.negotiation_offer.OfferStatus",
     },
 }

@@ -43,6 +43,23 @@ class AuditAction(models.TextChoices):
     AGREEMENT_TERMINATED = "AGREEMENT_TERMINATED", _("Agreement Terminated")
     AGREEMENT_AMENDED = "AGREEMENT_AMENDED", _("Agreement Amended")
 
+    # Negotiation actions
+    NEGOTIATION_CREATED = "NEGOTIATION_CREATED", _("Negotiation Created")
+    NEGOTIATION_STARTED = "NEGOTIATION_STARTED", _("Negotiation Started")
+    NEGOTIATION_AGREED = "NEGOTIATION_AGREED", _("Negotiation Agreed")
+    NEGOTIATION_FAILED = "NEGOTIATION_FAILED", _("Negotiation Failed")
+    NEGOTIATION_CANCELLED = "NEGOTIATION_CANCELLED", _("Negotiation Cancelled")
+
+    # Offer actions
+    OFFER_CREATED = "OFFER_CREATED", _("Offer Created")
+    OFFER_ACCEPTED = "OFFER_ACCEPTED", _("Offer Accepted")
+    OFFER_REJECTED = "OFFER_REJECTED", _("Offer Rejected")
+    OFFER_WITHDRAWN = "OFFER_WITHDRAWN", _("Offer Withdrawn")
+
+    # Comment actions
+    COMMENT_ADDED = "COMMENT_ADDED", _("Comment Added")
+    COMMENT_DELETED = "COMMENT_DELETED", _("Comment Deleted")
+
 
 class AuditLog(models.Model):
     """Immutable audit log entry.

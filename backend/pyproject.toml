@@ -28,3 +28,4 @@ django_settings_module = "legatio.settings.development"
 DJANGO_SETTINGS_MODULE = "legatio.settings.development"
 python_files = ["test_*.py", "*_test.py"]
 addopts = "-v --cov=apps --cov-report=term-missing"
+asyncio_mode = "strict"

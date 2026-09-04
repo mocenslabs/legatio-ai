@@ -269,3 +269,36 @@ class AutomationService:
             payload=payload,
             created_by_id=rule.agent.created_by_id,
         )
+
+    @staticmethod
+    def execute_rule(
+        rule_id: uuid.UUID,
+        context: dict[str, Any],
+    ) -> bool:
+        """Execute a specific automation rule against a context.
+
+        Evaluates the rule's condition and executes its action if met.
+
+        Args:
+            rule_id: The UUID of the rule to execute.
+            context: Event context data for evaluation and action.
+
+        Returns:
+            True if the rule was executed, False if condition was not met.
+
+        Raises:
+            AutomationServiceError: If the rule doesn't exist or can't fire.
+        """
+        try:
+            rule = AutomationRule.objects.get(id=rule_id)
+        except AutomationRule.DoesNotExist as e:
+            raise AutomationServiceError(f"Rule {rule_id} not found") from e
+
+        if not rule.can_fire:
+            raise AutomationServiceError(f"Rule {rule_id} cannot fire (inactive)")
+
+        if not AutomationService._evaluate_rule_condition(rule, context):
+            return False
+
+        AutomationService._execute_rule_action(rule, context)
+        return True

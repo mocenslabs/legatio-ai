@@ -1,12 +1,16 @@
+"""Agents API URLs.
+
+This module defines the URL routing for the agents app API endpoints.
 """
-URL configuration for the agents app.
-"""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from rest_framework.routers import DefaultRouter
 
-app_name = "agents"
+from apps.agents.views import AgentViewSet, AutomationRuleViewSet
 
-urlpatterns: list[URLPattern] = [
-    # Agent endpoints will be added here
-]
+router = DefaultRouter()
+router.register(r"rules", AutomationRuleViewSet, basename="automationrule")
+router.register(r"", AgentViewSet, basename="agent")
+
+urlpatterns = router.urls

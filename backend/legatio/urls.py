@@ -23,4 +23,5 @@ urlpatterns = [
     path("api/notifications/", include("apps.notifications.urls")),
     path("api/agreements/", include("apps.agreements.urls")),
     path("api/negotiations/", include("apps.negotiations.urls")),
+    path("api/agents/", include("apps.agents.urls")),
 ]

@@ -60,6 +60,15 @@ class AuditAction(models.TextChoices):
     COMMENT_ADDED = "COMMENT_ADDED", _("Comment Added")
     COMMENT_DELETED = "COMMENT_DELETED", _("Comment Deleted")
 
+    # Agent actions
+    AGENT_CREATED = "AGENT_CREATED", _("Agent Created")
+    AGENT_ACTIVATED = "AGENT_ACTIVATED", _("Agent Activated")
+    AGENT_DEACTIVATED = "AGENT_DEACTIVATED", _("Agent Deactivated")
+
+    # Automation rule actions
+    AUTOMATION_RULE_CREATED = "AUTOMATION_RULE_CREATED", _("Automation Rule Created")
+    AUTOMATION_RULE_EXECUTED = "AUTOMATION_RULE_EXECUTED", _("Automation Rule Executed")
+
 
 class AuditLog(models.Model):
     """Immutable audit log entry.

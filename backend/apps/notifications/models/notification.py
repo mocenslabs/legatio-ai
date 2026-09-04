@@ -7,12 +7,15 @@ proposal status changes, etc.).
 
 from __future__ import annotations
 
+import logging
 import uuid
 
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+logger = logging.getLogger(__name__)
 
 
 class NotificationType(models.TextChoices):
@@ -47,7 +50,9 @@ class Notification(models.Model):
     """A notification delivered to a user.
 
     Notifications inform users about relevant events such as pending
-    approval requests or changes in proposal status.
+    approval requests or changes in proposal status. When created via
+    the notify() classmethod, they are also pushed in real-time via
+    WebSocket if the channel layer is available.
 
     Attributes:
         id: UUID primary key.
@@ -181,9 +186,11 @@ class Notification(models.Model):
         entity_type: str = "",
         entity_id: uuid.UUID | None = None,
     ) -> Notification:
-        """Create a notification for a user.
+        """Create a notification for a user and send it in real-time.
 
-        This is the primary method for sending notifications.
+        This is the primary method for sending notifications. After
+        creating the notification in the database, it sends it to the
+        user's WebSocket group for instant delivery.
 
         Args:
             notification_type: The category of the notification.
@@ -196,7 +203,7 @@ class Notification(models.Model):
         Returns:
             The created Notification instance.
         """
-        return cls.objects.create(
+        notification = cls.objects.create(
             notification_type=notification_type,
             recipient_id=recipient_id,
             title=title,
@@ -204,3 +211,31 @@ class Notification(models.Model):
             entity_type=entity_type,
             entity_id=entity_id,
         )
+
+        # Send real-time notification via WebSocket (fail-safe)
+        try:
+            import json
+
+            from rest_framework.renderers import JSONRenderer
+
+            from apps.notifications.serializers import NotificationSerializer
+            from apps.notifications.services.realtime import send_realtime_notification
+
+            # Render through DRF's JSONRenderer to ensure UUIDs, datetimes,
+            # and other non-native types are converted to JSON-safe values.
+            rendered = JSONRenderer().render(NotificationSerializer(notification).data)
+            serialized_data = json.loads(rendered)
+
+            send_realtime_notification(
+                recipient_id=recipient_id,
+                notification_data=serialized_data,
+            )
+        except Exception as e:
+            # Fail-safe: log the error but don't break notification creation
+            logger.exception(
+                "Failed to send real-time notification %s: %s",
+                notification.id,
+                str(e),
+            )
+
+        return notification

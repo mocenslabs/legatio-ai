@@ -214,10 +214,18 @@ class Notification(models.Model):
 
         # Send real-time notification via WebSocket (fail-safe)
         try:
+            import json
+
+            from rest_framework.renderers import JSONRenderer
+
             from apps.notifications.serializers import NotificationSerializer
             from apps.notifications.services.realtime import send_realtime_notification
 
-            serialized_data = NotificationSerializer(notification).data
+            # Render through DRF's JSONRenderer to ensure UUIDs, datetimes,
+            # and other non-native types are converted to JSON-safe values.
+            rendered = JSONRenderer().render(NotificationSerializer(notification).data)
+            serialized_data = json.loads(rendered)
+
             send_realtime_notification(
                 recipient_id=recipient_id,
                 notification_data=serialized_data,

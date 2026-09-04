@@ -57,6 +57,9 @@ class JWTAuthMiddleware(BaseMiddleware):
     with the authenticated user. Unauthenticated connections receive
     AnonymousUser and are rejected by the consumer.
 
+    If the scope already contains an authenticated user (e.g., set by
+    tests or another middleware), it is respected and not overwritten.
+
     Usage:
         Connect with: ws://host/ws/notifications/?token=<access_token>
     """
@@ -77,6 +80,14 @@ class JWTAuthMiddleware(BaseMiddleware):
         Returns:
             The result of the inner application call.
         """
+        # If scope already has an authenticated user, respect it (useful for tests)
+        existing_user = scope.get("user")
+        if existing_user is not None and hasattr(existing_user, "is_authenticated"):
+            if existing_user.is_authenticated:
+                logger.debug("WebSocket connection already authenticated")
+                return await super().__call__(scope, receive, send)
+
+        # Otherwise, try to authenticate via JWT token in query string
         query_string = scope.get("query_string", b"").decode("utf-8")
         query_params = parse_qs(query_string)
         token_list = query_params.get("token", [])

@@ -245,3 +245,35 @@ class AuditService:
             new_state=new_state,
             metadata=metadata,
         )
+
+    @staticmethod
+    def log_agent_event(
+        action: str,
+        agent_id: uuid.UUID,
+        actor_id: uuid.UUID | None = None,
+        old_state: dict[str, Any] | None = None,
+        new_state: dict[str, Any] | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> AuditLog:
+        """Record an agent-related audit event.
+
+        Args:
+            action: The agent action performed.
+            agent_id: The UUID of the agent.
+            actor_id: The UUID of the user who performed the action.
+            old_state: Previous agent state.
+            new_state: New agent state.
+            metadata: Additional context about the action.
+
+        Returns:
+            The created AuditLog instance.
+        """
+        return AuditService._log(
+            action=action,
+            entity_type="Agent",
+            entity_id=agent_id,
+            actor_id=actor_id,
+            old_state=old_state,
+            new_state=new_state,
+            metadata=metadata,
+        )

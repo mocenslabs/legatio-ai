@@ -1,38 +1,24 @@
-"""
-Celery application configuration for Legatio AI.
+"""Celery application configuration for Legatio project.
 
-This module sets up the Celery instance used for async task processing
-(LLM calls, audit processing, notifications, etc.).
-
-Reference: 02-ARCHITECTURE.md Section 5.1 (ADR-006)
+This module defines the Celery app used for asynchronous task processing
+and scheduled jobs. Settings are loaded from Django settings using the
+CELERY namespace.
 """
+
+from __future__ import annotations
 
 import os
 
 from celery import Celery
-from celery.app.task import Task
 
-# Set the default Django settings module
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legatio.settings.development")
 
-# Create the Celery app
 app = Celery("legatio")
 
-# Load configuration from Django settings, using the CELERY_ namespace
-# This means all Celery config must be prefixed with CELERY_ in settings
+# Load settings from Django settings, using the CELERY namespace.
+# This means all Celery config keys must be prefixed with CELERY_
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
-# Auto-discover tasks from all installed apps
-# This will look for a tasks.py module in each app
+# Auto-discover tasks in all installed apps.
+# Each app can define tasks in a tasks.py module.
 app.autodiscover_tasks()
-
-
-@app.task(bind=True, ignore_result=True)
-def debug_task(self: Task) -> None:
-    """
-    Debug task to verify Celery is working correctly.
-
-    This task simply prints the request info. Useful for testing
-    that the Celery worker is properly connected to the broker.
-    """
-    print(f"Request: {self.request!r}")

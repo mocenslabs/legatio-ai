@@ -1,10 +1,9 @@
+"""Legatio project package.
+
+This module ensures the Celery app is loaded when Django starts,
+so that shared_task decorators use this app.
 """
-Legatio AI - Main Django Project.
 
-This module ensures the Celery app is always imported when
-Django starts so that shared_task will use this app.
-"""
+from legatio.celery import app as celery_app
 
-from .celery import app as celery_app
-
-__all__ = ("celery_app",)
+__all__ = ["celery_app"]

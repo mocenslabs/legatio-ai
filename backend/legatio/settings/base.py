@@ -173,6 +173,23 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
 
+# Celery Beat schedule
+CELERY_BEAT_SCHEDULE = {
+    "process-scheduled-rules": {
+        "task": "apps.agents.tasks.process_scheduled_rules",
+        "schedule": 300.0,  # Every 5 minutes
+    },
+    "check-expired-agreements": {
+        "task": "apps.scheduling.tasks.check_expired_agreements",
+        "schedule": 3600.0,  # Every hour
+    },
+    "cleanup-old-jobs": {
+        "task": "apps.scheduling.tasks.cleanup_old_jobs",
+        "schedule": 86400.0,  # Every 24 hours
+        "kwargs": {"days": 90},
+    },
+}
+
 # Redis
 REDIS_HOST = config("REDIS_HOST", default="localhost")
 REDIS_PORT = config("REDIS_PORT", default=6379, cast=int)

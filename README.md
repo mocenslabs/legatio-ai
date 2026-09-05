@@ -117,7 +117,7 @@ The LLM is **never** allowed to make authorization decisions. Authorization is a
 ### Prerequisites
 
 - Docker & Docker Compose
-- Python 3.11+
+- Python 3.12+
 - Node.js 20+
 - Git
 

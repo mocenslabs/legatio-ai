@@ -175,7 +175,7 @@ Response (201):
   "can_be_activated": true
 }
 ```
-### Generata from an Executed Proposal
+### Generate from an Executed Proposal
 ```bash
 POST /api/agreements/generate_from_proposal/
 {

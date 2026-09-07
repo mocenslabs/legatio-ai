@@ -184,7 +184,7 @@ class ReportingService:
                 "id": str(entry.id),
                 "action": entry.action,
                 "entity_type": entry.entity_type,
-                "entity_id": str(entry.entity_id) if entry.entity_id else None,
+                "entity_id": str(entry.entity_id),
                 "actor_id": str(entry.actor_id) if entry.actor_id else None,
                 "created_at": entry.created_at.isoformat(),
             }

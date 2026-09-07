@@ -15,7 +15,7 @@ class ActivityEntrySerializer(serializers.Serializer):
     id = serializers.CharField(help_text="Audit log entry ID.")
     action = serializers.CharField(help_text="The action performed.")
     entity_type = serializers.CharField(help_text="Type of the affected entity.")
-    entity_id = serializers.CharField(allow_null=True, help_text="UUID of the affected entity.")
+    entity_id = serializers.CharField(help_text="UUID of the affected entity.")
     actor_id = serializers.CharField(
         allow_null=True, help_text="UUID of the user who performed the action."
     )

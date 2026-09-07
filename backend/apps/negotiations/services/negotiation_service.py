@@ -22,6 +22,7 @@ from apps.negotiations.models import (
 from apps.notifications.models import NotificationType
 from apps.notifications.services import NotificationService
 from apps.proposals.models import Proposal
+from apps.webhooks.services import WebhookService
 
 
 class NegotiationServiceError(Exception):
@@ -135,6 +136,10 @@ class NegotiationService:
             message=f"Your negotiation '{negotiation.title}' has started.",
         )
 
+        WebhookService.trigger_event(
+            "NEGOTIATION_STARTED",
+            {"negotiation_id": str(negotiation.id), "status": negotiation.status},
+        )
         return negotiation
 
     @staticmethod
@@ -363,6 +368,13 @@ class NegotiationService:
             new_state={"status": negotiation.status},
         )
 
+        event_type = (
+            "NEGOTIATION_AGREED" if negotiation.status == "AGREED" else "NEGOTIATION_FAILED"
+        )
+        WebhookService.trigger_event(
+            event_type,
+            {"negotiation_id": str(negotiation.id), "status": negotiation.status},
+        )
         return negotiation
 
     @staticmethod

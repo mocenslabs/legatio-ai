@@ -125,13 +125,21 @@ All agent and automation events are recorded:
 ### 7. Key Features
 
 ✅ **Automated Agents**: Configurable actors for governance automation
+
 ✅ **Agent Types**: AUTO_PROPOSER, AUTO_APPROVER, MONITOR, CUSTOM
+
 ✅ **Automation Rules**: Trigger-based rules with conditions and actions
+
 ✅ **Condition Evaluation**: Reuses Policy Engine's safe_evaluate (DRY)
+
 ✅ **Priority Ordering**: Rules evaluated by priority (lower first)
+
 ✅ **Fail-Safe Processing**: One rule's failure doesn't block others
+
 ✅ **Manual Execution**: Test rules against custom contexts via API
+
 ✅ **Audit Integration**: All agent events recorded
+
 ✅ **REST API**: Full lifecycle management via HTTP endpoints
 
 ## API Usage Examples

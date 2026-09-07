@@ -94,11 +94,17 @@ Phase 9 introduces scheduled task execution using Celery, enabling the system to
 ### 8. Key Features
 
 ✅ **Scheduled Execution**: ON_SCHEDULE rules run automatically every 5 minutes
+
 ✅ **Execution History**: Full audit trail of automated job runs
+
 ✅ **Expiration Handling**: Agreements auto-terminated when they expire
+
 ✅ **Data Retention**: Old job records cleaned up automatically
+
 ✅ **Fail-Safe**: Individual rule failures don't block other rules
+
 ✅ **Read-Only API**: Job history queryable but not modifiable via API
+
 ✅ **Monitoring**: Admin shows execution durations for debugging
 
 ## Running the System

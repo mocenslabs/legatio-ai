@@ -149,6 +149,15 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "core.pagination.StandardCursorPagination",
     "PAGE_SIZE": 20,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "core.throttling.BurstRateThrottle",
+        "core.throttling.SustainedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "burst": config("THROTTLE_BURST_RATE", default="120/min"),
+        "sustained": config("THROTTLE_SUSTAINED_RATE", default="10000/day"),
+        "anon_burst": config("THROTTLE_ANON_BURST_RATE", default="30/min"),
+    },
 }
 
 # Channels

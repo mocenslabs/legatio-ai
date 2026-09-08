@@ -190,6 +190,7 @@ class TestPolicyEngineIntegration:
         assert uuid.UUID(str(active_rule.id)) in decision.matched_rules
 
 
+@pytest.mark.filterwarnings("ignore::pytest.PytestUnraisableExceptionWarning")
 class TestPolicyEnginePerformance:
     """Performance tests for the policy engine."""
 

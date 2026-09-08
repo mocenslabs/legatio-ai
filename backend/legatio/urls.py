@@ -26,4 +26,5 @@ urlpatterns = [
     path("api/agents/", include("apps.agents.urls")),
     path("api/scheduling/", include("apps.scheduling.urls")),
     path("api/reporting/", include("apps.reporting.urls")),
+    path("api/webhooks/", include("apps.webhooks.urls")),
 ]

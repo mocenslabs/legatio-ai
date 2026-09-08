@@ -21,6 +21,7 @@ from apps.notifications.services import NotificationService
 from apps.policies.engine.types import DecisionOutcome
 from apps.policies.services import PolicyEngineService
 from apps.proposals.models import Proposal, ProposalStatus
+from apps.webhooks.services import WebhookService
 
 
 class ProposalServiceError(Exception):
@@ -87,6 +88,10 @@ class ProposalService:
             proposal_id=proposal.id,
             actor_id=created_by_id,
             new_state={"status": proposal.status, "title": proposal.title},
+        )
+        WebhookService.trigger_event(
+            "PROPOSAL_CREATED",
+            {"proposal_id": str(proposal.id), "status": proposal.status},
         )
 
         return proposal
@@ -160,6 +165,12 @@ class ProposalService:
                 proposal_title=proposal.title,
                 reason=decision.reason,
             )
+
+            WebhookService.trigger_event(
+                "PROPOSAL_STATUS_CHANGED",
+                {"proposal_id": str(proposal.id), "status": proposal.status},
+            )
+
             return proposal
 
         if decision.outcome == DecisionOutcome.ERROR:
@@ -436,6 +447,10 @@ class ProposalService:
             proposal_title=proposal.title,
         )
 
+        WebhookService.trigger_event(
+            "PROPOSAL_STATUS_CHANGED",
+            {"proposal_id": str(proposal.id), "status": proposal.status},
+        )
         return proposal
 
     @staticmethod

@@ -1,19 +1,23 @@
-"""
-Root pytest configuration for Legatio AI.
+"""Root pytest configuration.
 
-This file is automatically loaded by pytest before running tests.
-It provides global fixtures and configuration.
+This module provides shared fixtures for the entire test suite.
 """
+
+from __future__ import annotations
+
+from collections.abc import Iterator
 
 import pytest
+from django.core.cache import cache
 
 
 @pytest.fixture(autouse=True)
-def enable_db_access_for_all_tests(db: object) -> None:
-    """
-    Enable database access for all tests by default.
+def _clear_cache_between_tests() -> Iterator[None]:
+    """Clear the Django cache before and after each test.
 
-    This fixture uses pytest-django's db fixture to ensure
-    the database is set up before each test runs.
+    This ensures throttle state does not accumulate across tests,
+    preventing rate-limit false positives in the test suite.
     """
-    pass
+    cache.clear()
+    yield
+    cache.clear()

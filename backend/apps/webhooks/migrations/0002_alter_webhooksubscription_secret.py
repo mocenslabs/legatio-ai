@@ -4,15 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('webhooks', '0001_initial'),
+        ("webhooks", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='webhooksubscription',
-            name='secret',
-            field=models.CharField(default='d75b4f0507fddb50042af7dc161e7f268ccee814cea0fa20b626169d67afae05', help_text='Secret key used to generate HMAC signatures.', max_length=128, verbose_name='Secret'),
+            model_name="webhooksubscription",
+            name="secret",
+            field=models.CharField(
+                default="d75b4f0507fddb50042af7dc161e7f268ccee814cea0fa20b626169d67afae05",
+                help_text="Secret key used to generate HMAC signatures.",
+                max_length=128,
+                verbose_name="Secret",
+            ),
         ),
     ]

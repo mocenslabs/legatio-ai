@@ -76,19 +76,20 @@ CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", os.getenv("REDIS_URL", REDIS_
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", f"redis://{REDIS_HOST}:{REDIS_PORT}/1")
 
 # ──────────────────────────────────────────────
-# Static & Media Files
+# Static & Media Files (WhiteNoise)
 # ──────────────────────────────────────────────
 STATIC_ROOT = BASE_DIR / "staticfiles"  # type: ignore # noqa: F405
 MEDIA_ROOT = BASE_DIR / "mediafiles"  # type: ignore # noqa: F405
 MEDIA_URL = "/media/"
 
-# Nota: Si decides instalar 'whitenoise' en el futuro para servir estáticos,
-# agrégalo a INSTALLED_APPS en base.py y descomenta esto:
-# STORAGES = {
-#     "staticfiles": {
-#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-#     },
-# }
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # ──────────────────────────────────────────────
 # Logging

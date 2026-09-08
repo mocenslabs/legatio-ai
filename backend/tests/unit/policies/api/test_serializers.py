@@ -19,6 +19,7 @@ from apps.policies.serializers import (
 )
 
 
+@pytest.mark.django_db
 class TestConstitutionSerializer:
     """Tests for ConstitutionSerializer."""
 
@@ -64,6 +65,7 @@ class TestConstitutionSerializer:
         assert serializer.is_valid()
 
 
+@pytest.mark.django_db
 class TestPolicyRuleSerializer:
     """Tests for PolicyRuleSerializer."""
 

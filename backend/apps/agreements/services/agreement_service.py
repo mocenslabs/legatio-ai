@@ -20,6 +20,7 @@ from apps.audit.services import AuditService
 from apps.notifications.models import NotificationType
 from apps.notifications.services import NotificationService
 from apps.proposals.models import Proposal, ProposalStatus
+from apps.webhooks.services import WebhookService
 
 
 class AgreementServiceError(Exception):
@@ -202,6 +203,10 @@ class AgreementService:
             message=f"Your agreement '{agreement.title}' is now active.",
         )
 
+        WebhookService.trigger_event(
+            "AGREEMENT_ACTIVATED",
+            {"agreement_id": str(agreement.id), "status": agreement.status},
+        )
         return agreement
 
     @staticmethod
@@ -310,7 +315,8 @@ class AgreementService:
             AgreementServiceError: If the agreement doesn't exist.
             InvalidTransitionError: If the agreement is not ACTIVE.
         """
-        return AgreementService._transition_to_final(
+        # 1. Primero realizamos la transición y obtenemos el agreement actualizado
+        agreement = AgreementService._transition_to_final(
             agreement_id=agreement_id,
             target_status=AgreementStatus.TERMINATED,
             audit_action=AuditAction.AGREEMENT_TERMINATED,
@@ -318,6 +324,14 @@ class AgreementService:
             actor_id=actor_id,
             reason=reason,
         )
+
+        # 2. Luego disparamos el webhook con los datos correctos del agreement
+        WebhookService.trigger_event(
+            "AGREEMENT_TERMINATED",
+            {"agreement_id": str(agreement.id), "status": agreement.status},
+        )
+
+        return agreement
 
     @staticmethod
     def _transition_to_final(

@@ -168,3 +168,45 @@ jobs:
 
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
+
+  # ──────────────────────────────────────────────
+  # Docker Build & Push (Production)
+  # ──────────────────────────────────────────────
+  docker-build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [backend, frontend, pre-commit] # Espera a que todos los checks pasen
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/legatio-backend
+          tags: |
+            type=ref,event=branch
+            type=sha,format=long
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile.prod
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

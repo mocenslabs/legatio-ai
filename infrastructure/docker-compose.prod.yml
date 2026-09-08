@@ -1,2 +1,86 @@
-# Production compose configuration is intentionally deferred.
-# Local development uses docker-compose.yml.
+services:
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME:-legatio}
+      - POSTGRES_USER=${DB_USER:-legatio}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-legatio}
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-legatio}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: ../backend          # <-- CAMBIO CLAVE: Apunta a la carpeta backend
+      dockerfile: Dockerfile.prod  # <-- El archivo está dentro de ese contexto
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+      - REDIS_HOST=redis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+
+  worker:
+    build:
+      context: ../backend          # <-- CAMBIO CLAVE
+      dockerfile: Dockerfile.prod
+    volumes:
+      - media_volume:/app/mediafiles
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+      - REDIS_HOST=redis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+
+  beat:
+    build:
+      context: ../backend          # <-- CAMBIO CLAVE
+      dockerfile: Dockerfile.prod
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+      - REDIS_HOST=redis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

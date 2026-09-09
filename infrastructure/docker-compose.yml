@@ -1,3 +1,4 @@
+name: legatio-dev
 services:
   # ──────────────────────────────────────────────
   # PostgreSQL Database

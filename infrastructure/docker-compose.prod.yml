@@ -1,3 +1,4 @@
+name: legatio-prod
 services:
   db:
     image: postgres:16-alpine
@@ -50,6 +51,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile.prod
+    command: celery -A legatio worker --loglevel=info --concurrency=2
     volumes:
       - media_volume:/app/mediafiles
     env_file:
@@ -68,6 +70,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile.prod
+    command: celery -A legatio beat --loglevel=info
     env_file:
       - .env
     environment:

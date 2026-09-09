@@ -4,9 +4,6 @@
 gunicorn==21.2.0
 uvicorn[standard]==0.27.0
 
-# Static Files
-whitenoise==6.7.0
-
 # Security
 django-csp==3.7
 

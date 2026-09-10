@@ -12,7 +12,7 @@ env:
 
 jobs:
   # ──────────────────────────────────────────────
-  # Backend: Lint, Type Check & Test
+  # Backend: Lint, Type Check & Test (development)
   # ──────────────────────────────────────────────
   backend:
     name: Backend (lint + type-check + test)
@@ -105,7 +105,47 @@ jobs:
           fail_ci_if_error: false
 
   # ──────────────────────────────────────────────
-  # Frontend: Lint, Type Check & Build
+  # Backend: Production dependency & image validation
+  # ──────────────────────────────────────────────
+  backend-production:
+    name: Backend (production build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: backend/requirements/production.txt
+
+      - name: Install production dependencies only
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/production.txt
+
+      - name: Check Django configuration (production settings)
+        env:
+          DJANGO_SETTINGS_MODULE: legatio.settings.production
+          SECRET_KEY: ci-test-secret-key
+          ALLOWED_HOSTS: "localhost"
+          DB_HOST: localhost
+          DB_NAME: legatio
+          DB_USER: legatio
+          DB_PASSWORD: legatio
+          REDIS_HOST: localhost
+        run: python manage.py check --deploy
+
+      - name: Build production Docker image
+        run: docker build -f Dockerfile.prod -t legatio-backend-prod:ci .
+
+  # ──────────────────────────────────────────────
+  # Frontend: Lint, Type Check, Test & Build
   # ──────────────────────────────────────────────
   frontend:
     name: Frontend (lint + type-check + test + build)
@@ -130,4 +170,11 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Check
+      - name: Check TypeScript types
+        run: npm run type-check
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build

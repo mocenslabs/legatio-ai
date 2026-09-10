@@ -1,5 +1,8 @@
 name: legatio-prod
 services:
+  # ──────────────────────────────────────────────
+  # PostgreSQL Database
+  # ──────────────────────────────────────────────
   db:
     image: postgres:16-alpine
     volumes:
@@ -17,6 +20,9 @@ services:
       timeout: 5s
       retries: 5
 
+  # ──────────────────────────────────────────────
+  # Redis (Cache + Message Broker)
+  # ──────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     restart: always
@@ -47,6 +53,9 @@ services:
         condition: service_healthy
     restart: always
 
+  # ──────────────────────────────────────────────
+  # Celery Worker (Async task processing)
+  # ──────────────────────────────────────────────
   worker:
     build:
       context: ../backend
@@ -66,6 +75,9 @@ services:
         condition: service_healthy
     restart: always
 
+  # ──────────────────────────────────────────────
+  # Celery Beat (Scheduled tasks)
+  # ──────────────────────────────────────────────
   beat:
     build:
       context: ../backend

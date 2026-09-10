@@ -16,6 +16,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+def generate_webhook_secret() -> str:
+    return secrets.token_hex(32)
+
+
 class WebhookEventType(models.TextChoices):
     """Types of events that can trigger a webhook."""
 
@@ -67,7 +71,7 @@ class WebhookSubscription(models.Model):
     )
     secret = models.CharField(
         max_length=128,
-        default=secrets.token_hex(32),
+        default=generate_webhook_secret,
         verbose_name=_("Secret"),
         help_text=_("Secret key used to generate HMAC signatures."),
     )

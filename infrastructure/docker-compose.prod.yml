@@ -1,4 +1,8 @@
+name: legatio-prod
 services:
+  # ──────────────────────────────────────────────
+  # PostgreSQL Database
+  # ──────────────────────────────────────────────
   db:
     image: postgres:16-alpine
     volumes:
@@ -16,6 +20,9 @@ services:
       timeout: 5s
       retries: 5
 
+  # ──────────────────────────────────────────────
+  # Redis (Cache + Message Broker)
+  # ──────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     restart: always
@@ -27,8 +34,8 @@ services:
 
   web:
     build:
-      context: ../backend          # <-- CAMBIO CLAVE: Apunta a la carpeta backend
-      dockerfile: Dockerfile.prod  # <-- El archivo está dentro de ese contexto
+      context: ../backend
+      dockerfile: Dockerfile.prod
     volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/mediafiles
@@ -46,10 +53,14 @@ services:
         condition: service_healthy
     restart: always
 
+  # ──────────────────────────────────────────────
+  # Celery Worker (Async task processing)
+  # ──────────────────────────────────────────────
   worker:
     build:
-      context: ../backend          # <-- CAMBIO CLAVE
+      context: ../backend
       dockerfile: Dockerfile.prod
+    command: celery -A legatio worker --loglevel=info --concurrency=2
     volumes:
       - media_volume:/app/mediafiles
     env_file:
@@ -64,10 +75,14 @@ services:
         condition: service_healthy
     restart: always
 
+  # ──────────────────────────────────────────────
+  # Celery Beat (Scheduled tasks)
+  # ──────────────────────────────────────────────
   beat:
     build:
-      context: ../backend          # <-- CAMBIO CLAVE
+      context: ../backend
       dockerfile: Dockerfile.prod
+    command: celery -A legatio beat --loglevel=info
     env_file:
       - .env
     environment:

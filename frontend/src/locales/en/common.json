@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "constitutions": "Constitutions",
+    "negotiations": "Negotiations",
+    "approvals": "Approvals",
+    "audit": "Audit"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "signOut": "Sign Out",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "errors": {
+    "generic": "An unexpected error occurred.",
+    "unauthorized": "You must be logged in to access this resource."
+  }
+}

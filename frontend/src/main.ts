@@ -1,25 +1,16 @@
-/**
- * Application entry point.
- *
- * Registers global plugins: router, Pinia, Vue Query.
- *
- * Reference: 02-ARCHITECTURE.md Section 5.2
- */
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { VueQueryPlugin } from '@tanstack/vue-query'
-
 import App from './App.vue'
 import router from './router'
+import i18n from './locales'
 import './assets/styles/main.css'
 
 const app = createApp(App)
 
-// Install plugins
 app.use(createPinia())
 app.use(router)
 app.use(VueQueryPlugin)
+app.use(i18n)
 
-// Mount the application
 app.mount('#app')

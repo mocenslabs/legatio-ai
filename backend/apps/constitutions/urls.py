@@ -1,12 +1,15 @@
-"""
-URL configuration for the constitutions app.
-"""
+"""Constitutions API URLs."""
 
+from __future__ import annotations
 
-from django.urls import URLPattern
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-app_name = "constitutions"
+from apps.constitutions.views import ConstitutionViewSet
 
-urlpatterns: list[URLPattern] = [
-    # Constitution endpoints will be added here
+router = DefaultRouter()
+router.register(r"", ConstitutionViewSet, basename="constitution")
+
+urlpatterns = [
+    path("", include(router.urls)),
 ]

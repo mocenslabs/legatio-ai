@@ -1,6 +1,6 @@
 """Policies admin configuration.
 
-This module registers Constitution and PolicyRule models with the Django admin
+This module registers the PolicyRule model with the Django admin
 interface, providing a user-friendly interface for policy management.
 """
 
@@ -10,28 +10,7 @@ from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
 
-from apps.constitutions.models import Constitution
 from apps.policies.models import PolicyRule
-
-
-@admin.register(Constitution)
-class ConstitutionAdmin(admin.ModelAdmin):
-    """Admin interface for Constitution model.
-
-    Provides list view with filtering, search, and bulk actions.
-    """
-
-    list_display = ["name", "is_active", "created_at", "updated_at"]
-    list_filter = ["is_active", "created_at"]
-    search_fields = ["name", "description"]
-    ordering = ["-created_at"]
-    readonly_fields = ["id", "created_at", "updated_at"]
-
-    fieldsets = (
-        (None, {"fields": ("id", "name", "description")}),
-        ("Status", {"fields": ("is_active",)}),
-        ("Timestamps", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
-    )
 
 
 @admin.register(PolicyRule)
@@ -82,7 +61,10 @@ class PolicyRuleAdmin(admin.ModelAdmin):
                 "fields": ("constitution", "is_active"),
             },
         ),
-        ("Timestamps", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
+        (
+            "Timestamps",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[PolicyRule]:

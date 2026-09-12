@@ -769,18 +769,20 @@ GET    /api/v1/constitutions/
 POST   /api/v1/constitutions/
 GET    /api/v1/constitutions/{id}/
 PATCH  /api/v1/constitutions/{id}/
-POST   /api/v1/constitutions/{id}/activate
-GET    /api/v1/constitutions/{id}/versions
+DELETE /api/v1/constitutions/{id}/
+# Nota: La activación se maneja vía PATCH is_active=true o endpoint dedicado en fases futuras.
+
 ```
 
 **Policy Rules:**
 
 ```text
-GET    /api/v1/constitutions/{id}/rules/
-POST   /api/v1/constitutions/{id}/rules/
-PATCH  /api/v1/rules/{id}/
-DELETE /api/v1/rules/{id}/
-POST   /api/v1/rules/{id}/evaluate    # Test a rule against a proposal
+GET    /api/v1/policies/rules/               # Filtrar por ?constitution_id={id}
+POST   /api/v1/policies/rules/
+GET    /api/v1/policies/rules/{id}/
+PATCH  /api/v1/policies/rules/{id}/
+DELETE /api/v1/policies/rules/{id}/
+POST   /api/v1/policies/evaluate/
 ```
 
 **Negotiations:**

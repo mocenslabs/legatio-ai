@@ -29,21 +29,10 @@ class ConstitutionSerializer(serializers.ModelSerializer[Constitution]):
         read_only_fields = ["id", "created_at", "updated_at"]
 
     def validate_name(self, value: str) -> str:
-        """Validate constitution name is unique.
-
-        Args:
-            value: The name value to validate.
-
-        Returns:
-            The validated name.
-
-        Raises:
-            serializers.ValidationError: If name already exists.
-        """
+        """Validate constitution name is unique."""
         instance = self.instance
         queryset = Constitution.objects.filter(name=value)
 
-        # Exclude current instance if updating
         if instance is not None and hasattr(instance, "pk"):
             queryset = queryset.exclude(pk=instance.pk)
 

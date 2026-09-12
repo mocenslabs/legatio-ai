@@ -1,0 +1,77 @@
+{
+  "title": "Constitutions",
+  "subtitle": "Define the rules your agents must respect.",
+  "new": "New constitution",
+  "empty": {
+    "title": "No constitutions yet",
+    "description": "Create your first constitution to start controlling your agents."
+  },
+  "fields": {
+    "name": "Name",
+    "description": "Description",
+    "isActive": "Active"
+  },
+  "status": {
+    "active": "Active",
+    "draft": "Draft"
+  },
+  "actions": {
+    "activate": "Activate",
+    "edit": "Edit",
+    "delete": "Delete",
+    "viewRules": "View rules"
+  },
+  "rules": {
+    "title": "Rules",
+    "new": "Add rule",
+    "empty": "This constitution has no rules yet.",
+    "fields": {
+      "name": "Rule name",
+      "description": "Description",
+      "conditionField": "Field",
+      "conditionOperator": "Operator",
+      "conditionValue": "Value",
+      "actionType": "Action",
+      "riskLevel": "Risk level",
+      "priority": "Priority",
+      "approvers": "Approvers"
+    },
+    "actions": {
+      "ALLOW": "Allow",
+      "DENY": "Deny",
+      "REQUIRE_APPROVAL": "Require approval"
+    },
+    "risk": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "CRITICAL": "Critical"
+    },
+    "operators": {
+      "==": "equals",
+      "!=": "not equals",
+      ">": "greater than",
+      "<": "less than",
+      ">=": "greater or equal",
+      "<=": "less or equal",
+      "in": "in list",
+      "not_in": "not in list",
+      "contains": "contains",
+      "exists": "exists"
+    }
+  },
+  "evaluation": {
+    "title": "Test policy",
+    "outcome": {
+      "ALLOW": "Allowed",
+      "DENY": "Denied",
+      "REQUIRE_HUMAN_APPROVAL": "Requires human approval",
+      "ERROR": "Evaluation error"
+    }
+  },
+  "errors": {
+    "loadFailed": "Could not load constitutions.",
+    "saveFailed": "Could not save the constitution.",
+    "deleteFailed": "Could not delete the constitution."
+  }
+}

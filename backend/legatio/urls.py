@@ -10,6 +10,7 @@ urlpatterns = [
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     # Apps (Agregando v1 para cumplir con ADR-010)
+    path("api/v1/auth/", include("apps.accounts.urls")),
     path("api/v1/constitutions/", include("apps.constitutions.urls")),
     path("api/v1/policies/", include("apps.policies.urls")),
     path("api/v1/proposals/", include("apps.proposals.urls")),

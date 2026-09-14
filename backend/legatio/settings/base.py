@@ -4,6 +4,7 @@ Base Django settings for Legatio AI project.
 Contains settings common to all environments.
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 from decouple import config
@@ -237,4 +238,19 @@ SPECTACULAR_SETTINGS = {
         "OfferStatusEnum": "apps.negotiations.models.negotiation_offer.OfferStatus",
         "AgentActionTypeEnum": "apps.agents.models.automation_rule.ActionType",
     },
+}
+
+# SimpleJWT Configuration
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
 }

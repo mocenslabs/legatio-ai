@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { apiClient } from '@/api/client'
-
+import { getApiErrorMessage, getErrorStatus } from '@/utils/api'
 // UI Components
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -54,9 +54,13 @@ async function handleRegister() {
 
     // Redirigir al login para que inicien sesión (o auto-login si el backend lo permite)
     await router.push('/login?registered=true')
-  } catch (error: any) {
-    console.error('Register failed:', error)
-    errorMessage.value = error.response?.data?.detail || t('auth.register.errors.generic')
+  } catch (error: unknown) {
+    const status = getErrorStatus(error)
+    if (status === 401) {
+      errorMessage.value = t('auth.login.errors.invalidCredentials')
+    } else {
+      errorMessage.value = getApiErrorMessage(error, t('auth.login.errors.generic'))
+    }
   } finally {
     isLoading.value = false
   }

@@ -114,3 +114,4 @@ frontend/tsconfig.app.tsbuildinfo
 frontend/tsconfig.node.tsbuildinfo
 frontend/dist/
 frontend/coverage/
+backend/celerybeat-schedule*

@@ -1,17 +1,17 @@
 import { createI18n } from 'vue-i18n'
 import enAuth from './en/auth.json'
 import enCommon from './en/common.json'
+import enConstitution from './en/constitution.json'
 
 const i18n = createI18n({
-  legacy: false, // Composition API
+  legacy: false,
   locale: 'en',
   fallbackLocale: 'en',
   messages: {
     en: {
-      // CORREGIDO: enAuth ya es { login: { title: "..." } }
-      // No necesita .auth al final
       auth: enAuth,
       common: enCommon,
+      constitution: enConstitution,
     },
   },
   missingWarn: false,

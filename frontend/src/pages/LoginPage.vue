@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { apiClient } from '@/api/client'
-
+import { getApiErrorMessage, getErrorStatus } from '@/utils/api'
 // UI Components
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -57,13 +57,12 @@ async function handleLogin() {
     // Redirigir a la ruta original o al dashboard
     const redirectPath = (route.query.redirect as string) || '/dashboard'
     await router.push(redirectPath)
-  } catch (error: any) {
-    console.error('Login failed:', error)
-    const status = error.response?.status
+  } catch (error: unknown) {
+    const status = getErrorStatus(error)
     if (status === 401) {
       errorMessage.value = t('auth.login.errors.invalidCredentials')
     } else {
-      errorMessage.value = error.response?.data?.detail || t('auth.login.errors.generic')
+      errorMessage.value = getApiErrorMessage(error, t('auth.login.errors.generic'))
     }
   } finally {
     isLoading.value = false

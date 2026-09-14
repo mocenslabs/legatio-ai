@@ -1,13 +1,5 @@
-/**
- * Application router configuration.
- *
- * Defines all top-level routes for Legatio AI. Routes are
- * lazy-loaded to optimize initial bundle size.
- *
- * Reference: 02-ARCHITECTURE.md Section 6.1
- */
-
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -71,9 +63,9 @@ const router = createRouter({
   routes,
 })
 
-import { useAuthStore } from '@/stores/auth'
-
-router.beforeEach((to, from, next) => {
+// Router guard global
+router.beforeEach((to, _from, next) => {
+  // CORREGIDO: _from en lugar de from
   const authStore = useAuthStore()
   const requiresAuth = to.meta.requiresAuth as boolean
 

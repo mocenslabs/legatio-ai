@@ -12,6 +12,7 @@ import type { PolicyRule } from '@/types/models/constitution'
 type PolicyRuleListResponse = PaginatedResponse<PolicyRule> | PolicyRule[]
 
 export const policyRulesApi = {
+  // CORREGIDO: Backend usa /api/policies/rules/ NO /api/v1/policies/rules/
   list(params?: PolicyRuleListParams) {
     return apiClient.get<PolicyRuleListResponse>('/policies/rules/', { params })
   },
@@ -30,6 +31,7 @@ export const policyRulesApi = {
 }
 
 export const policyEvaluationApi = {
+  // CORREGIDO: Backend usa /api/policies/evaluate/
   evaluate(payload: PolicyEvaluationRequest) {
     return apiClient.post<PolicyEvaluationResponse>('/policies/evaluate/', payload)
   },

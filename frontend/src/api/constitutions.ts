@@ -10,6 +10,7 @@ import type { Constitution } from '@/types/models/constitution'
 type ConstitutionListResponse = PaginatedResponse<Constitution> | Constitution[]
 
 export const constitutionsApi = {
+  // CORREGIDO: Backend usa /api/constitutions/ NO /api/v1/constitutions/
   list(params?: ConstitutionListParams) {
     return apiClient.get<ConstitutionListResponse>('/constitutions/', { params })
   },
@@ -25,13 +26,6 @@ export const constitutionsApi = {
   remove(id: string) {
     return apiClient.delete<void>(`/constitutions/${id}/`)
   },
-  /**
-   * Activate a constitution.
-   *
-   * NOTE: the backend exposes no dedicated /activate endpoint yet
-   * (see 02-ARCHITECTURE.md §9.2 note); activation is performed via
-   * PATCH is_active=true until the dedicated action lands.
-   */
   activate(id: string) {
     return apiClient.patch<Constitution>(`/constitutions/${id}/`, { is_active: true })
   },

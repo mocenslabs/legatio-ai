@@ -54,6 +54,7 @@ export function useUpdateConstitution() {
       constitutionsApi.update(id, payload),
     onSuccess: (response) => {
       void queryClient.invalidateQueries({ queryKey: constitutionKeys.lists() })
+      // CORREGIDO: response ahora está tipado correctamente
       queryClient.setQueryData(constitutionKeys.detail(response.data.id), response.data)
     },
   })

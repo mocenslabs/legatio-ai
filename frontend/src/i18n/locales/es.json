@@ -1,0 +1,374 @@
+{
+  "app": {
+    "name": "Legatio AI",
+    "tagline": "Confianza y control entre humanos y agentes de IA"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "constitutions": "Constituciones",
+    "negotiations": "Negociaciones",
+    "approvals": "Aprobaciones",
+    "agreements": "Acuerdos",
+    "audit": "Auditoría",
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión",
+    "profile": "Perfil",
+    "agents": "Agentes",
+    "help": "Ayuda"
+  },
+  "auth": {
+    "loginTitle": "Iniciar sesión",
+    "loginSubtitle": "Accedé a tu espacio Legatio",
+    "registerTitle": "Crear cuenta",
+    "registerSubtitle": "Empezá a definir reglas para tus agentes",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "confirmPassword": "Confirmar contraseña",
+    "submitLogin": "Ingresar",
+    "submitRegister": "Crear cuenta",
+    "noAccount": "¿No tenés cuenta?",
+    "hasAccount": "¿Ya tenés cuenta?",
+    "goRegister": "Registrarse",
+    "goLogin": "Iniciar sesión",
+    "loggingIn": "Ingresando…",
+    "registering": "Creando cuenta…",
+    "invalidCredentials": "Correo o contraseña inválidos",
+    "registerFailed": "No se pudo registrar. Intentá de nuevo.",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+    "twoFactorTitle": "Autenticación en dos pasos",
+    "twoFactorSubtitle": "Ingresá el código de 6 dígitos de tu app autenticadora",
+    "totpCode": "Código de autenticación",
+    "verify2fa": "Verificar",
+    "verifying": "Verificando…",
+    "invalid2fa": "Código de autenticación inválido"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": "Bienvenido/a, {name}",
+    "welcomeGuest": "Bienvenido/a",
+    "subtitle": "Administrá constituciones, negociaciones y aprobaciones humanas.",
+    "comingSoon": "Próxima etapa",
+    "cards": {
+      "constitutions": "Constituciones",
+      "constitutionsDesc": "Definí reglas que tus agentes deben cumplir",
+      "negotiations": "Negociaciones",
+      "negotiationsDesc": "Salas activas e historial",
+      "approvals": "Aprobaciones",
+      "approvalsDesc": "Decisiones humanas en el flujo",
+      "agreements": "Acuerdos",
+      "agreementsDesc": "Registros firmados y exportaciones",
+      "profile": "Perfil",
+      "profileDesc": "Nombre, contraseña y autenticación en dos pasos",
+      "agents": "Agentes",
+      "agentsDesc": "Creá y administrá tus agentes"
+    },
+    "subtitleGuide": "Seguí la lista — cada paso habilita el siguiente.",
+    "checklistTitle": "Primeros pasos",
+    "nextHint": "Siguiente: {step}",
+    "checklist": {
+      "agentTitle": "Creá un agente",
+      "agentDesc": "Un agente ficticio que actúa por vos",
+      "constitutionTitle": "Agregá una constitución",
+      "constitutionDesc": "Reglas que tu agente debe cumplir",
+      "negotiationTitle": "Iniciá una negociación",
+      "negotiationDesc": "Emparejá tu agente con uno externo",
+      "approvalTitle": "Aprobaciones humanas",
+      "approvalDesc": "No hay nada pendiente",
+      "approvalPending": "{n} esperando tu decisión",
+      "doIt": "Hacer esto",
+      "review": "Revisar"
+    }
+  },
+  "common": {
+    "loading": "Cargando…",
+    "error": "Algo salió mal",
+    "retry": "Reintentar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "language": "Idioma",
+    "english": "Inglés",
+    "spanish": "Español",
+    "saving": "Guardando…",
+    "back": "Volver",
+    "view": "Ver",
+    "refresh": "Actualizar",
+    "open": "Abrir",
+    "menu": "Menú",
+    "theme": "Tema",
+    "light": "Modo claro",
+    "dark": "Modo oscuro",
+    "lightShort": "Claro",
+    "darkShort": "Oscuro",
+    "delete": "Eliminar"
+  },
+  "errors": {
+    "network": "Error de red. Revisá tu conexión.",
+    "unauthorized": "Sesión expirada. Volvé a iniciar sesión.",
+    "forbidden": "No tenés permiso para hacer eso.",
+    "server": "Error del servidor. Probá más tarde.",
+    "unknown": "Error inesperado"
+  },
+  "constitutions": {
+    "title": "Constituciones",
+    "subtitle": "Reglas que gobiernan a tus agentes",
+    "create": "Nueva constitución",
+    "createSubtitle": "Asociá una constitución a uno de tus agentes",
+    "detailTitle": "Detalle de constitución",
+    "emptyTitle": "Todavía no hay constituciones",
+    "emptyBody": "Creá una o ejecutá el seed para cargar datos demo.",
+    "colName": "Nombre",
+    "colStatus": "Estado",
+    "colUpdated": "Actualizado",
+    "description": "Descripción",
+    "agent": "Agente",
+    "selectAgent": "Seleccioná un agente",
+    "formRequired": "Nombre y agente son obligatorios",
+    "metaTitle": "Detalle",
+    "version": "Versión activa",
+    "rulesTitle": "Reglas",
+    "noRules": "No hay reglas en la versión activa",
+    "nextNegotiation": "Reglas listas. Siguiente: iniciá una negociación."
+  },
+  "negotiations": {
+    "title": "Negociaciones",
+    "subtitle": "Salas entre tu agente y agentes externos",
+    "create": "Nueva negociación",
+    "createSubtitle": "Creá una sala con constitución y agentes",
+    "detailTitle": "Detalle de negociación",
+    "emptyTitle": "Todavía no hay negociaciones",
+    "emptyBody": "Creá una sala o usá el seed (escenario Madrid).",
+    "colRef": "Referencia",
+    "colTitle": "Título",
+    "colStatus": "Estado",
+    "colRound": "Ronda",
+    "colUpdated": "Actualizado",
+    "colAmount": "Monto",
+    "colType": "Tipo",
+    "instruction": "Instrucción",
+    "userAgent": "Tu agente",
+    "externalAgent": "Agente externo",
+    "maxRounds": "Máx. rondas",
+    "formRequired": "Título, agentes y constitución son obligatorios",
+    "metaTitle": "Detalle",
+    "proposalsTitle": "Propuestas",
+    "noProposals": "Sin propuestas — iniciá la negociación y procesá rondas.",
+    "start": "Iniciar",
+    "processRound": "Procesar ronda",
+    "started": "Negociación iniciada",
+    "roundProcessed": "Ronda procesada — resultado: {outcome}"
+  },
+  "approvals": {
+    "title": "Aprobaciones",
+    "subtitle": "Decisiones humanas requeridas por el motor de políticas",
+    "emptyTitle": "No hay aprobaciones pendientes",
+    "emptyBody": "Cuando una propuesta requiera aprobación humana, aparecerá aquí.",
+    "colSummary": "Resumen",
+    "colStatus": "Estado",
+    "colExpires": "Vence",
+    "colActions": "Acciones",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "approved": "Aprobación concedida",
+    "rejected": "Aprobación rechazada"
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Cuenta, contraseña y autenticación en dos pasos",
+    "accountSection": "Cuenta",
+    "passwordSection": "Contraseña",
+    "twoFactorSection": "Autenticación en dos pasos",
+    "saveProfile": "Guardar perfil",
+    "saved": "Perfil guardado",
+    "saveFailed": "No se pudo guardar (¿está disponible PATCH /auth/me/?)",
+    "passwordHint": "Requiere el endpoint POST /auth/change-password/ (incluido en backend_profile_patch).",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "changePassword": "Cambiar contraseña",
+    "passwordChanged": "Contraseña actualizada",
+    "passwordFailed": "No se pudo cambiar la contraseña",
+    "language": "Idioma preferido",
+    "timezone": "Zona horaria",
+    "twoFactorOn": "Activado",
+    "twoFactorOff": "Desactivado",
+    "twoFactorHint": "Protegé tu cuenta con una app autenticadora (TOTP).",
+    "enable2fa": "Activar 2FA",
+    "scanQr": "Escaneá este QR y confirmá con un código.",
+    "secret": "Secreto manual",
+    "confirm2fa": "Confirmar y activar",
+    "twoFactorEnabled": "2FA activado",
+    "disable2faHint": "Ingresá un código TOTP actual para desactivar 2FA.",
+    "disable2fa": "Desactivar 2FA",
+    "twoFactorDisabled": "2FA desactivado",
+    "avatarHint": "Avatar generado para demos (aún sin subida de archivo)."
+  },
+  "agreements": {
+    "title": "Acuerdos",
+    "subtitle": "Registros firmados de negociaciones completadas",
+    "detailTitle": "Detalle del acuerdo",
+    "emptyTitle": "Todavía no hay acuerdos",
+    "emptyBody": "Completá una negociación y aprobá una propuesta para generar un acuerdo.",
+    "colRef": "Referencia",
+    "colStatus": "Estado",
+    "colAmount": "Monto",
+    "colSigned": "Firmado",
+    "metaTitle": "Detalle",
+    "canonical": "Payload canónico",
+    "sign": "Firmar",
+    "verify": "Verificar",
+    "export": "Exportar JSON",
+    "signed": "Acuerdo firmado",
+    "verified": "Resultado verify: {result}",
+    "exported": "Exportación descargada"
+  },
+  "audit": {
+    "title": "Auditoría",
+    "subtitle": "Registro inmutable de eventos",
+    "emptyTitle": "Sin eventos de auditoría",
+    "emptyBody": "Los eventos aparecen al usar negociaciones y aprobaciones.",
+    "colType": "Evento",
+    "colEntity": "Entidad",
+    "colActor": "Actor",
+    "colWhen": "Cuándo",
+    "verifyChain": "Verificar cadena",
+    "verified": "Verify cadena: {result}"
+  },
+  "agents": {
+    "title": "Agentes",
+    "subtitle": "Tus agentes y contrapartes externas para negociar",
+    "create": "Nuevo agente",
+    "createSubtitle": "Creá un USER_AGENT para demos y pruebas",
+    "createHint": "Crea un agente de usuario ficticio de tu propiedad. Los externos vienen del seed.",
+    "nameRequired": "El nombre es obligatorio",
+    "description": "Descripción",
+    "mineTitle": "Mis agentes",
+    "externalTitle": "Externos / simulados",
+    "externalHint": "Vienen del entorno (seed). Usalos como contraparte en una negociación.",
+    "emptyMine": "Todavía no tenés agentes",
+    "emptyMineBody": "Creá uno para asociar constituciones e iniciar negociaciones.",
+    "emptyExternal": "No hay agentes externos. Ejecutá el seed.",
+    "colName": "Nombre",
+    "colType": "Tipo",
+    "colStatus": "Estado",
+    "colUpdated": "Actualizado",
+    "confirmDelete": "¿Dar de baja (soft-delete) este agente?",
+    "nextConstitution": "Agente listo. Siguiente: asociá una constitución.",
+    "emptyExternalBody": "Ejecutá ./scripts/seed.sh para ver hoteles/ISP simulados."
+  },
+  "help": {
+    "title": "Ayuda",
+    "subtitle": "Cómo probar Legatio en pocos pasos",
+    "howTitle": "Flujo recomendado",
+    "faqTitle": "Preguntas frecuentes",
+    "steps": [
+      {
+        "title": "Creá un agente",
+        "body": "Agentes → Nuevo agente. Poné un nombre (ej. “Asistente de viajes”)."
+      },
+      {
+        "title": "Definí una constitución",
+        "body": "Constituciones → Nueva. Asociála a tu agente y usá reglas del seed o las que agregues."
+      },
+      {
+        "title": "Iniciá una negociación",
+        "body": "Negociaciones → Nueva. Elegí tu agente, uno externo y la constitución. Luego Iniciar y Procesar ronda."
+      },
+      {
+        "title": "Aprobá si hace falta",
+        "body": "Si la política pide humano, abrí Aprobaciones y aprobá o rechazá."
+      },
+      {
+        "title": "Revisá acuerdo y auditoría",
+        "body": "Los resultados firmados están en Acuerdos. Cada paso queda en Auditoría."
+      }
+    ],
+    "faqs": [
+      {
+        "q": "¿Qué es Legatio?",
+        "a": "Una capa de control entre humanos y agentes de IA: reglas (constituciones), negociaciones, aprobaciones humanas, acuerdos firmados y auditoría."
+      },
+      {
+        "q": "¿Hacen falta APIs externas reales?",
+        "a": "No. El MVP usa agentes externos simulados del seed para demostrar el flujo completo."
+      },
+      {
+        "q": "¿Por qué no veo agentes?",
+        "a": "Creá el tuyo en Agentes, o corré ./scripts/seed.sh para cargar los de demo."
+      },
+      {
+        "q": "¿Qué hace Procesar ronda?",
+        "a": "Avanza una ronda: la contraparte simulada propone, se evalúan políticas y el resultado puede ser ALLOW, DENY o REQUIRE_HUMAN_APPROVAL."
+      },
+      {
+        "q": "¿Es obligatorio el 2FA?",
+        "a": "No. Se activa en Perfil. Después el login pide un código TOTP."
+      }
+    ]
+  },
+  "home": {
+    "eyebrow": "Capa de confianza para agentes de IA",
+    "headline": "El humano sigue al mando cuando los agentes negocian",
+    "lead": "Legatio permite definir reglas, negociar en varias rondas, pedir aprobación humana cuando hay riesgo, y dejar un rastro auditable.",
+    "cta": "Abrir la app",
+    "ctaHelp": "Cómo funciona",
+    "pillars": [
+      {
+        "title": "Constituciones",
+        "body": "Reglas que tus agentes deben cumplir: presupuestos, privacidad, renovaciones."
+      },
+      {
+        "title": "Negociaciones",
+        "body": "Rondas estructuradas entre tu agente y terceros, con resultados claros."
+      },
+      {
+        "title": "Humano en el loop",
+        "body": "Las propuestas de alto riesgo se pausan. Acuerdos y auditoría cierran el ciclo."
+      }
+    ],
+    "flowTitle": "De la regla al resultado firmado",
+    "flow": [
+      {
+        "title": "Agente",
+        "body": "Creá el agente que actúa por vos."
+      },
+      {
+        "title": "Reglas",
+        "body": "Asociá una constitución con límites."
+      },
+      {
+        "title": "Negociar",
+        "body": "Corré rondas hasta aceptar, denegar o aprobar."
+      },
+      {
+        "title": "Registro",
+        "body": "Firmá acuerdos e inspeccioná la cadena de auditoría."
+      }
+    ],
+    "bottomTitle": "Pensado para demos y control real",
+    "bottomBody": "Empezá con el seed o creá tu agente en segundos. Interfaz en español e inglés, tema claro y oscuro."
+  },
+  "status": {
+    "unknown": "—",
+    "raw": "",
+    "active": "Activo",
+    "draft": "Borrador",
+    "pending": "Pendiente",
+    "inProgress": "En curso",
+    "awaitingApproval": "Esperando tu aprobación",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "denied": "Denegado",
+    "allowed": "Permitido",
+    "completed": "Completado",
+    "signed": "Firmado",
+    "executed": "Ejecutado",
+    "cancelled": "Cancelado",
+    "expired": "Vencido",
+    "suspended": "Suspendido",
+    "revoked": "Revocado",
+    "failed": "Fallido",
+    "archived": "Archivado"
+  }
+}

@@ -1,0 +1,14 @@
+# =============================================================================
+# Legatio AI — Production requirements
+# =============================================================================
+
+-r base.txt
+
+# ASGI server
+gunicorn==23.0.0
+
+# Security hardening
+django-csp==4.0
+
+# Database connection pooling (future)
+# django-db-geventpool==4.0.1

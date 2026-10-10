@@ -1,0 +1,120 @@
+.empty-state {
+  padding: 2.25rem 1.25rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.empty-state strong {
+  display: block;
+  color: var(--color-text);
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+}
+
+.empty-state p {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checklist__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.checklist__item:hover {
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-sm);
+}
+
+.checklist__item.is-done {
+  opacity: 0.85;
+}
+
+.checklist__mark {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.checklist__item.is-done .checklist__mark {
+  border-color: var(--color-success);
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.checklist__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.checklist__body strong {
+  display: block;
+  font-size: 0.875rem;
+}
+
+.checklist__body span {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.checklist__cta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-brand);
+  white-space: nowrap;
+}
+
+.next-step {
+  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-soft);
+  border: 1px solid var(--color-brand);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.next-step p {
+  margin: 0;
+  color: var(--color-text);
+}

@@ -1,0 +1,36 @@
+.locale-switch,
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+}
+
+.locale-switch__btn,
+.theme-switch__btn {
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.locale-switch__btn.is-active,
+.theme-switch__btn.is-active {
+  background: var(--color-surface);
+  color: var(--color-brand);
+  box-shadow: var(--shadow-sm);
+}
+
+.locale-switch__btn:hover:not(.is-active),
+.theme-switch__btn:hover:not(.is-active) {
+  color: var(--color-text);
+}

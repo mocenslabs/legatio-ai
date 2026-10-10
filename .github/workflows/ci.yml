@@ -1,0 +1,272 @@
+# =============================================================================
+# Legatio AI — Continuous Integration Pipeline
+# =============================================================================
+# Lint, type-check, tests, frontend build, docker build.
+# Triggers: push/PR to main and develop.
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "20"
+  # MVP coverage gate (overrides pyproject fail_under if higher)
+  COV_FAIL_UNDER: "80"
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Backend: Lint + Type Check
+  # ---------------------------------------------------------------------------
+  backend-lint:
+    name: Backend Lint & Type Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+          cache-dependency-path: backend/requirements/*.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/development.txt
+
+      - name: Run ruff check
+        run: ruff check .
+
+      - name: Run ruff format check
+        run: ruff format --check .
+
+      - name: Run mypy
+        run: mypy .
+
+  # ---------------------------------------------------------------------------
+  # Backend: Unit / Integration Tests
+  # ---------------------------------------------------------------------------
+  backend-test:
+    name: Backend Unit Tests
+    runs-on: ubuntu-latest
+    needs: backend-lint
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: legatio_test
+          POSTGRES_USER: legatio
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DJANGO_SETTINGS_MODULE: legatio.settings.development
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: legatio_test
+      POSTGRES_USER: legatio
+      POSTGRES_PASSWORD: test_password
+      REDIS_URL: redis://localhost:6379/0
+      CELERY_TASK_ALWAYS_EAGER: "True"
+      DJANGO_SECRET_KEY: test-secret-key-not-for-production
+      JWT_SECRET_KEY: test-jwt-secret-key-not-for-production
+      ENCRYPTION_KEY: dGVzdC1lbmNyeXB0aW9uLWtleS0xMjM0NTY3OA==
+      SERVER_SIGNING_KEY: test-signing-key-not-for-production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+          cache-dependency-path: backend/requirements/*.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/development.txt
+
+      - name: Run migrations
+        run: python manage.py migrate --noinput
+
+      - name: Run pytest with coverage
+        run: >
+          pytest
+          --cov=apps
+          --cov=services
+          --cov=core
+          --cov-report=xml
+          --cov-report=term-missing
+          --cov-fail-under=${{ env.COV_FAIL_UNDER }}
+
+      - name: Upload coverage to Codecov
+        if: github.event_name == 'push'
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./backend/coverage.xml
+          flags: backend
+          fail_ci_if_error: false
+
+  # ---------------------------------------------------------------------------
+  # Frontend: Lint + Type Check
+  # ---------------------------------------------------------------------------
+  frontend-lint:
+    name: Frontend Lint & Type Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # No --fix in CI: must match committed sources
+      - name: Run ESLint
+        run: npx eslint . --max-warnings=0
+
+      - name: Run TypeScript type check
+        run: npm run type-check
+
+  # ---------------------------------------------------------------------------
+  # Frontend: Build
+  # ---------------------------------------------------------------------------
+  frontend-build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    needs: frontend-lint
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Upload build artifacts
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 7
+
+  # ---------------------------------------------------------------------------
+  # Docker: Build Images (no push)
+  # ---------------------------------------------------------------------------
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [backend-test, frontend-build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: false
+          tags: legatio-backend:ci-${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          tags: legatio-frontend:ci-${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ---------------------------------------------------------------------------
+  # Summary
+  # ---------------------------------------------------------------------------
+  ci-summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs:
+      [
+        backend-lint,
+        backend-test,
+        frontend-lint,
+        frontend-build,
+        docker-build,
+      ]
+    if: always()
+    steps:
+      - name: Check all jobs status
+        run: |
+          if [ "${{ needs.backend-lint.result }}" != "success" ] || \
+             [ "${{ needs.backend-test.result }}" != "success" ] || \
+             [ "${{ needs.frontend-lint.result }}" != "success" ] || \
+             [ "${{ needs.frontend-build.result }}" != "success" ] || \
+             [ "${{ needs.docker-build.result }}" != "success" ]; then
+            echo "❌ CI pipeline failed"
+            echo "backend-lint:    ${{ needs.backend-lint.result }}"
+            echo "backend-test:    ${{ needs.backend-test.result }}"
+            echo "frontend-lint:   ${{ needs.frontend-lint.result }}"
+            echo "frontend-build:  ${{ needs.frontend-build.result }}"
+            echo "docker-build:    ${{ needs.docker-build.result }}"
+            exit 1
+          fi
+          echo "✅ CI pipeline passed successfully"

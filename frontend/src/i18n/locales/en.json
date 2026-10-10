@@ -1,0 +1,374 @@
+{
+  "app": {
+    "name": "Legatio AI",
+    "tagline": "Trust and control between humans and AI agents"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "constitutions": "Constitutions",
+    "negotiations": "Negotiations",
+    "approvals": "Approvals",
+    "agreements": "Agreements",
+    "audit": "Audit",
+    "settings": "Settings",
+    "logout": "Log out",
+    "profile": "Profile",
+    "agents": "Agents",
+    "help": "Help"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Access your Legatio workspace",
+    "registerTitle": "Create account",
+    "registerSubtitle": "Start defining rules for your agents",
+    "email": "Email",
+    "password": "Password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "confirmPassword": "Confirm password",
+    "submitLogin": "Sign in",
+    "submitRegister": "Create account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "goRegister": "Register",
+    "goLogin": "Sign in",
+    "loggingIn": "Signing in…",
+    "registering": "Creating account…",
+    "invalidCredentials": "Invalid email or password",
+    "registerFailed": "Registration failed. Please try again.",
+    "passwordMismatch": "Passwords do not match",
+    "passwordMin": "Password must be at least 8 characters",
+    "twoFactorTitle": "Two-factor authentication",
+    "twoFactorSubtitle": "Enter the 6-digit code from your authenticator app",
+    "totpCode": "Authentication code",
+    "verify2fa": "Verify",
+    "verifying": "Verifying…",
+    "invalid2fa": "Invalid authentication code"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {name}",
+    "welcomeGuest": "Welcome",
+    "subtitle": "Manage constitutions, negotiations and human approvals.",
+    "comingSoon": "Coming in the next stage",
+    "cards": {
+      "constitutions": "Constitutions",
+      "constitutionsDesc": "Define rules your agents must follow",
+      "negotiations": "Negotiations",
+      "negotiationsDesc": "Active and historical negotiation rooms",
+      "approvals": "Approvals",
+      "approvalsDesc": "Human-in-the-loop decisions",
+      "agreements": "Agreements",
+      "agreementsDesc": "Signed records and exports",
+      "profile": "Profile",
+      "profileDesc": "Name, password and two-factor authentication",
+      "agents": "Agents",
+      "agentsDesc": "Create and manage your agents"
+    },
+    "subtitleGuide": "Follow the checklist — each step unlocks the next.",
+    "checklistTitle": "Getting started",
+    "nextHint": "Next up: {step}",
+    "checklist": {
+      "agentTitle": "Create an agent",
+      "agentDesc": "A fictional agent that acts on your behalf",
+      "constitutionTitle": "Add a constitution",
+      "constitutionDesc": "Rules your agent must follow",
+      "negotiationTitle": "Start a negotiation",
+      "negotiationDesc": "Pair your agent with an external one",
+      "approvalTitle": "Human approvals",
+      "approvalDesc": "Nothing pending right now",
+      "approvalPending": "{n} waiting for you",
+      "doIt": "Do this",
+      "review": "Review"
+    }
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "language": "Language",
+    "english": "English",
+    "spanish": "Spanish",
+    "saving": "Saving…",
+    "back": "Back",
+    "view": "View",
+    "refresh": "Refresh",
+    "open": "Open",
+    "menu": "Menu",
+    "theme": "Theme",
+    "light": "Light mode",
+    "dark": "Dark mode",
+    "lightShort": "Light",
+    "darkShort": "Dark",
+    "delete": "Delete"
+  },
+  "errors": {
+    "network": "Network error. Check your connection.",
+    "unauthorized": "Session expired. Please sign in again.",
+    "forbidden": "You do not have permission to do that.",
+    "server": "Server error. Try again later.",
+    "unknown": "Unexpected error"
+  },
+  "constitutions": {
+    "title": "Constitutions",
+    "subtitle": "Rules that govern your agents",
+    "create": "New constitution",
+    "createSubtitle": "Attach a constitution to one of your agents",
+    "detailTitle": "Constitution detail",
+    "emptyTitle": "No constitutions yet",
+    "emptyBody": "Create one or run the seed script to load demo data.",
+    "colName": "Name",
+    "colStatus": "Status",
+    "colUpdated": "Updated",
+    "description": "Description",
+    "agent": "Agent",
+    "selectAgent": "Select an agent",
+    "formRequired": "Name and agent are required",
+    "metaTitle": "Details",
+    "version": "Active version",
+    "rulesTitle": "Rules",
+    "noRules": "No rules on the active version",
+    "nextNegotiation": "Rules ready. Next: start a negotiation."
+  },
+  "negotiations": {
+    "title": "Negotiations",
+    "subtitle": "Rooms between your agent and external agents",
+    "create": "New negotiation",
+    "createSubtitle": "Start a room with constitution and agents",
+    "detailTitle": "Negotiation detail",
+    "emptyTitle": "No negotiations yet",
+    "emptyBody": "Create a room or use seed data (Madrid travel scenario).",
+    "colRef": "Reference",
+    "colTitle": "Title",
+    "colStatus": "Status",
+    "colRound": "Round",
+    "colUpdated": "Updated",
+    "colAmount": "Amount",
+    "colType": "Type",
+    "instruction": "Instruction",
+    "userAgent": "Your agent",
+    "externalAgent": "External agent",
+    "maxRounds": "Max rounds",
+    "formRequired": "Title, agents and constitution are required",
+    "metaTitle": "Details",
+    "proposalsTitle": "Proposals",
+    "noProposals": "No proposals yet — start the negotiation and process rounds.",
+    "start": "Start",
+    "processRound": "Process round",
+    "started": "Negotiation started",
+    "roundProcessed": "Round processed — outcome: {outcome}"
+  },
+  "approvals": {
+    "title": "Approvals",
+    "subtitle": "Human decisions required by the policy engine",
+    "emptyTitle": "No pending approvals",
+    "emptyBody": "When a proposal needs human approval it will appear here.",
+    "colSummary": "Summary",
+    "colStatus": "Status",
+    "colExpires": "Expires",
+    "colActions": "Actions",
+    "approve": "Approve",
+    "reject": "Reject",
+    "approved": "Approval granted",
+    "rejected": "Approval rejected"
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Account settings, password and two-factor authentication",
+    "accountSection": "Account",
+    "passwordSection": "Password",
+    "twoFactorSection": "Two-factor authentication",
+    "saveProfile": "Save profile",
+    "saved": "Profile saved",
+    "saveFailed": "Could not save profile (is PATCH /auth/me/ available?)",
+    "passwordHint": "Requires backend endpoint POST /auth/change-password/ (included in backend_profile_patch).",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "changePassword": "Change password",
+    "passwordChanged": "Password updated",
+    "passwordFailed": "Could not change password",
+    "language": "Preferred language",
+    "timezone": "Timezone",
+    "twoFactorOn": "Enabled",
+    "twoFactorOff": "Disabled",
+    "twoFactorHint": "Protect your account with an authenticator app (TOTP).",
+    "enable2fa": "Enable 2FA",
+    "scanQr": "Scan this QR code, then enter a code to confirm.",
+    "secret": "Manual secret",
+    "confirm2fa": "Confirm and enable",
+    "twoFactorEnabled": "2FA enabled",
+    "disable2faHint": "Enter a current TOTP code to disable 2FA.",
+    "disable2fa": "Disable 2FA",
+    "twoFactorDisabled": "2FA disabled",
+    "avatarHint": "Avatar is generated for demos (no upload yet)."
+  },
+  "agreements": {
+    "title": "Agreements",
+    "subtitle": "Signed records from completed negotiations",
+    "detailTitle": "Agreement detail",
+    "emptyTitle": "No agreements yet",
+    "emptyBody": "Complete a negotiation and approve a proposal to generate an agreement.",
+    "colRef": "Reference",
+    "colStatus": "Status",
+    "colAmount": "Amount",
+    "colSigned": "Signed",
+    "metaTitle": "Details",
+    "canonical": "Canonical payload",
+    "sign": "Sign",
+    "verify": "Verify",
+    "export": "Export JSON",
+    "signed": "Agreement signed",
+    "verified": "Verify result: {result}",
+    "exported": "Export downloaded"
+  },
+  "audit": {
+    "title": "Audit trail",
+    "subtitle": "Immutable event log for compliance",
+    "emptyTitle": "No audit events",
+    "emptyBody": "Events appear as you use negotiations and approvals.",
+    "colType": "Event",
+    "colEntity": "Entity",
+    "colActor": "Actor",
+    "colWhen": "When",
+    "verifyChain": "Verify chain",
+    "verified": "Chain verify: {result}"
+  },
+  "agents": {
+    "title": "Agents",
+    "subtitle": "Your agents and external counterparts used in negotiations",
+    "create": "New agent",
+    "createSubtitle": "Create a USER_AGENT for demos and tests",
+    "createHint": "This creates a fictional user agent owned by you. External agents come from seed data.",
+    "nameRequired": "Name is required",
+    "description": "Description",
+    "mineTitle": "My agents",
+    "externalTitle": "External / simulated",
+    "externalHint": "Provided by the environment (seed). Use them as the other party in a negotiation.",
+    "emptyMine": "You have no agents yet",
+    "emptyMineBody": "Create one to attach constitutions and start negotiations.",
+    "emptyExternal": "No external agents visible. Run the seed script.",
+    "colName": "Name",
+    "colType": "Type",
+    "colStatus": "Status",
+    "colUpdated": "Updated",
+    "confirmDelete": "Soft-delete this agent?",
+    "nextConstitution": "Agent ready. Next: attach a constitution.",
+    "emptyExternalBody": "Run ./scripts/seed.sh so simulated hotels/ISPs appear."
+  },
+  "help": {
+    "title": "Help",
+    "subtitle": "How to try Legatio in a few steps",
+    "howTitle": "Recommended flow",
+    "faqTitle": "FAQ",
+    "steps": [
+      {
+        "title": "Create an agent",
+        "body": "Go to Agents → New agent. Give it a name (e.g. “Travel assistant”)."
+      },
+      {
+        "title": "Define a constitution",
+        "body": "Constitutions → New. Attach it to your agent and (via seed or later rules) define limits like max price."
+      },
+      {
+        "title": "Start a negotiation",
+        "body": "Negotiations → New. Pick your agent, an external agent, and the constitution. Then Start and Process round."
+      },
+      {
+        "title": "Approve if asked",
+        "body": "If policy requires human approval, open Approvals and approve or reject."
+      },
+      {
+        "title": "Review agreement & audit",
+        "body": "Signed outcomes appear under Agreements. Every step is logged in Audit."
+      }
+    ],
+    "faqs": [
+      {
+        "q": "What is Legatio?",
+        "a": "A control layer between humans and autonomous AI agents: rules (constitutions), negotiations, human approvals, signed agreements and an audit trail."
+      },
+      {
+        "q": "Do I need real external APIs?",
+        "a": "No. The MVP uses simulated external agents from the seed so you can demo the full flow offline."
+      },
+      {
+        "q": "Why is the agent list empty?",
+        "a": "Create your own agent under Agents, or run ./scripts/seed.sh so demo agents exist."
+      },
+      {
+        "q": "What does Process round do?",
+        "a": "Advances one negotiation round: the simulated counterparty proposes, policies evaluate, and you may get ALLOW, DENY, or REQUIRE_HUMAN_APPROVAL."
+      },
+      {
+        "q": "Is 2FA required?",
+        "a": "Optional. Enable it under Profile. After that, login asks for a TOTP code."
+      }
+    ]
+  },
+  "home": {
+    "eyebrow": "Trust layer for AI agents",
+    "headline": "Humans stay in control when agents negotiate",
+    "lead": "Legatio lets you define rules, run multi-round negotiations, require human approval when risk is high, and keep a verifiable audit trail.",
+    "cta": "Open the app",
+    "ctaHelp": "How it works",
+    "pillars": [
+      {
+        "title": "Constitutions",
+        "body": "Policy rules your agents must obey: budgets, privacy, auto-renewal limits."
+      },
+      {
+        "title": "Negotiations",
+        "body": "Structured rounds between your agent and external parties with clear outcomes."
+      },
+      {
+        "title": "Human-in-the-loop",
+        "body": "High-risk proposals pause for approval. Agreements and audit close the loop."
+      }
+    ],
+    "flowTitle": "From rule to signed outcome",
+    "flow": [
+      {
+        "title": "Agent",
+        "body": "Create the agent that acts on your behalf."
+      },
+      {
+        "title": "Rules",
+        "body": "Attach a constitution with enforceable limits."
+      },
+      {
+        "title": "Negotiate",
+        "body": "Run rounds until accept, deny, or approval."
+      },
+      {
+        "title": "Record",
+        "body": "Sign agreements and inspect the audit chain."
+      }
+    ],
+    "bottomTitle": "Built for demos and real control",
+    "bottomBody": "Start with seed data or create your own agent in seconds. English and Spanish UI, light and dark themes."
+  },
+  "status": {
+    "unknown": "—",
+    "raw": "",
+    "active": "Active",
+    "draft": "Draft",
+    "pending": "Pending",
+    "inProgress": "In progress",
+    "awaitingApproval": "Waiting for your approval",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "denied": "Denied",
+    "allowed": "Allowed",
+    "completed": "Completed",
+    "signed": "Signed",
+    "executed": "Executed",
+    "cancelled": "Cancelled",
+    "expired": "Expired",
+    "suspended": "Suspended",
+    "revoked": "Revoked",
+    "failed": "Failed",
+    "archived": "Archived"
+  }
+}

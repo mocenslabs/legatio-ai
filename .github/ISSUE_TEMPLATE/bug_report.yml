@@ -1,0 +1,138 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior in Legatio AI
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! 🏛️
+        Please fill in as much detail as possible so we can reproduce and fix it quickly.
+
+        ⚠️ **If this is a security vulnerability, do NOT open a public issue.**
+        Please follow the private reporting process in [SECURITY.md](../SECURITY.md).
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the behavior.
+      placeholder: |
+        1. Create a Constitution with rule...
+        2. Start a negotiation...
+        3. Submit a proposal that...
+        4. Observe that...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: The Policy Engine should return DENY because...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Instead, the proposal was allowed through...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which part of Legatio is affected?
+      options:
+        - Policy Engine
+        - Constitution / Rules
+        - Negotiation
+        - Human Approval
+        - Agreement / Signing
+        - Audit Trail
+        - API (backend)
+        - Frontend (Vue)
+        - WebSockets / real-time
+        - Infrastructure / Docker
+        - Documentation
+        - Other / Unknown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - "Low — minor issue, workaround available"
+        - "Medium — impacts functionality but not critical"
+        - "High — significant feature broken"
+        - "Critical — authorization/security logic affected"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: |
+        Provide details about your environment.
+      value: |
+        - OS:
+        - Python version:
+        - Node.js version:
+        - Django version:
+        - Browser (if frontend):
+        - Docker version (if applicable):
+        - Git commit hash:
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs / Tracebacks
+      description: |
+        Paste any relevant logs, tracebacks, or error messages.
+        ⚠️ **Redact any secrets or PII before pasting.**
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain the problem.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate.
+          required: true
+        - label: I have read the SECURITY.md and this is NOT a security vulnerability.
+          required: true
+        - label: I have provided steps to reproduce the issue.
+          required: true
+        - label: I have redacted any secrets or PII from logs.
+          required: false

@@ -1,0 +1,32 @@
+# =============================================================================
+# Legatio AI — Development requirements
+# =============================================================================
+
+-r base.txt
+
+# Testing
+pytest==8.3.4
+pytest-django==4.9.0
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+factory-boy==3.3.1
+faker==33.1.0
+
+# Linting / formatting
+ruff==0.8.3
+mypy==1.13.0
+django-stubs[compatible-mypy]==5.1.1
+djangorestframework-stubs==3.15.2
+
+# Debug
+django-debug-toolbar==4.4.6
+ipython==8.30.0
+
+# Type checking extras
+types-redis==4.6.0.20241004
+
+# Pre-commit hooks
+pre-commit==4.0.1
+
+# Property-based testing
+hypothesis==6.119.3

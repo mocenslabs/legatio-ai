@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+.Python
+pip-log.txt
+
+# Node / Vue
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+
+# Django
+backend/media/
+backend/staticfiles/
+backend/static/
+db.sqlite3
+*.log
+local_settings.py
+
+# Environment & secrets (CRÍTICO)
+.env
+.env.local
+.env.*.local
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Testing & coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Terraform (cuando se active)
+infrastructure/terraform/**/*.tfstate
+infrastructure/terraform/**/*.tfstate.backup
+infrastructure/terraform/.terraform/
+infrastructure/terraform/**/.terraform.lock.hcl
+
+#Hypothesis
+backend/.hypothesis
+
+#Celery
+#
+backend/celerybeat-schedule

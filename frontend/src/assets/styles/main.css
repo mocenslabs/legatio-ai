@@ -1,0 +1,13 @@
+@import './variables.css';
+@import './base.css';
+@import './components/buttons.css';
+@import './components/forms.css';
+@import './components/locale-switch.css';
+@import './components/badges.css';
+@import './components/data.css';
+@import './layout/auth-layout.css';
+@import './layout/app-shell.css';
+@import './layout/dashboard.css';
+@import './layout/home.css';
+@import './components/empty-state.css';
+@import './components/avatar.css';

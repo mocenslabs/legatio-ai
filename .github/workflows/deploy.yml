@@ -1,0 +1,35 @@
+# =============================================================================
+# Legatio AI — Deployment Pipeline (Placeholder)
+# =============================================================================
+# DEL-008: Placeholder for future deployment pipeline.
+# This will be implemented in a later phase when production infrastructure is ready.
+# =============================================================================
+
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment (staging or production)"
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy placeholder
+        run: |
+          echo "🚀 Deployment pipeline is a placeholder."
+          echo "Target environment: ${{ github.event.inputs.environment }}"
+          echo "This will be implemented in a later phase."
+          echo "See 02-ARCHITECTURE.md section 13.4 for the target architecture."

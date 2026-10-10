@@ -92,18 +92,21 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DJANGO_SETTINGS_MODULE: legatio.settings.development
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: "5432"
-      POSTGRES_DB: legatio_test
-      POSTGRES_USER: legatio
-      POSTGRES_PASSWORD: test_password
-      REDIS_URL: redis://localhost:6379/0
-      CELERY_TASK_ALWAYS_EAGER: "True"
-      DJANGO_SECRET_KEY: test-secret-key-not-for-production
-      JWT_SECRET_KEY: test-jwt-secret-key-not-for-production
-      ENCRYPTION_KEY: dGVzdC1lbmNyeXB0aW9uLWtleS0xMjM0NTY3OA==
-      SERVER_SIGNING_KEY: test-signing-key-not-for-production
+        DJANGO_SETTINGS_MODULE: legatio.settings.development
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: "5432"
+        POSTGRES_DB: legatio_test
+        POSTGRES_USER: legatio
+        POSTGRES_PASSWORD: test_password
+        REDIS_URL: redis://localhost:6379/0
+        CELERY_BROKER_URL: redis://localhost:6379/0
+        CELERY_RESULT_BACKEND: redis://localhost:6379/1
+        CELERY_TASK_ALWAYS_EAGER: "True"
+        CELERY_TASK_EAGER_PROPAGATES: "True"
+        DJANGO_SECRET_KEY: test-secret-key-not-for-production
+        JWT_SECRET_KEY: test-jwt-secret-key-not-for-production
+        ENCRYPTION_KEY: dGVzdC1lbmNyeXB0aW9uLWtleS0xMjM0NTY3OA==
+        SERVER_SIGNING_KEY: test-signing-key-not-for-production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

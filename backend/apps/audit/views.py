@@ -64,7 +64,7 @@ class AuditEventViewSet(ReadOnlyModelViewSet):  # type: ignore[type-arg]
             return queryset
 
         # Access related_name='agents' safely via type: ignore
-        user_agents = user.agents.all()  # type: ignore[attr-defined]
+        user_agents = user.agents.all()
         user_agent_ids = [str(agent.id) for agent in user_agents]
 
         return queryset.filter(

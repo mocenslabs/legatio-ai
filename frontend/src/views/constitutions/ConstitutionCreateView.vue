@@ -177,36 +177,93 @@ onMounted(() => {
   <div>
     <div class="page-header">
       <div>
-        <h1 class="page-header__title">{{ t('constitutions.create') }}</h1>
-        <p class="page-header__subtitle">{{ t('constitutions.createSubtitle') }}</p>
+        <h1 class="page-header__title">
+          {{ t('constitutions.create') }}
+        </h1>
+        <p class="page-header__subtitle">
+          {{ t('constitutions.createSubtitle') }}
+        </p>
       </div>
       <div class="page-header__actions">
-        <button type="button" class="btn btn--secondary btn--sm" @click="router.push({ name: 'constitutions' })">
+        <button
+          type="button"
+          class="btn btn--secondary btn--sm"
+          @click="router.push({ name: 'constitutions' })"
+        >
           {{ t('common.cancel') }}
         </button>
       </div>
     </div>
 
-    <div v-if="error" class="form-alert" role="alert">{{ error }}</div>
+    <div
+      v-if="error"
+      class="form-alert"
+      role="alert"
+    >
+      {{ error }}
+    </div>
 
-    <form class="stack" @submit.prevent="onSubmit">
+    <form
+      class="stack"
+      @submit.prevent="onSubmit"
+    >
       <div class="card-panel">
-        <div class="card-panel__header">{{ t('constitutions.metaTitle') }}</div>
+        <div class="card-panel__header">
+          {{ t('constitutions.metaTitle') }}
+        </div>
         <div class="card-panel__body stack">
-          <p class="page-header__subtitle">{{ t('constitutions.createFlowHint') }}</p>
+          <p class="page-header__subtitle">
+            {{ t('constitutions.createFlowHint') }}
+          </p>
           <div class="form-field">
-            <label class="form-label" for="c-name">{{ t('constitutions.colName') }}</label>
-            <input id="c-name" v-model="form.name" class="form-input" required maxlength="200" />
+            <label
+              class="form-label"
+              for="c-name"
+            >{{ t('constitutions.colName') }}</label>
+            <input
+              id="c-name"
+              v-model="form.name"
+              class="form-input"
+              required
+              maxlength="200"
+            >
           </div>
           <div class="form-field">
-            <label class="form-label" for="c-desc">{{ t('constitutions.description') }}</label>
-            <textarea id="c-desc" v-model="form.description" class="form-textarea" rows="2" />
+            <label
+              class="form-label"
+              for="c-desc"
+            >{{ t('constitutions.description') }}</label>
+            <textarea
+              id="c-desc"
+              v-model="form.description"
+              class="form-textarea"
+              rows="2"
+            />
           </div>
           <div class="form-field">
-            <label class="form-label" for="c-agent">{{ t('constitutions.agent') }}</label>
-            <select id="c-agent" v-model="form.agent_id" class="form-select" required>
-              <option disabled value="">{{ t('constitutions.selectAgent') }}</option>
-              <option v-for="a in agents" :key="a.id" :value="a.id">{{ a.name }}</option>
+            <label
+              class="form-label"
+              for="c-agent"
+            >{{ t('constitutions.agent') }}</label>
+            <select
+              id="c-agent"
+              v-model="form.agent_id"
+              class="form-select"
+              required
+            >
+              <option
+                disabled
+                value=""
+              >
+                {{ t('constitutions.selectAgent') }}
+              </option>
+              <option
+                v-for="a in agents"
+                :key="a.id"
+                :value="a.id"
+              >
+                {{ a.name }}
+              </option>
             </select>
           </div>
         </div>
@@ -218,73 +275,146 @@ onMounted(() => {
           <span class="badge badge--brand">{{ rules.length }}</span>
         </div>
         <div class="card-panel__body stack">
-          <p class="page-header__subtitle">{{ t('constitutions.rulesBuilderHint') }}</p>
+          <p class="page-header__subtitle">
+            {{ t('constitutions.rulesBuilderHint') }}
+          </p>
 
-          <div class="rule-preview" role="status">{{ livePreview }}</div>
+          <div
+            class="rule-preview"
+            role="status"
+          >
+            {{ livePreview }}
+          </div>
 
-          <div class="page-header__actions" style="justify-content: flex-start; flex-wrap: wrap">
-            <button type="button" class="btn btn--secondary btn--sm" @click="addRule('approval_amount')">
+          <div
+            class="page-header__actions"
+            style="justify-content: flex-start; flex-wrap: wrap"
+          >
+            <button
+              type="button"
+              class="btn btn--secondary btn--sm"
+              @click="addRule('approval_amount')"
+            >
               + {{ t('constitutions.tplApproval') }}
             </button>
-            <button type="button" class="btn btn--secondary btn--sm" @click="addRule('deny_amount')">
+            <button
+              type="button"
+              class="btn btn--secondary btn--sm"
+              @click="addRule('deny_amount')"
+            >
               + {{ t('constitutions.tplDenyAmount') }}
             </button>
-            <button type="button" class="btn btn--secondary btn--sm" @click="addRule('deny_privacy')">
+            <button
+              type="button"
+              class="btn btn--secondary btn--sm"
+              @click="addRule('deny_privacy')"
+            >
               + {{ t('constitutions.tplDenyPrivacy') }}
             </button>
           </div>
 
-          <div v-for="(row, idx) in rules" :key="row.key" class="card-panel" style="box-shadow: none">
+          <div
+            v-for="(row, idx) in rules"
+            :key="row.key"
+            class="card-panel"
+            style="box-shadow: none"
+          >
             <div class="card-panel__body stack">
               <div class="form-row form-row--2">
                 <div class="form-field">
                   <label class="form-label">{{ t('constitutions.ruleTemplate') }}</label>
-                  <select v-model="row.template" class="form-select" @change="applyTemplate(row)">
-                    <option value="approval_amount">{{ t('constitutions.tplApproval') }}</option>
-                    <option value="deny_amount">{{ t('constitutions.tplDenyAmount') }}</option>
-                    <option value="deny_privacy">{{ t('constitutions.tplDenyPrivacy') }}</option>
-                    <option value="custom">{{ t('constitutions.tplCustom') }}</option>
+                  <select
+                    v-model="row.template"
+                    class="form-select"
+                    @change="applyTemplate(row)"
+                  >
+                    <option value="approval_amount">
+                      {{ t('constitutions.tplApproval') }}
+                    </option>
+                    <option value="deny_amount">
+                      {{ t('constitutions.tplDenyAmount') }}
+                    </option>
+                    <option value="deny_privacy">
+                      {{ t('constitutions.tplDenyPrivacy') }}
+                    </option>
+                    <option value="custom">
+                      {{ t('constitutions.tplCustom') }}
+                    </option>
                   </select>
                 </div>
                 <div class="form-field">
                   <label class="form-label">{{ t('constitutions.ruleValue') }}</label>
-                  <input v-model="row.value" class="form-input" required />
+                  <input
+                    v-model="row.value"
+                    class="form-input"
+                    required
+                  >
                 </div>
               </div>
 
               <details v-if="row.template === 'custom'">
                 <summary>{{ t('constitutions.advanced') }}</summary>
-                <div class="stack" style="margin-top: 0.75rem">
+                <div
+                  class="stack"
+                  style="margin-top: 0.75rem"
+                >
                   <div class="form-field">
                     <label class="form-label">{{ t('constitutions.ruleName') }}</label>
-                    <input v-model="row.name" class="form-input" />
+                    <input
+                      v-model="row.name"
+                      class="form-input"
+                    >
                   </div>
                   <div class="form-row form-row--2">
                     <div class="form-field">
                       <label class="form-label">{{ t('constitutions.ruleField') }}</label>
-                      <input v-model="row.field" class="form-input" />
+                      <input
+                        v-model="row.field"
+                        class="form-input"
+                      >
                     </div>
                     <div class="form-field">
                       <label class="form-label">{{ t('constitutions.ruleOperator') }}</label>
-                      <select v-model="row.operator" class="form-select">
-                        <option value="GREATER_THAN">GREATER_THAN</option>
-                        <option value="EQUALS">EQUALS</option>
-                        <option value="LESS_THAN">LESS_THAN</option>
+                      <select
+                        v-model="row.operator"
+                        class="form-select"
+                      >
+                        <option value="GREATER_THAN">
+                          GREATER_THAN
+                        </option>
+                        <option value="EQUALS">
+                          EQUALS
+                        </option>
+                        <option value="LESS_THAN">
+                          LESS_THAN
+                        </option>
                       </select>
                     </div>
                   </div>
                   <div class="form-field">
                     <label class="form-label">{{ t('constitutions.ruleAction') }}</label>
-                    <select v-model="row.action" class="form-select">
-                      <option value="REQUIRE_APPROVAL">REQUIRE_APPROVAL</option>
-                      <option value="DENY">DENY</option>
-                      <option value="ALLOW">ALLOW</option>
+                    <select
+                      v-model="row.action"
+                      class="form-select"
+                    >
+                      <option value="REQUIRE_APPROVAL">
+                        REQUIRE_APPROVAL
+                      </option>
+                      <option value="DENY">
+                        DENY
+                      </option>
+                      <option value="ALLOW">
+                        ALLOW
+                      </option>
                     </select>
                   </div>
                 </div>
               </details>
 
-              <div class="page-header__actions" style="justify-content: space-between">
+              <div
+                class="page-header__actions"
+                style="justify-content: space-between"
+              >
                 <span class="page-header__subtitle">#{{ idx + 1 }} · {{ row.name }}</span>
                 <button
                   type="button"
@@ -300,7 +430,11 @@ onMounted(() => {
         </div>
       </div>
 
-      <button class="btn btn--primary" type="submit" :disabled="loading">
+      <button
+        class="btn btn--primary"
+        type="submit"
+        :disabled="loading"
+      >
         {{ loading ? t('common.saving') : t('constitutions.saveAndActivate') }}
       </button>
     </form>

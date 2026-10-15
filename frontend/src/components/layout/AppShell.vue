@@ -86,12 +86,23 @@ function onLogout(): void {
 </script>
 
 <template>
-  <div class="app-shell" :class="{ 'is-sidebar-open': sidebarOpen }">
-    <div class="app-shell__backdrop" @click="closeSidebar" />
+  <div
+    class="app-shell"
+    :class="{ 'is-sidebar-open': sidebarOpen }"
+  >
+    <div
+      class="app-shell__backdrop"
+      @click="closeSidebar"
+    />
 
     <aside class="app-shell__sidebar">
-      <div class="app-shell__brand">{{ t('app.name') }}</div>
-      <nav class="app-shell__nav" :aria-label="t('app.name')">
+      <div class="app-shell__brand">
+        {{ t('app.name') }}
+      </div>
+      <nav
+        class="app-shell__nav"
+        :aria-label="t('app.name')"
+      >
         <router-link
           v-for="item in navItems"
           :key="item.name"
@@ -100,7 +111,11 @@ function onLogout(): void {
           active-class="is-active"
         >
           <span>{{ item.label }}</span>
-          <span v-if="item.badge > 0" class="nav-badge" :aria-label="String(item.badge)">
+          <span
+            v-if="item.badge > 0"
+            class="nav-badge"
+            :aria-label="String(item.badge)"
+          >
             {{ item.badge > 9 ? '9+' : item.badge }}
           </span>
         </router-link>
@@ -118,7 +133,9 @@ function onLogout(): void {
         >
           ☰
         </button>
-        <div class="app-shell__page-title">{{ pageTitle }}</div>
+        <div class="app-shell__page-title">
+          {{ pageTitle }}
+        </div>
       </div>
       <div class="app-shell__header-right">
         <ThemeSwitch />
@@ -136,7 +153,11 @@ function onLogout(): void {
           />
           <span class="app-shell__user-name">{{ displayName }}</span>
         </RouterLink>
-        <button type="button" class="btn btn--ghost btn--sm" @click="onLogout">
+        <button
+          type="button"
+          class="btn btn--ghost btn--sm"
+          @click="onLogout"
+        >
           <span>{{ t('nav.logout') }}</span>
         </button>
       </div>

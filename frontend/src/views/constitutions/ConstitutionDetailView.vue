@@ -130,7 +130,9 @@ onMounted(() => {
         <h1 class="page-header__title">
           {{ item?.name || t('constitutions.detailTitle') }}
         </h1>
-        <p class="page-header__subtitle">{{ t('constitutions.subtitle') }}</p>
+        <p class="page-header__subtitle">
+          {{ t('constitutions.subtitle') }}
+        </p>
       </div>
       <div class="page-header__actions">
         <button
@@ -152,8 +154,20 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="error" class="form-alert" role="alert">{{ error }}</div>
-    <div v-if="success" class="form-alert form-alert--success" role="status">{{ success }}</div>
+    <div
+      v-if="error"
+      class="form-alert"
+      role="alert"
+    >
+      {{ error }}
+    </div>
+    <div
+      v-if="success"
+      class="form-alert form-alert--success"
+      role="status"
+    >
+      {{ success }}
+    </div>
     <div
       v-if="isDraft && !versionIdToActivate && !loading"
       class="form-alert"
@@ -161,29 +175,54 @@ onMounted(() => {
     >
       {{ t('constitutions.activateNoVersion') }}
     </div>
-    <div v-if="loading" class="loading-block">{{ t('common.loading') }}</div>
+    <div
+      v-if="loading"
+      class="loading-block"
+    >
+      {{ t('common.loading') }}
+    </div>
 
-    <div v-else-if="item" class="stack">
+    <div
+      v-else-if="item"
+      class="stack"
+    >
       <div class="card-panel">
-        <div class="card-panel__header">{{ t('constitutions.metaTitle') }}</div>
+        <div class="card-panel__header">
+          {{ t('constitutions.metaTitle') }}
+        </div>
         <div class="card-panel__body meta-grid">
           <div class="meta-item">
-            <div class="meta-item__label">{{ t('constitutions.colStatus') }}</div>
+            <div class="meta-item__label">
+              {{ t('constitutions.colStatus') }}
+            </div>
             <div class="meta-item__value">
               <span :class="statusBadgeClass(item.status)">{{ item.status }}</span>
             </div>
           </div>
           <div class="meta-item">
-            <div class="meta-item__label">{{ t('constitutions.version') }}</div>
-            <div class="meta-item__value">v{{ displayVersionNumber ?? '—' }}</div>
+            <div class="meta-item__label">
+              {{ t('constitutions.version') }}
+            </div>
+            <div class="meta-item__value">
+              v{{ displayVersionNumber ?? '—' }}
+            </div>
           </div>
           <div class="meta-item">
-            <div class="meta-item__label">{{ t('constitutions.colUpdated') }}</div>
-            <div class="meta-item__value">{{ formatDate(item.updated_at || item.created_at) }}</div>
+            <div class="meta-item__label">
+              {{ t('constitutions.colUpdated') }}
+            </div>
+            <div class="meta-item__value">
+              {{ formatDate(item.updated_at || item.created_at) }}
+            </div>
           </div>
         </div>
-        <div v-if="isDraft" class="card-panel__body">
-          <p class="page-header__subtitle">{{ t('constitutions.activateHint') }}</p>
+        <div
+          v-if="isDraft"
+          class="card-panel__body"
+        >
+          <p class="page-header__subtitle">
+            {{ t('constitutions.activateHint') }}
+          </p>
         </div>
       </div>
 
@@ -193,19 +232,31 @@ onMounted(() => {
           <span class="badge badge--brand">{{ rules.length }}</span>
         </div>
         <div class="card-panel__body">
-          <div v-if="rules.length === 0" class="empty-state">
+          <div
+            v-if="rules.length === 0"
+            class="empty-state"
+          >
             <strong>{{ t('constitutions.noRules') }}</strong>
-            <p class="page-header__subtitle">{{ t('constitutions.noRulesHint') }}</p>
+            <p class="page-header__subtitle">
+              {{ t('constitutions.noRulesHint') }}
+            </p>
           </div>
-          <div v-else class="rule-list">
+          <div
+            v-else
+            class="rule-list"
+          >
             <div
               v-for="rule in rules"
               :key="rule.id || String(rule.rule_number) + rule.name"
               class="rule-item"
             >
-              <div class="rule-item__num">#{{ rule.rule_number ?? '—' }}</div>
+              <div class="rule-item__num">
+                #{{ rule.rule_number ?? '—' }}
+              </div>
               <div>
-                <div class="rule-item__name">{{ rule.name }}</div>
+                <div class="rule-item__name">
+                  {{ rule.name }}
+                </div>
                 <div class="rule-item__meta">
                   {{ rule.category }} · {{ rule.field }} {{ rule.operator }}
                   {{ formatValue(rule.value) }}
@@ -217,7 +268,10 @@ onMounted(() => {
         </div>
       </div>
 
-      <div v-if="isActive" class="next-step">
+      <div
+        v-if="isActive"
+        class="next-step"
+      >
         <p>{{ t('constitutions.nextNegotiation') }}</p>
         <button
           type="button"

@@ -141,16 +141,24 @@ onMounted(() => {
         <h1 class="page-header__title">
           {{ t('dashboard.welcome', { name: displayName }) }}
         </h1>
-        <p class="page-header__subtitle">{{ t('dashboard.subtitle') }}</p>
+        <p class="page-header__subtitle">
+          {{ t('dashboard.subtitle') }}
+        </p>
       </div>
     </div>
 
-    <div v-if="counts.approvals > 0" class="dash-banner" role="status">
+    <div
+      v-if="counts.approvals > 0"
+      class="dash-banner"
+      role="status"
+    >
       <div>
         <p class="dash-banner__title">
           {{ t('dashboard.attentionTitle', { n: counts.approvals }) }}
         </p>
-        <p class="dash-banner__body">{{ t('dashboard.attentionBody') }}</p>
+        <p class="dash-banner__body">
+          {{ t('dashboard.attentionBody') }}
+        </p>
       </div>
       <button
         type="button"
@@ -175,10 +183,19 @@ onMounted(() => {
       </button>
     </div>
 
-    <div v-if="nextStep && !loading" class="dash-next">
-      <div class="dash-next__label">{{ t('dashboard.nextLabel') }}</div>
-      <p class="dash-next__title">{{ nextStep.title }}</p>
-      <p class="dash-next__body">{{ nextStep.desc }}</p>
+    <div
+      v-if="nextStep && !loading"
+      class="dash-next"
+    >
+      <div class="dash-next__label">
+        {{ t('dashboard.nextLabel') }}
+      </div>
+      <p class="dash-next__title">
+        {{ nextStep.title }}
+      </p>
+      <p class="dash-next__body">
+        {{ nextStep.desc }}
+      </p>
       <button
         type="button"
         class="btn btn--primary btn--sm dash-next__btn"
@@ -189,10 +206,20 @@ onMounted(() => {
     </div>
 
     <div class="card-panel">
-      <div class="card-panel__header">{{ t('dashboard.checklistTitle') }}</div>
+      <div class="card-panel__header">
+        {{ t('dashboard.checklistTitle') }}
+      </div>
       <div class="card-panel__body">
-        <div v-if="loading" class="loading-block">{{ t('common.loading') }}</div>
-        <ul v-else class="dash-list">
+        <div
+          v-if="loading"
+          class="loading-block"
+        >
+          {{ t('common.loading') }}
+        </div>
+        <ul
+          v-else
+          class="dash-list"
+        >
           <li
             v-for="step in steps"
             :key="step.id"
@@ -202,12 +229,19 @@ onMounted(() => {
               'dash-item--pending': step.pending,
             }"
           >
-            <span class="dash-item__mark" aria-hidden="true">
+            <span
+              class="dash-item__mark"
+              aria-hidden="true"
+            >
               {{ step.pending ? '!' : step.done ? '✓' : '·' }}
             </span>
             <div class="dash-item__text">
-              <p class="dash-item__title">{{ step.title }}</p>
-              <p class="dash-item__desc">{{ step.desc }}</p>
+              <p class="dash-item__title">
+                {{ step.title }}
+              </p>
+              <p class="dash-item__desc">
+                {{ step.desc }}
+              </p>
             </div>
             <button
               type="button"

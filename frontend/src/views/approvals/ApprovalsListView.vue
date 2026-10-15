@@ -72,46 +72,98 @@ onMounted(() => {
   <div>
     <div class="page-header">
       <div>
-        <h1 class="page-header__title">{{ t('approvals.title') }}</h1>
-        <p class="page-header__subtitle">{{ t('approvals.subtitle') }}</p>
+        <h1 class="page-header__title">
+          {{ t('approvals.title') }}
+        </h1>
+        <p class="page-header__subtitle">
+          {{ t('approvals.subtitle') }}
+        </p>
       </div>
     </div>
 
-    <div v-if="error" class="form-alert" role="alert">{{ error }}</div>
-    <div v-if="success" class="form-alert form-alert--success" role="status">{{ success }}</div>
-    <div v-if="loading" class="loading-block">{{ t('common.loading') }}</div>
+    <div
+      v-if="error"
+      class="form-alert"
+      role="alert"
+    >
+      {{ error }}
+    </div>
+    <div
+      v-if="success"
+      class="form-alert form-alert--success"
+      role="status"
+    >
+      {{ success }}
+    </div>
+    <div
+      v-if="loading"
+      class="loading-block"
+    >
+      {{ t('common.loading') }}
+    </div>
 
-    <div v-else-if="items.length === 0" class="card-panel">
+    <div
+      v-else-if="items.length === 0"
+      class="card-panel"
+    >
       <div class="card-panel__body empty-state">
         <strong>{{ t('approvals.emptyTitle') }}</strong>
-        <p class="page-header__subtitle">{{ t('approvals.emptyBody') }}</p>
-        <button type="button" class="btn btn--secondary btn--sm" @click="router.push({ name: 'negotiations' })">
+        <p class="page-header__subtitle">
+          {{ t('approvals.emptyBody') }}
+        </p>
+        <button
+          type="button"
+          class="btn btn--secondary btn--sm"
+          @click="router.push({ name: 'negotiations' })"
+        >
           {{ t('approvals.emptyCta') }}
         </button>
       </div>
     </div>
 
-    <div v-else class="stack">
-      <div v-for="item in items" :key="item.id" class="card-panel">
+    <div
+      v-else
+      class="stack"
+    >
+      <div
+        v-for="item in items"
+        :key="item.id"
+        class="card-panel"
+      >
         <div class="card-panel__body stack">
           <div class="meta-grid">
             <div class="meta-item">
-              <div class="meta-item__label">{{ t('approvals.colStatus') }}</div>
+              <div class="meta-item__label">
+                {{ t('approvals.colStatus') }}
+              </div>
               <div class="meta-item__value">
                 <span :class="statusBadgeClass(item.status)">{{ labelStatus(item.status) }}</span>
               </div>
             </div>
             <div class="meta-item">
-              <div class="meta-item__label">{{ t('approvals.colCreated') }}</div>
-              <div class="meta-item__value">{{ formatDate(item.created_at) }}</div>
+              <div class="meta-item__label">
+                {{ t('approvals.colCreated') }}
+              </div>
+              <div class="meta-item__value">
+                {{ formatDate(item.created_at) }}
+              </div>
             </div>
             <div class="meta-item">
-              <div class="meta-item__label">{{ t('approvals.colReason') }}</div>
-              <div class="meta-item__value">{{ item.reason || item.summary || '—' }}</div>
+              <div class="meta-item__label">
+                {{ t('approvals.colReason') }}
+              </div>
+              <div class="meta-item__value">
+                {{ item.reason || item.summary || '—' }}
+              </div>
             </div>
           </div>
-          <p class="page-header__subtitle">{{ t('approvals.decideHint') }}</p>
-          <div class="page-header__actions" style="justify-content: flex-start">
+          <p class="page-header__subtitle">
+            {{ t('approvals.decideHint') }}
+          </p>
+          <div
+            class="page-header__actions"
+            style="justify-content: flex-start"
+          >
             <button
               type="button"
               class="btn btn--primary btn--sm"

@@ -126,7 +126,11 @@ onMounted(() => {
         </p>
       </div>
       <div class="page-header__actions">
-        <button type="button" class="btn btn--secondary btn--sm" @click="router.push({ name: 'negotiations' })">
+        <button
+          type="button"
+          class="btn btn--secondary btn--sm"
+          @click="router.push({ name: 'negotiations' })"
+        >
           {{ t('common.back') }}
         </button>
         <button
@@ -158,15 +162,42 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="error" class="form-alert" role="alert">{{ error }}</div>
-    <div v-if="success" class="form-alert form-alert--success" role="status">{{ success }}</div>
-    <div v-if="loading" class="loading-block">{{ t('common.loading') }}</div>
+    <div
+      v-if="error"
+      class="form-alert"
+      role="alert"
+    >
+      {{ error }}
+    </div>
+    <div
+      v-if="success"
+      class="form-alert form-alert--success"
+      role="status"
+    >
+      {{ success }}
+    </div>
+    <div
+      v-if="loading"
+      class="loading-block"
+    >
+      {{ t('common.loading') }}
+    </div>
 
-    <div v-else-if="room" class="stack">
+    <div
+      v-else-if="room"
+      class="stack"
+    >
       <div class="next-step-card">
-        <div class="next-step-card__label">{{ t('negotiations.nextLabel') }}</div>
-        <p class="attention-banner__title">{{ nextHint }}</p>
-        <p v-if="lastProposal" class="attention-banner__body">
+        <div class="next-step-card__label">
+          {{ t('negotiations.nextLabel') }}
+        </div>
+        <p class="attention-banner__title">
+          {{ nextHint }}
+        </p>
+        <p
+          v-if="lastProposal"
+          class="attention-banner__body"
+        >
           {{
             t('negotiations.lastProposal', {
               amount: lastProposal.amount ?? '—',
@@ -178,25 +209,41 @@ onMounted(() => {
       </div>
 
       <div class="card-panel">
-        <div class="card-panel__header">{{ t('negotiations.metaTitle') }}</div>
+        <div class="card-panel__header">
+          {{ t('negotiations.metaTitle') }}
+        </div>
         <div class="card-panel__body meta-grid">
           <div class="meta-item">
-            <div class="meta-item__label">{{ t('negotiations.colStatus') }}</div>
+            <div class="meta-item__label">
+              {{ t('negotiations.colStatus') }}
+            </div>
             <div class="meta-item__value">
               <span :class="statusBadgeClass(room.status)">{{ labelStatus(room.status) }}</span>
             </div>
           </div>
           <div class="meta-item">
-            <div class="meta-item__label">{{ t('negotiations.colRound') }}</div>
-            <div class="meta-item__value">{{ room.current_round ?? 0 }}/{{ room.max_rounds ?? '—' }}</div>
+            <div class="meta-item__label">
+              {{ t('negotiations.colRound') }}
+            </div>
+            <div class="meta-item__value">
+              {{ room.current_round ?? 0 }}/{{ room.max_rounds ?? '—' }}
+            </div>
           </div>
           <div class="meta-item">
-            <div class="meta-item__label">{{ t('negotiations.instruction') }}</div>
-            <div class="meta-item__value">{{ room.user_instruction || '—' }}</div>
+            <div class="meta-item__label">
+              {{ t('negotiations.instruction') }}
+            </div>
+            <div class="meta-item__value">
+              {{ room.user_instruction || '—' }}
+            </div>
           </div>
           <div class="meta-item">
-            <div class="meta-item__label">{{ t('negotiations.colUpdated') }}</div>
-            <div class="meta-item__value">{{ formatDate(room.updated_at || room.created_at) }}</div>
+            <div class="meta-item__label">
+              {{ t('negotiations.colUpdated') }}
+            </div>
+            <div class="meta-item__value">
+              {{ formatDate(room.updated_at || room.created_at) }}
+            </div>
           </div>
         </div>
       </div>
@@ -207,8 +254,16 @@ onMounted(() => {
           <span class="badge badge--brand">{{ proposals.length }}</span>
         </div>
         <div class="card-panel__body">
-          <div v-if="proposals.length === 0" class="empty-state">{{ t('negotiations.noProposals') }}</div>
-          <div v-else class="data-table-wrap">
+          <div
+            v-if="proposals.length === 0"
+            class="empty-state"
+          >
+            {{ t('negotiations.noProposals') }}
+          </div>
+          <div
+            v-else
+            class="data-table-wrap"
+          >
             <table class="data-table">
               <thead>
                 <tr>
@@ -219,11 +274,18 @@ onMounted(() => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="p in proposals" :key="p.id">
+                <tr
+                  v-for="p in proposals"
+                  :key="p.id"
+                >
                   <td>{{ p.round_number ?? '—' }}</td>
                   <td>
-                    <template v-if="p.amount != null">{{ p.amount }} {{ p.currency || '' }}</template>
-                    <template v-else>—</template>
+                    <template v-if="p.amount != null">
+                      {{ p.amount }} {{ p.currency || '' }}
+                    </template>
+                    <template v-else>
+                      —
+                    </template>
                   </td>
                   <td>
                     <span :class="statusBadgeClass(p.status)">{{ labelStatus(p.status) }}</span>

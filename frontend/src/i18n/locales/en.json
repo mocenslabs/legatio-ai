@@ -47,16 +47,16 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome, {name}",
+    "welcome": "Hi, {name}",
     "welcomeGuest": "Welcome",
-    "subtitle": "Manage constitutions, negotiations and human approvals.",
+    "subtitle": "Your agents only move inside the rules you set.",
     "comingSoon": "Coming in the next stage",
     "cards": {
       "constitutions": "Constitutions",
       "constitutionsDesc": "Define rules your agents must follow",
       "negotiations": "Negotiations",
       "negotiationsDesc": "Active and historical negotiation rooms",
-      "approvals": "Approvals",
+      "approvals": "Pending approvals",
       "approvalsDesc": "Human-in-the-loop decisions",
       "agreements": "Agreements",
       "agreementsDesc": "Signed records and exports",
@@ -66,21 +66,24 @@
       "agentsDesc": "Create and manage your agents"
     },
     "subtitleGuide": "Follow the checklist — each step unlocks the next.",
-    "checklistTitle": "Getting started",
+    "checklistTitle": "Get started",
     "nextHint": "Next up: {step}",
     "checklist": {
       "agentTitle": "Create an agent",
-      "agentDesc": "A fictional agent that acts on your behalf",
-      "constitutionTitle": "Add a constitution",
-      "constitutionDesc": "Rules your agent must follow",
+      "agentDesc": "A digital representative that negotiates under your rules.",
+      "constitutionTitle": "Add rules (constitution)",
+      "constitutionDesc": "Use templates — e.g. ask your OK above 200 EUR.",
       "negotiationTitle": "Start a negotiation",
-      "negotiationDesc": "Pair your agent with an external one",
+      "negotiationDesc": "Run rounds against a simulated counterparty.",
       "approvalTitle": "Human approvals",
-      "approvalDesc": "Nothing pending right now",
-      "approvalPending": "{n} waiting for you",
-      "doIt": "Do this",
-      "review": "Review"
-    }
+      "approvalDesc": "When a rule needs you, items appear here.",
+      "approvalPending": "{n} waiting for your decision.",
+      "doIt": "Do it",
+      "review": "Review now"
+    },
+    "nextLabel": "Suggested next step",
+    "attentionTitle": "You have {n} decision(s) waiting",
+    "attentionBody": "Nothing sensitive continues until you approve or reject."
   },
   "common": {
     "loading": "Loading…",
@@ -102,7 +105,7 @@
     "dark": "Dark mode",
     "lightShort": "Light",
     "darkShort": "Dark",
-    "delete": "Delete"
+    "delete": "Remove"
   },
   "errors": {
     "network": "Network error. Check your connection.",
@@ -115,8 +118,8 @@
     "title": "Constitutions",
     "subtitle": "Rules that govern your agents",
     "create": "New constitution",
-    "createSubtitle": "Attach a constitution to one of your agents",
-    "detailTitle": "Constitution detail",
+    "createSubtitle": "Pick an agent, add rule templates, save — we activate for you.",
+    "detailTitle": "Constitution",
     "emptyTitle": "No constitutions yet",
     "emptyBody": "Create one or run the seed script to load demo data.",
     "colName": "Name",
@@ -125,12 +128,41 @@
     "description": "Description",
     "agent": "Agent",
     "selectAgent": "Select an agent",
-    "formRequired": "Name and agent are required",
+    "formRequired": "Name and agent are required.",
     "metaTitle": "Details",
     "version": "Active version",
     "rulesTitle": "Rules",
     "noRules": "No rules on the active version",
-    "nextNegotiation": "Rules ready. Next: start a negotiation."
+    "nextNegotiation": "Ready — create a negotiation that uses this constitution.",
+    "activate": "Activate",
+    "activateHint": "Draft constitutions must be activated before negotiations.",
+    "activateSuccess": "Constitution activated.",
+    "activateFailed": "Could not activate.",
+    "activateNoVersion": "No version to activate.",
+    "noRulesHint": "Create a new constitution with rule templates, or open Help.",
+    "createFlowHint": "You only need a name, an agent, and at least one threshold.",
+    "rulesBuilderHint": "Templates hide technical fields. Change the value (e.g. 200).",
+    "rulesRequired": "Add at least one rule.",
+    "ruleFieldsRequired": "Each rule needs a field and a value.",
+    "ruleTemplate": "Template",
+    "ruleName": "Name",
+    "ruleField": "Field",
+    "ruleOperator": "Operator",
+    "ruleValue": "Threshold / value",
+    "ruleAction": "Action",
+    "tplApproval": "Ask my OK if amount > X",
+    "tplDenyAmount": "Block if amount > X",
+    "tplDenyPrivacy": "Block private data sharing",
+    "tplCustom": "Custom",
+    "tplApprovalName": "Human approval above amount",
+    "tplDenyAmountName": "Hard amount ceiling",
+    "tplDenyPrivacyName": "Deny sharing phone / private data",
+    "saveAndActivate": "Save and activate",
+    "previewApproval": "If a proposal is above {x}, Legatio will ask for your OK.",
+    "previewDeny": "If a proposal is above {x}, it will be blocked.",
+    "previewDefault": "Add a template to see what will happen in plain language.",
+    "advanced": "Advanced fields",
+    "savedActivated": "Saved and activated. You can negotiate now."
   },
   "negotiations": {
     "title": "Negotiations",
@@ -157,14 +189,23 @@
     "noProposals": "No proposals yet — start the negotiation and process rounds.",
     "start": "Start",
     "processRound": "Process round",
-    "started": "Negotiation started",
-    "roundProcessed": "Round processed — outcome: {outcome}"
+    "started": "Negotiation started.",
+    "roundProcessed": "Round processed — outcome: {outcome}",
+    "nextLabel": "What to do now",
+    "nextStart": "Start the negotiation to begin the first round.",
+    "nextRound": "Process the next round to get a new proposal and policy result.",
+    "nextApproval": "A rule needs your decision — open Approvals before continuing.",
+    "nextDone": "This negotiation is finished.",
+    "nextIdle": "No action required right now.",
+    "lastProposal": "Last proposal: {amount} {currency} → {status}",
+    "roundProcessedHuman": "Round processed: {outcome}",
+    "goApprovals": "Go to approvals"
   },
   "approvals": {
     "title": "Approvals",
-    "subtitle": "Human decisions required by the policy engine",
-    "emptyTitle": "No pending approvals",
-    "emptyBody": "When a proposal needs human approval it will appear here.",
+    "subtitle": "You are the safety brake. Nothing waits here is auto-approved.",
+    "emptyTitle": "No decisions waiting",
+    "emptyBody": "When a constitution rule asks for your OK, it shows up here. Until then, agents stay within automatic allow/deny.",
     "colSummary": "Summary",
     "colStatus": "Status",
     "colExpires": "Expires",
@@ -172,7 +213,13 @@
     "approve": "Approve",
     "reject": "Reject",
     "approved": "Approval granted",
-    "rejected": "Approval rejected"
+    "rejected": "Approval rejected",
+    "emptyCta": "View negotiations",
+    "decideHint": "Approve only if you accept this proposal under your rules.",
+    "approvedOk": "Approved — the flow can continue.",
+    "rejectedOk": "Rejected — the proposal stays blocked.",
+    "colCreated": "Created",
+    "colReason": "Why it paused"
   },
   "profile": {
     "title": "Profile",
@@ -259,51 +306,77 @@
   },
   "help": {
     "title": "Help",
-    "subtitle": "How to try Legatio in a few steps",
-    "howTitle": "Recommended flow",
+    "subtitle": "How Legatio keeps you in control",
+    "howTitle": "Recommended path",
     "faqTitle": "FAQ",
     "steps": [
       {
-        "title": "Create an agent",
-        "body": "Go to Agents → New agent. Give it a name (e.g. “Travel assistant”)."
+        "title": "Create your agent",
+        "body": "From Dashboard or Agents — this is who negotiates for you."
       },
       {
-        "title": "Define a constitution",
-        "body": "Constitutions → New. Attach it to your agent and (via seed or later rules) define limits like max price."
+        "title": "Define rules",
+        "body": "New constitution → templates → save and activate."
       },
       {
-        "title": "Start a negotiation",
-        "body": "Negotiations → New. Pick your agent, an external agent, and the constitution. Then Start and Process round."
+        "title": "Negotiate",
+        "body": "Start a room, process rounds, watch proposals and outcomes."
       },
       {
-        "title": "Approve if asked",
-        "body": "If policy requires human approval, open Approvals and approve or reject."
-      },
-      {
-        "title": "Review agreement & audit",
-        "body": "Signed outcomes appear under Agreements. Every step is logged in Audit."
+        "title": "Decide when asked",
+        "body": "Approvals badge in the menu means Legatio needs you."
       }
     ],
     "faqs": [
       {
-        "q": "What is Legatio?",
-        "a": "A control layer between humans and autonomous AI agents: rules (constitutions), negotiations, human approvals, signed agreements and an audit trail."
+        "q": "Why was everything ALLOWED?",
+        "a": "Usually the constitution had no matching rules (or no rules at all). Add an approval threshold and activate."
       },
       {
-        "q": "Do I need real external APIs?",
-        "a": "No. The MVP uses simulated external agents from the seed so you can demo the full flow offline."
+        "q": "Do I need JSON or code?",
+        "a": "No. Use the constitution form templates and only edit the number."
       },
       {
-        "q": "Why is the agent list empty?",
-        "a": "Create your own agent under Agents, or run ./scripts/seed.sh so demo agents exist."
+        "q": "What if I never open Approvals?",
+        "a": "Actions that require your OK stay blocked. That is intentional."
       },
       {
-        "q": "What does Process round do?",
-        "a": "Advances one negotiation round: the simulated counterparty proposes, policies evaluate, and you may get ALLOW, DENY, or REQUIRE_HUMAN_APPROVAL."
+        "q": "Is the counterparty real?",
+        "a": "In this MVP counterparties are simulated so you can test the full control loop safely."
+      }
+    ],
+    "rulesTitle": "Rules in plain language",
+    "rulesIntro": "Rules look at proposal fields (like amount). Matching DENY blocks. Matching REQUIRE_APPROVAL waits for you. Otherwise ALLOW.",
+    "rulesHowTo": "How to set them",
+    "rulesHowToBody": "Dashboard checklist → create agent → new constitution → use templates → save and activate → negotiate → process rounds → open Approvals if asked.",
+    "rulesExampleTitle": "Example that triggers human OK",
+    "rulesExampleBody": "Template “Ask my OK if amount > X” with value 200. Simulated offers of 600–800 will pause for you.",
+    "rulesActions": "Prefer human OK for grey zones; hard DENY for absolute limits (privacy, extreme amounts).",
+    "rulesTip": "Never leave a constitution with zero rules if you care about control — empty means almost everything is allowed.",
+    "backDashboard": "Back to dashboard",
+    "promiseTitle": "What Legatio is",
+    "promiseBody": "Legatio is not the agent that books hotels or renews subscriptions by itself. It is the trust layer: you define rules, agents propose, policy decides allow / deny / ask you, and everything is audited.",
+    "glossaryTitle": "Glossary",
+    "glossary": [
+      {
+        "term": "Agent",
+        "meaning": "A party in a negotiation. Yours is “your agent”; counterparties may be simulated in the MVP."
       },
       {
-        "q": "Is 2FA required?",
-        "a": "Optional. Enable it under Profile. After that, login asks for a TOTP code."
+        "term": "Constitution",
+        "meaning": "The rule pack attached to your agent. Must be Active to negotiate."
+      },
+      {
+        "term": "Proposal",
+        "meaning": "An offer in a round (amount, type, etc.) evaluated by policy."
+      },
+      {
+        "term": "Approval",
+        "meaning": "A pause for your explicit yes/no when a rule requires it."
+      },
+      {
+        "term": "Agreement / Audit",
+        "meaning": "Signed outcome and immutable history of what happened."
       }
     ]
   },
@@ -350,16 +423,16 @@
     "bottomBody": "Start with seed data or create your own agent in seconds. English and Spanish UI, light and dark themes."
   },
   "status": {
-    "unknown": "—",
-    "raw": "",
+    "unknown": "Unknown",
+    "raw": "—",
     "active": "Active",
     "draft": "Draft",
     "pending": "Pending",
     "inProgress": "In progress",
-    "awaitingApproval": "Waiting for your approval",
+    "awaitingApproval": "Needs your OK",
     "approved": "Approved",
     "rejected": "Rejected",
-    "denied": "Denied",
+    "denied": "Blocked",
     "allowed": "Allowed",
     "completed": "Completed",
     "signed": "Signed",
@@ -369,6 +442,10 @@
     "suspended": "Suspended",
     "revoked": "Revoked",
     "failed": "Failed",
-    "archived": "Archived"
+    "archived": "Archived",
+    "needsYourOk": "Needs your OK",
+    "yourAgent": "Your agent",
+    "externalAgent": "External agent",
+    "simulatedAgent": "Simulated"
   }
 }

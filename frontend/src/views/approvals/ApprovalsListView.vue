@@ -13,9 +13,15 @@ const router = useRouter()
 
 const items = ref<ApprovalRequest[]>([])
 const loading = ref(true)
-const actingId = ref<string | null>(null)
 const error = ref<string | null>(null)
+const actingId = ref<string | null>(null)
 const success = ref<string | null>(null)
+
+function labelStatus(status?: string): string {
+  const key = statusLabelKey(status)
+  if (key === 'status.raw') return status || '—'
+  return t(key)
+}
 
 async function load(): Promise<void> {
   loading.value = true
@@ -32,10 +38,9 @@ async function load(): Promise<void> {
 async function onApprove(id: string): Promise<void> {
   actingId.value = id
   error.value = null
-  success.value = null
   try {
-    await approvalsApi.approveRequest(id, 'Approved from UI')
-    success.value = t('approvals.approved')
+    await approvalsApi.approveRequest(id)
+    success.value = t('approvals.approvedOk')
     await load()
   } catch (err) {
     error.value = extractApiMessage(err, t('errors.unknown'))
@@ -47,22 +52,15 @@ async function onApprove(id: string): Promise<void> {
 async function onReject(id: string): Promise<void> {
   actingId.value = id
   error.value = null
-  success.value = null
   try {
-    await approvalsApi.rejectRequest(id, 'Rejected from UI')
-    success.value = t('approvals.rejected')
+    await approvalsApi.rejectRequest(id)
+    success.value = t('approvals.rejectedOk')
     await load()
   } catch (err) {
     error.value = extractApiMessage(err, t('errors.unknown'))
   } finally {
     actingId.value = null
   }
-}
-
-function labelStatus(status?: string): string {
-  const key = statusLabelKey(status)
-  if (key === 'status.raw') return status || '—'
-  return t(key)
 }
 
 onMounted(() => {
@@ -74,112 +72,64 @@ onMounted(() => {
   <div>
     <div class="page-header">
       <div>
-        <h1 class="page-header__title">
-          {{ t('approvals.title') }}
-        </h1>
-        <p class="page-header__subtitle">
-          {{ t('approvals.subtitle') }}
-        </p>
+        <h1 class="page-header__title">{{ t('approvals.title') }}</h1>
+        <p class="page-header__subtitle">{{ t('approvals.subtitle') }}</p>
       </div>
-      <div class="page-header__actions">
-        <button
-          type="button"
-          class="btn btn--secondary btn--sm"
-          :disabled="loading"
-          @click="load"
-        >
-          {{ t('common.refresh') }}
+    </div>
+
+    <div v-if="error" class="form-alert" role="alert">{{ error }}</div>
+    <div v-if="success" class="form-alert form-alert--success" role="status">{{ success }}</div>
+    <div v-if="loading" class="loading-block">{{ t('common.loading') }}</div>
+
+    <div v-else-if="items.length === 0" class="card-panel">
+      <div class="card-panel__body empty-state">
+        <strong>{{ t('approvals.emptyTitle') }}</strong>
+        <p class="page-header__subtitle">{{ t('approvals.emptyBody') }}</p>
+        <button type="button" class="btn btn--secondary btn--sm" @click="router.push({ name: 'negotiations' })">
+          {{ t('approvals.emptyCta') }}
         </button>
       </div>
     </div>
 
-    <div
-      v-if="error"
-      class="form-alert"
-      role="alert"
-    >
-      {{ error }}
-    </div>
-    <div
-      v-if="success"
-      class="form-alert form-alert--success"
-      role="status"
-    >
-      {{ success }}
-    </div>
-    <div
-      v-if="loading"
-      class="loading-block"
-    >
-      {{ t('common.loading') }}
-    </div>
-
-    <div
-      v-else
-      class="card-panel"
-    >
-      <div
-        v-if="items.length === 0"
-        class="empty-state"
-      >
-        <strong>{{ t('approvals.emptyTitle') }}</strong>
-        <p>{{ t('approvals.emptyBody') }}</p>
-        <div class="empty-state__actions">
-          <button
-            type="button"
-            class="btn btn--secondary"
-            @click="router.push({ name: 'negotiations' })"
-          >
-            {{ t('nav.negotiations') }}
-          </button>
-        </div>
-      </div>
-      <div
-        v-else
-        class="data-table-wrap"
-      >
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>{{ t('approvals.colSummary') }}</th>
-              <th>{{ t('approvals.colStatus') }}</th>
-              <th>{{ t('approvals.colExpires') }}</th>
-              <th>{{ t('approvals.colActions') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="a in items"
-              :key="a.id"
+    <div v-else class="stack">
+      <div v-for="item in items" :key="item.id" class="card-panel">
+        <div class="card-panel__body stack">
+          <div class="meta-grid">
+            <div class="meta-item">
+              <div class="meta-item__label">{{ t('approvals.colStatus') }}</div>
+              <div class="meta-item__value">
+                <span :class="statusBadgeClass(item.status)">{{ labelStatus(item.status) }}</span>
+              </div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-item__label">{{ t('approvals.colCreated') }}</div>
+              <div class="meta-item__value">{{ formatDate(item.created_at) }}</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-item__label">{{ t('approvals.colReason') }}</div>
+              <div class="meta-item__value">{{ item.reason || item.summary || '—' }}</div>
+            </div>
+          </div>
+          <p class="page-header__subtitle">{{ t('approvals.decideHint') }}</p>
+          <div class="page-header__actions" style="justify-content: flex-start">
+            <button
+              type="button"
+              class="btn btn--primary btn--sm"
+              :disabled="actingId === item.id"
+              @click="onApprove(item.id)"
             >
-              <td>{{ a.summary || a.id.slice(0, 8) }}</td>
-              <td>
-                <span :class="statusBadgeClass(a.status)">{{ labelStatus(a.status) }}</span>
-              </td>
-              <td>{{ formatDate(a.expires_at) }}</td>
-              <td>
-                <div class="page-header__actions">
-                  <button
-                    type="button"
-                    class="btn btn--primary btn--sm"
-                    :disabled="actingId === a.id"
-                    @click="onApprove(a.id)"
-                  >
-                    {{ t('approvals.approve') }}
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn--danger btn--sm"
-                    :disabled="actingId === a.id"
-                    @click="onReject(a.id)"
-                  >
-                    {{ t('approvals.reject') }}
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              {{ t('approvals.approve') }}
+            </button>
+            <button
+              type="button"
+              class="btn btn--secondary btn--sm"
+              :disabled="actingId === item.id"
+              @click="onReject(item.id)"
+            >
+              {{ t('approvals.reject') }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

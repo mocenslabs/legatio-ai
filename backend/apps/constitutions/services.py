@@ -68,6 +68,9 @@ def create_constitution(
         status=ConstitutionStatus.DRAFT,
     )
 
+    # Initial draft version so activate / rules always have a target
+    create_version(constitution=constitution, user=user)
+
     # Audit event
     create_audit_event(
         event_type=EventType.CONSTITUTION_CREATED,

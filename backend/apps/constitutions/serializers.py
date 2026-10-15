@@ -112,6 +112,7 @@ class ConstitutionVersionSerializer(serializers.ModelSerializer):  # type: ignor
     """Serializer for ConstitutionVersion (read-only)."""
 
     rules_count = serializers.SerializerMethodField()
+    rules = PolicyRuleSerializer(many=True, read_only=True)
 
     class Meta:
         model = ConstitutionVersion
@@ -126,6 +127,7 @@ class ConstitutionVersionSerializer(serializers.ModelSerializer):  # type: ignor
             "archived_at",
             "created_at",
             "rules_count",
+            "rules",
         ]
         read_only_fields = fields
 

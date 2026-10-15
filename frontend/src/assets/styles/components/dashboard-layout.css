@@ -1,0 +1,213 @@
+/* ===== Dashboard layout (desktop + mobile) ===== */
+
+.dash {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.dash-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-md, 12px);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  background: var(--color-surface, rgba(255, 255, 255, 0.03));
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dash-stat:hover {
+  border-color: color-mix(in srgb, var(--color-brand, #0ea5e9) 45%, transparent);
+}
+
+.dash-stat__label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.dash-stat__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.dash-stat.is-alert .dash-stat__value {
+  color: var(--color-warning, #f59e0b);
+}
+
+.dash-checklist {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-check {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr auto;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+.dash-check:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.dash-check:first-child {
+  padding-top: 0;
+}
+
+.dash-check__mark {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--color-surface-2, rgba(255, 255, 255, 0.06));
+}
+
+.dash-check.is-done .dash-check__mark {
+  background: color-mix(in srgb, var(--color-success, #22c55e) 28%, transparent);
+  color: var(--color-success, #22c55e);
+}
+
+.dash-check.is-pending .dash-check__mark {
+  background: color-mix(in srgb, var(--color-warning, #f59e0b) 28%, transparent);
+  color: var(--color-warning, #f59e0b);
+}
+
+.dash-check__body {
+  min-width: 0;
+}
+
+.dash-check__title {
+  margin: 0 0 0.15rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.dash-check__desc {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+  line-height: 1.35;
+}
+
+.dash-check__cta {
+  flex-shrink: 0;
+}
+
+.attention-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius-md, 12px);
+  border: 1px solid color-mix(in srgb, var(--color-warning, #f59e0b) 40%, transparent);
+  background: color-mix(in srgb, var(--color-warning, #f59e0b) 12%, transparent);
+}
+
+.attention-banner__title {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.attention-banner__body {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.next-step-card {
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-md, 12px);
+  padding: 1rem 1.2rem;
+  background: var(--color-surface, rgba(255, 255, 255, 0.03));
+}
+
+.next-step-card__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.65;
+  margin-bottom: 0.35rem;
+}
+
+/* Tablet */
+@media (max-width: 960px) {
+  .dash-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .dash-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .dash-stat {
+    padding: 0.85rem 0.9rem;
+  }
+
+  .dash-stat__value {
+    font-size: 1.45rem;
+  }
+
+  .dash-check {
+    grid-template-columns: 1.75rem 1fr;
+    grid-template-areas:
+      "mark body"
+      "cta cta";
+    gap: 0.55rem 0.75rem;
+  }
+
+  .dash-check__mark {
+    grid-area: mark;
+  }
+
+  .dash-check__body {
+    grid-area: body;
+  }
+
+  .dash-check__cta {
+    grid-area: cta;
+    width: 100%;
+  }
+
+  .dash-check__cta .btn {
+    width: 100%;
+  }
+
+  .attention-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .attention-banner .btn {
+    width: 100%;
+  }
+
+  .next-step-card .btn {
+    width: 100%;
+  }
+}

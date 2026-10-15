@@ -47,16 +47,16 @@
   },
   "dashboard": {
     "title": "Panel",
-    "welcome": "Bienvenido/a, {name}",
+    "welcome": "Hola, {name}",
     "welcomeGuest": "Bienvenido/a",
-    "subtitle": "Administrá constituciones, negociaciones y aprobaciones humanas.",
+    "subtitle": "Tus agentes solo se mueven dentro de las reglas que definís.",
     "comingSoon": "Próxima etapa",
     "cards": {
       "constitutions": "Constituciones",
       "constitutionsDesc": "Definí reglas que tus agentes deben cumplir",
       "negotiations": "Negociaciones",
       "negotiationsDesc": "Salas activas e historial",
-      "approvals": "Aprobaciones",
+      "approvals": "Aprobaciones pendientes",
       "approvalsDesc": "Decisiones humanas en el flujo",
       "agreements": "Acuerdos",
       "agreementsDesc": "Registros firmados y exportaciones",
@@ -66,21 +66,24 @@
       "agentsDesc": "Creá y administrá tus agentes"
     },
     "subtitleGuide": "Seguí la lista — cada paso habilita el siguiente.",
-    "checklistTitle": "Primeros pasos",
+    "checklistTitle": "Empezar",
     "nextHint": "Siguiente: {step}",
     "checklist": {
-      "agentTitle": "Creá un agente",
-      "agentDesc": "Un agente ficticio que actúa por vos",
-      "constitutionTitle": "Agregá una constitución",
-      "constitutionDesc": "Reglas que tu agente debe cumplir",
-      "negotiationTitle": "Iniciá una negociación",
-      "negotiationDesc": "Emparejá tu agente con uno externo",
+      "agentTitle": "Crear un agente",
+      "agentDesc": "Tu representante digital bajo tus reglas.",
+      "constitutionTitle": "Agregar reglas (constitución)",
+      "constitutionDesc": "Usá plantillas — por ejemplo pedir tu OK sobre 200 EUR.",
+      "negotiationTitle": "Iniciar una negociación",
+      "negotiationDesc": "Corrés rounds contra una contraparte simulada.",
       "approvalTitle": "Aprobaciones humanas",
-      "approvalDesc": "No hay nada pendiente",
-      "approvalPending": "{n} esperando tu decisión",
-      "doIt": "Hacer esto",
-      "review": "Revisar"
-    }
+      "approvalDesc": "Cuando una regla te necesita, aparecen acá.",
+      "approvalPending": "{n} esperando tu decisión.",
+      "doIt": "Hacerlo",
+      "review": "Revisar ahora"
+    },
+    "nextLabel": "Siguiente paso sugerido",
+    "attentionTitle": "Tenés {n} decisión(es) pendiente(s)",
+    "attentionBody": "Nada sensible sigue hasta que apruebes o rechaces."
   },
   "common": {
     "loading": "Cargando…",
@@ -102,7 +105,7 @@
     "dark": "Modo oscuro",
     "lightShort": "Claro",
     "darkShort": "Oscuro",
-    "delete": "Eliminar"
+    "delete": "Quitar"
   },
   "errors": {
     "network": "Error de red. Revisá tu conexión.",
@@ -115,8 +118,8 @@
     "title": "Constituciones",
     "subtitle": "Reglas que gobiernan a tus agentes",
     "create": "Nueva constitución",
-    "createSubtitle": "Asociá una constitución a uno de tus agentes",
-    "detailTitle": "Detalle de constitución",
+    "createSubtitle": "Elegí agente, plantillas de reglas y guardá — activamos por vos.",
+    "detailTitle": "Constitución",
     "emptyTitle": "Todavía no hay constituciones",
     "emptyBody": "Creá una o ejecutá el seed para cargar datos demo.",
     "colName": "Nombre",
@@ -125,12 +128,41 @@
     "description": "Descripción",
     "agent": "Agente",
     "selectAgent": "Seleccioná un agente",
-    "formRequired": "Nombre y agente son obligatorios",
-    "metaTitle": "Detalle",
+    "formRequired": "Nombre y agente son obligatorios.",
+    "metaTitle": "Detalles",
     "version": "Versión activa",
     "rulesTitle": "Reglas",
     "noRules": "No hay reglas en la versión activa",
-    "nextNegotiation": "Reglas listas. Siguiente: iniciá una negociación."
+    "nextNegotiation": "Lista — creá una negociación con esta constitución.",
+    "activate": "Activar",
+    "activateHint": "Las constitutions en borrador deben activarse antes de negociar.",
+    "activateSuccess": "Constitución activada.",
+    "activateFailed": "No se pudo activar.",
+    "activateNoVersion": "No hay versión para activar.",
+    "noRulesHint": "Creá una constitution nueva con plantillas, o mirá Ayuda.",
+    "createFlowHint": "Con un nombre, un agente y un umbral alcanza.",
+    "rulesBuilderHint": "Las plantillas ocultan lo técnico. Cambiá el valor (ej. 200).",
+    "rulesRequired": "Agregá al menos una regla.",
+    "ruleFieldsRequired": "Cada regla necesita campo y valor.",
+    "ruleTemplate": "Plantilla",
+    "ruleName": "Nombre",
+    "ruleField": "Campo",
+    "ruleOperator": "Operador",
+    "ruleValue": "Umbral / valor",
+    "ruleAction": "Acción",
+    "tplApproval": "Pedir mi OK si monto > X",
+    "tplDenyAmount": "Bloquear si monto > X",
+    "tplDenyPrivacy": "Bloquear datos privados",
+    "tplCustom": "Personalizada",
+    "tplApprovalName": "Aprobación humana sobre monto",
+    "tplDenyAmountName": "Tope duro de monto",
+    "tplDenyPrivacyName": "Denegar compartir teléfono / datos privados",
+    "saveAndActivate": "Guardar y activar",
+    "previewApproval": "Si una propuesta supera {x}, Legatio pedirá tu OK.",
+    "previewDeny": "Si una propuesta supera {x}, se bloquea.",
+    "previewDefault": "Sumá una plantilla para ver el efecto en lenguaje claro.",
+    "advanced": "Campos avanzados",
+    "savedActivated": "Guardada y activada. Ya podés negociar."
   },
   "negotiations": {
     "title": "Negociaciones",
@@ -157,14 +189,23 @@
     "noProposals": "Sin propuestas — iniciá la negociación y procesá rondas.",
     "start": "Iniciar",
     "processRound": "Procesar ronda",
-    "started": "Negociación iniciada",
-    "roundProcessed": "Ronda procesada — resultado: {outcome}"
+    "started": "Negociación iniciada.",
+    "roundProcessed": "Ronda procesada — resultado: {outcome}",
+    "nextLabel": "Qué hacer ahora",
+    "nextStart": "Iniciá la negociación para la primera ronda.",
+    "nextRound": "Procesá la siguiente ronda para una nueva propuesta.",
+    "nextApproval": "Una regla necesita tu decisión — abrí Aprobaciones.",
+    "nextDone": "Esta negociación terminó.",
+    "nextIdle": "No hay acción requerida ahora.",
+    "lastProposal": "Última propuesta: {amount} {currency} → {status}",
+    "roundProcessedHuman": "Ronda procesada: {outcome}",
+    "goApprovals": "Ir a aprobaciones"
   },
   "approvals": {
     "title": "Aprobaciones",
-    "subtitle": "Decisiones humanas requeridas por el motor de políticas",
-    "emptyTitle": "No hay aprobaciones pendientes",
-    "emptyBody": "Cuando una propuesta requiera aprobación humana, aparecerá aquí.",
+    "subtitle": "Sos el freno de seguridad. Nada acá se auto-aprueba.",
+    "emptyTitle": "No hay decisiones pendientes",
+    "emptyBody": "Cuando una regla pida tu OK, aparece acá. Hasta entonces, allow/deny automático según tus reglas.",
     "colSummary": "Resumen",
     "colStatus": "Estado",
     "colExpires": "Vence",
@@ -172,7 +213,13 @@
     "approve": "Aprobar",
     "reject": "Rechazar",
     "approved": "Aprobación concedida",
-    "rejected": "Aprobación rechazada"
+    "rejected": "Aprobación rechazada",
+    "emptyCta": "Ver negociaciones",
+    "decideHint": "Aprobá solo si aceptás la propuesta bajo tus reglas.",
+    "approvedOk": "Aprobada — el flujo puede seguir.",
+    "rejectedOk": "Rechazada — la propuesta queda bloqueada.",
+    "colCreated": "Creada",
+    "colReason": "Por qué se pausó"
   },
   "profile": {
     "title": "Perfil",
@@ -259,51 +306,77 @@
   },
   "help": {
     "title": "Ayuda",
-    "subtitle": "Cómo probar Legatio en pocos pasos",
-    "howTitle": "Flujo recomendado",
+    "subtitle": "Cómo Legatio te deja el control",
+    "howTitle": "Camino recomendado",
     "faqTitle": "Preguntas frecuentes",
     "steps": [
       {
-        "title": "Creá un agente",
-        "body": "Agentes → Nuevo agente. Poné un nombre (ej. “Asistente de viajes”)."
+        "title": "Creá tu agente",
+        "body": "Desde el panel o Agentes — negocia por vos."
       },
       {
-        "title": "Definí una constitución",
-        "body": "Constituciones → Nueva. Asociála a tu agente y usá reglas del seed o las que agregues."
+        "title": "Definí reglas",
+        "body": "Nueva constitución → plantillas → guardar y activar."
       },
       {
-        "title": "Iniciá una negociación",
-        "body": "Negociaciones → Nueva. Elegí tu agente, uno externo y la constitución. Luego Iniciar y Procesar ronda."
+        "title": "Negociá",
+        "body": "Iniciá la sala, procesá rounds y mirá propuestas."
       },
       {
-        "title": "Aprobá si hace falta",
-        "body": "Si la política pide humano, abrí Aprobaciones y aprobá o rechazá."
-      },
-      {
-        "title": "Revisá acuerdo y auditoría",
-        "body": "Los resultados firmados están en Acuerdos. Cada paso queda en Auditoría."
+        "title": "Decidí cuando te pidan",
+        "body": "El badge en el menú de Aprobaciones significa que Legatio te necesita."
       }
     ],
     "faqs": [
       {
-        "q": "¿Qué es Legatio?",
-        "a": "Una capa de control entre humanos y agentes de IA: reglas (constituciones), negociaciones, aprobaciones humanas, acuerdos firmados y auditoría."
+        "q": "¿Por qué todo salía ALLOWED?",
+        "a": "Casi siempre la constitution no tenía reglas que matchearan (o no tenía reglas). Sumá un umbral de aprobación y activá."
       },
       {
-        "q": "¿Hacen falta APIs externas reales?",
-        "a": "No. El MVP usa agentes externos simulados del seed para demostrar el flujo completo."
+        "q": "¿Hace falta JSON o código?",
+        "a": "No. Usá las plantillas y solo editá el número."
       },
       {
-        "q": "¿Por qué no veo agentes?",
-        "a": "Creá el tuyo en Agentes, o corré ./scripts/seed.sh para cargar los de demo."
+        "q": "¿Y si no abro Aprobaciones?",
+        "a": "Lo que requiere tu OK queda bloqueado. Es a propósito."
       },
       {
-        "q": "¿Qué hace Procesar ronda?",
-        "a": "Avanza una ronda: la contraparte simulada propone, se evalúan políticas y el resultado puede ser ALLOW, DENY o REQUIRE_HUMAN_APPROVAL."
+        "q": "¿La contraparte es real?",
+        "a": "En este MVP es simulada para probar el loop de control con seguridad."
+      }
+    ],
+    "rulesTitle": "Reglas en lenguaje claro",
+    "rulesIntro": "Las reglas miran campos de la propuesta (como amount). DENY bloquea. REQUIRE_APPROVAL te espera. Si no, ALLOW.",
+    "rulesHowTo": "Cómo configurarlas",
+    "rulesHowToBody": "Checklist del panel → crear agente → nueva constitución → plantillas → guardar y activar → negociar → process rounds → Aprobaciones si te avisan.",
+    "rulesExampleTitle": "Ejemplo que pide tu OK",
+    "rulesExampleBody": "Plantilla “Pedir mi OK si monto > X” con valor 200. Ofertas de 600–800 se pausan para vos.",
+    "rulesActions": "Usá OK humano en zonas grises; DENY duro para límites absolutos (privacidad, montos extremos).",
+    "rulesTip": "No dejes constitutions sin reglas si te importa el control: vacío ≈ casi todo permitido.",
+    "backDashboard": "Volver al panel",
+    "promiseTitle": "Qué es Legatio",
+    "promiseBody": "Legatio no es el agente que reserva hoteles solo. Es la capa de confianza: definís reglas, los agentes proponen, la policy decide allow / deny / pedirte OK, y todo queda auditado.",
+    "glossaryTitle": "Glosario",
+    "glossary": [
+      {
+        "term": "Agente",
+        "meaning": "Parte en una negociación. El tuyo es “tu agente”; en el MVP la contraparte puede ser simulada."
       },
       {
-        "q": "¿Es obligatorio el 2FA?",
-        "a": "No. Se activa en Perfil. Después el login pide un código TOTP."
+        "term": "Constitución",
+        "meaning": "Paquete de reglas de tu agente. Debe estar Activa para negociar."
+      },
+      {
+        "term": "Propuesta",
+        "meaning": "Oferta de una ronda evaluada por la policy."
+      },
+      {
+        "term": "Aprobación",
+        "meaning": "Pausa para tu sí/no cuando una regla lo exige."
+      },
+      {
+        "term": "Agreement / Audit",
+        "meaning": "Resultado firmado e historial inmutable."
       }
     ]
   },
@@ -350,25 +423,29 @@
     "bottomBody": "Empezá con el seed o creá tu agente en segundos. Interfaz en español e inglés, tema claro y oscuro."
   },
   "status": {
-    "unknown": "—",
-    "raw": "",
-    "active": "Activo",
+    "unknown": "Desconocido",
+    "raw": "—",
+    "active": "Activa",
     "draft": "Borrador",
     "pending": "Pendiente",
     "inProgress": "En curso",
-    "awaitingApproval": "Esperando tu aprobación",
-    "approved": "Aprobado",
-    "rejected": "Rechazado",
-    "denied": "Denegado",
-    "allowed": "Permitido",
-    "completed": "Completado",
-    "signed": "Firmado",
-    "executed": "Ejecutado",
-    "cancelled": "Cancelado",
-    "expired": "Vencido",
-    "suspended": "Suspendido",
-    "revoked": "Revocado",
-    "failed": "Fallido",
-    "archived": "Archivado"
+    "awaitingApproval": "Necesita tu OK",
+    "approved": "Aprobada",
+    "rejected": "Rechazada",
+    "denied": "Bloqueada",
+    "allowed": "Permitida",
+    "completed": "Completada",
+    "signed": "Firmada",
+    "executed": "Ejecutada",
+    "cancelled": "Cancelada",
+    "expired": "Vencida",
+    "suspended": "Suspendida",
+    "revoked": "Revocada",
+    "failed": "Fallida",
+    "archived": "Archivada",
+    "needsYourOk": "Necesita tu OK",
+    "yourAgent": "Tu agente",
+    "externalAgent": "Agente externo",
+    "simulatedAgent": "Simulado"
   }
 }

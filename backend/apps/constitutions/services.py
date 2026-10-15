@@ -457,7 +457,7 @@ def create_constitution_with_rules(
         Tuple of (Constitution, ConstitutionVersion).
     """
     with transaction.atomic():
-        # Create constitution
+        # Create constitution (also creates initial draft version v1)
         constitution = create_constitution(
             agent=agent,
             name=name,
@@ -465,8 +465,10 @@ def create_constitution_with_rules(
             user=user,
         )
 
-        # Create version
-        version = create_version(constitution=constitution, user=user)
+        # Reuse the initial draft version instead of creating v2 empty
+        version = constitution.versions.order_by("version_number").first()
+        if version is None:
+            version = create_version(constitution=constitution, user=user)
 
         # Validate all rules
         rule_validator = RuleSetValidator(rules=[RuleValidator(**r) for r in rules])

@@ -54,6 +54,8 @@ class TestCreateConstitution:
         assert constitution.agent == agent
         assert constitution.name == "Travel Constitution"
         assert constitution.status == ConstitutionStatus.DRAFT
+        assert constitution.versions.count() == 1
+        assert constitution.versions.first().version_number == 1
 
     def test_create_constitution_creates_audit_event(self, user: Any, agent: Any) -> None:
         """Creating a constitution creates an audit event."""
@@ -71,17 +73,20 @@ class TestCreateConstitution:
 @pytest.mark.django_db
 class TestCreateVersion:
     def test_create_first_version(self, user: Any, agent: Any) -> None:
-        """First version gets number 1."""
+        """create_constitution seeds version 1; next explicit version is 2."""
         constitution = create_constitution(agent=agent, name="Test", user=user)
+        assert constitution.versions.count() == 1
+        first = constitution.versions.get()
+        assert first.version_number == 1
         version = create_version(constitution=constitution, user=user)
-        assert version.version_number == 1
+        assert version.version_number == 2
 
     def test_create_second_version(self, user: Any, agent: Any) -> None:
-        """Second version gets number 2."""
+        """Subsequent versions increment from the auto-created v1."""
         constitution = create_constitution(agent=agent, name="Test", user=user)
-        create_version(constitution=constitution, user=user)
-        version2 = create_version(constitution=constitution, user=user)
-        assert version2.version_number == 2
+        create_version(constitution=constitution, user=user)  # v2
+        version3 = create_version(constitution=constitution, user=user)
+        assert version3.version_number == 3
 
 
 @pytest.mark.django_db
@@ -249,6 +254,7 @@ class TestCreateConstitutionWithRules:
 
         assert constitution.name == "Travel"
         assert version.version_number == 1
+        assert constitution.versions.count() == 1
         assert PolicyRule.objects.filter(version=version).count() == 2
 
     def test_create_with_rules_is_atomic(self, user: Any, agent: Any) -> None:

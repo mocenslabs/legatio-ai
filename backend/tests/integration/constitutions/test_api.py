@@ -178,6 +178,7 @@ class TestConstitutionVersionsAPI:
     def test_list_versions(self, user: Any, agent: Any, api_client: Any) -> None:
         """User can list versions of their constitution."""
         constitution = create_constitution(agent=agent, name="Travel", user=user)
+        # create_constitution already seeds v1; add two more → 3 total
         create_version(constitution=constitution, user=user)
         create_version(constitution=constitution, user=user)
         client, generate_token = api_client
@@ -185,7 +186,7 @@ class TestConstitutionVersionsAPI:
         client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
         response = client.get(f"/api/v1/constitutions/{constitution.id}/versions/")
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 2
+        assert len(response.data) == 3
 
 
 @pytest.mark.django_db

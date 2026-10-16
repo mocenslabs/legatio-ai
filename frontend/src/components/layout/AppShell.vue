@@ -147,6 +147,7 @@ function onLogout(): void {
           :title="auth.user.email"
         >
           <UserAvatar
+            :seed="auth.user.email || auth.user.id || 'user'"
             :first-name="auth.user.first_name"
             :last-name="auth.user.last_name"
             :email="auth.user.email"

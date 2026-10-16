@@ -153,7 +153,7 @@ onMounted(() => {
                 {{ t('approvals.colReason') }}
               </div>
               <div class="meta-item__value">
-                {{ item.reason || item.summary || '—' }}
+                {{ item.summary || '—' }}
               </div>
             </div>
           </div>

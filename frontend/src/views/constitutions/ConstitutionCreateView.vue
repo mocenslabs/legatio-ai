@@ -43,7 +43,7 @@ function applyTemplate(row: RuleFormRow): void {
     row.field = 'amount'
     row.operator = 'GREATER_THAN'
     row.action = 'REQUIRE_APPROVAL'
-    row.category = 'BUDGET'
+    row.category = 'FINANCIAL'
     row.priority = 10
     if (!row.value) row.value = '200'
   } else if (row.template === 'deny_amount') {
@@ -51,7 +51,7 @@ function applyTemplate(row: RuleFormRow): void {
     row.field = 'amount'
     row.operator = 'GREATER_THAN'
     row.action = 'DENY'
-    row.category = 'BUDGET'
+    row.category = 'FINANCIAL'
     row.priority = 5
     if (!row.value) row.value = '5000'
   } else if (row.template === 'deny_privacy') {
@@ -74,7 +74,7 @@ function addRule(template: RuleFormRow['template'] = 'approval_amount'): void {
     operator: 'GREATER_THAN',
     value: template === 'deny_amount' ? '5000' : '200',
     action: 'REQUIRE_APPROVAL',
-    category: 'BUDGET',
+    category: 'FINANCIAL',
     priority: 10 + rules.value.length,
   }
   applyTemplate(row)

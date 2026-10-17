@@ -143,6 +143,7 @@ class ConstitutionViewSet(ModelViewSet):  # type: ignore[type-arg]
         serializer.is_valid(raise_exception=True)
 
         version_id = serializer.validated_data["version_id"]
+        replace_active = bool(serializer.validated_data.get("replace_active", False))
         try:
             version = constitution.versions.get(id=version_id)
         except ConstitutionVersion.DoesNotExist:
@@ -152,10 +153,19 @@ class ConstitutionViewSet(ModelViewSet):  # type: ignore[type-arg]
             )
 
         try:
-            activated_version = activate_version(version=version, user=request.user)
+            activated_version = activate_version(
+                version=version,
+                user=request.user,
+                replace_active=replace_active,
+            )
         except Exception as exc:
+            err_code = getattr(exc, "code", None) or exc.__class__.__name__
             return Response(
-                {"error": str(exc)},
+                {
+                    "error": str(exc),
+                    "code": err_code,
+                    "detail": str(exc),
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

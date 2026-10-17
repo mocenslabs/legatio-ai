@@ -181,8 +181,16 @@ def assess_risk(action: ProposedAction, matched_rules: list[MatchedRule]) -> Ris
 
 
 def _rule_matches(rule: RuleInput, action: ProposedAction) -> bool:
-    """Check if all conditions of a rule match (AND logic)."""
-    return all(evaluate_condition(condition, action) for condition in rule.conditions)
+    """Check if all conditions of a rule match (AND logic).
+
+    Rules that reference unknown ProposedAction fields are skipped
+    (treated as non-matching) so a single bad rule does not abort
+    the whole negotiation round.
+    """
+    try:
+        return all(evaluate_condition(condition, action) for condition in rule.conditions)
+    except InvalidRuleError:
+        return False
 
 
 def _get_field_value(field_name: str, action: ProposedAction) -> Any:

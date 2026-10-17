@@ -92,10 +92,25 @@ export async function listVersions(constitutionId: string): Promise<Constitution
 export async function activateConstitution(
   constitutionId: string,
   versionId: string,
+  options?: { replaceActive?: boolean },
 ): Promise<{ constitution: Constitution }> {
   const { data } = await apiClient.post<{ constitution: Constitution }>(
     `/constitutions/${constitutionId}/activate/`,
-    { version_id: versionId },
+    {
+      version_id: versionId,
+      replace_active: Boolean(options?.replaceActive),
+    },
   )
   return data
+}
+
+/** True when backend rejected activate because another constitution is ACTIVE. */
+export function isActiveConflictError(err: unknown): boolean {
+  const e = err as {
+    response?: { data?: { error?: string; code?: string; detail?: string } }
+    message?: string
+  }
+  const data = e?.response?.data
+  const blob = `${data?.error || ''} ${data?.code || ''} ${data?.detail || ''} ${e?.message || ''}`
+  return /already has an active constitution|MultipleActiveConstitutions/i.test(blob)
 }

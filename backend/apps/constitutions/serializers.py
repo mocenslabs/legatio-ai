@@ -220,6 +220,7 @@ class ConstitutionActivateSerializer(serializers.Serializer):  # type: ignore[ty
     """Serializer for activating a constitution version."""
 
     version_id = serializers.UUIDField()
+    replace_active = serializers.BooleanField(required=False, default=False)
 
 
 class ConstitutionWithRulesSerializer(serializers.Serializer):  # type: ignore[type-arg]

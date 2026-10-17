@@ -56,9 +56,10 @@ function applyTemplate(row: RuleFormRow): void {
     if (!row.value) row.value = '5000'
   } else if (row.template === 'deny_privacy') {
     row.name = t('constitutions.tplDenyPrivacyName')
-    row.field = 'shares_phone'
-    row.operator = 'EQUALS'
-    row.value = 'true'
+    // ProposedAction known field: data_fields_requested (list)
+    row.field = 'data_fields_requested'
+    row.operator = 'CONTAINS'
+    row.value = 'phone_number'
     row.action = 'DENY'
     row.category = 'PRIVACY'
     row.priority = 1
@@ -102,7 +103,8 @@ const livePreview = computed(() => {
 
 function parseValue(raw: string, field: string): unknown {
   const s = raw.trim()
-  if (field === 'shares_phone' || s === 'true' || s === 'false') return s === 'true'
+  if (field === 'data_fields_requested') return s
+  if (s === 'true' || s === 'false') return s === 'true'
   const n = Number(s)
   if (!Number.isNaN(n) && s !== '') return n
   return s

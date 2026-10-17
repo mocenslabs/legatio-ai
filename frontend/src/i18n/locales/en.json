@@ -162,7 +162,11 @@
     "previewDeny": "If a proposal is above {x}, it will be blocked.",
     "previewDefault": "Add a template to see what will happen in plain language.",
     "advanced": "Advanced fields",
-    "savedActivated": "Saved and activated. You can negotiate now."
+    "savedActivated": "Saved and activated. You can negotiate now.",
+    "replaceTitle": "Replace active constitution?",
+    "replaceBody": "This agent already has an active constitution. Only one can be active at a time. Replace it with this one? The previous constitution will be archived.",
+    "replaceConfirm": "Replace and activate",
+    "activateReplaced": "Activated. The previous constitution was archived."
   },
   "negotiations": {
     "title": "Negotiations",

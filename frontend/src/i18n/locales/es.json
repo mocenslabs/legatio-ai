@@ -162,7 +162,11 @@
     "previewDeny": "Si una propuesta supera {x}, se bloquea.",
     "previewDefault": "Sumá una plantilla para ver el efecto en lenguaje claro.",
     "advanced": "Campos avanzados",
-    "savedActivated": "Guardada y activada. Ya podés negociar."
+    "savedActivated": "Guardada y activada. Ya podés negociar.",
+    "replaceTitle": "¿Reemplazar la constitución activa?",
+    "replaceBody": "Este agente ya tiene una constitución activa. Solo puede haber una a la vez. ¿Reemplazarla por esta? La anterior quedará archivada.",
+    "replaceConfirm": "Reemplazar y activar",
+    "activateReplaced": "Activada. La constitución anterior quedó archivada."
   },
   "negotiations": {
     "title": "Negociaciones",

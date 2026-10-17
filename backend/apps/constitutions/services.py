@@ -353,32 +353,21 @@ def activate_version(
     *,
     version: ConstitutionVersion,
     user: Any,
+    replace_active: bool = False,
 ) -> ConstitutionVersion:
     """
     Activate a ConstitutionVersion.
 
-    This is an atomic operation that:
-    1. Archives any currently active version
-    2. Sets this version to ACTIVE
-    3. Updates the Constitution's active_version
-    4. Creates an AuditEvent
-
-    Source: 03-DATA-MODEL.md Section 17.3 (Transaction Boundary)
-
-    Args:
-        version: The version to activate.
-        user: The user activating the version.
-
-    Returns:
-        The activated ConstitutionVersion.
+    Atomic: optionally archive other active constitution on same agent,
+    archive previous version, set this version ACTIVE, update constitution.
 
     Raises:
-        MultipleActiveConstitutionsError: If another constitution is already active for this agent.
+        MultipleActiveConstitutionsError: If another constitution is active
+            and replace_active is False.
     """
     constitution = version.constitution
 
     with transaction.atomic():
-        # Check if another constitution is already active for this agent
         other_active = (
             Constitution.objects.filter(
                 agent=constitution.agent,
@@ -390,8 +379,27 @@ def activate_version(
         )
 
         if other_active:
-            raise MultipleActiveConstitutionsError(
-                f"Agent {constitution.agent.id} already has an active constitution: {other_active.id}"
+            if not replace_active:
+                raise MultipleActiveConstitutionsError(
+                    f"Agent {constitution.agent.id} already has an active "
+                    f"constitution: {other_active.id}"
+                )
+            if (
+                other_active.active_version_id
+                and other_active.active_version
+                and other_active.active_version.status == ConstitutionStatus.ACTIVE
+            ):
+                prev_v = other_active.active_version
+                prev_v.status = ConstitutionStatus.ARCHIVED
+                prev_v.archived_at = timezone.now()
+                prev_v.save(update_fields=["status", "archived_at"])
+            other_active.status = ConstitutionStatus.ARCHIVED
+            other_active.active_version = None
+            other_active.save(update_fields=["status", "active_version", "updated_at"])
+            logger.info(
+                "Archived previous active constitution %s for agent %s",
+                other_active.id,
+                constitution.agent_id,
             )
 
         # Archive previous active version if exists

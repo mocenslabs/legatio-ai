@@ -36,6 +36,15 @@ class Agent(models.Model):
         related_name="agents",
         help_text="User who owns this agent. Null for external agents.",
     )
+
+    organization = models.ForeignKey(
+        "organizations.Organization",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="agents",
+        help_text="Optional organization scope. Null = personal agent owned only by user.",
+    )
     agent_type = models.CharField(
         max_length=20,
         choices=AgentType.choices,
@@ -95,6 +104,7 @@ class Agent(models.Model):
             models.Index(fields=["owner"], name="idx_agent_owner"),
             models.Index(fields=["agent_type"], name="idx_agent_type"),
             models.Index(fields=["status"], name="idx_agent_status"),
+            models.Index(fields=["organization"], name="idx_agent_organization"),
         ]
         constraints: list[Any] = []
 

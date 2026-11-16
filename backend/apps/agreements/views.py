@@ -180,13 +180,18 @@ class VerifyAgreementView(APIView):
     """
     View for verifying an agreement's signature.
 
-    Endpoint: POST /api/v1/agreements/{id}/verify
+    Endpoint: POST /api/v1/agreements/{id}/verify/
+
+    Returns a structured result suitable for clients and auditors:
+    - is_valid / status (VALID | INVALID | UNSIGNED)
+    - hash_match between canonical_hash and signed_payload_hash
+    - signature algorithm, signer, timestamps
     """
 
     permission_classes = [IsAuthenticated]
 
     def post(self, request: Request, pk: UUID) -> Response:
-        """Verify the signature of an agreement."""
+        """Verify the cryptographic integrity of an agreement signature."""
         user = request.user
         if not user.is_authenticated:
             return Response(
@@ -206,20 +211,39 @@ class VerifyAgreementView(APIView):
                 {"error": "Agreement not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        if not hasattr(agreement, "signature") or not agreement.signature:
+
+        if not hasattr(agreement, "signature") or agreement.signature is None:
             return Response(
-                {"error": "Agreement has not been signed yet."},
-                status=status.HTTP_400_BAD_REQUEST,
+                {
+                    "is_valid": False,
+                    "status": "UNSIGNED",
+                    "detail": "Agreement has not been signed yet.",
+                    "agreement_id": str(agreement.id),
+                    "reference_code": agreement.reference_code,
+                },
+                status=status.HTTP_200_OK,
             )
-        is_verified = verify_agreement_signature(agreement)
+
+        signature = agreement.signature
+        is_valid = verify_agreement_signature(agreement)
+        hash_match = signature.signed_payload_hash == agreement.canonical_hash
+
         return Response(
             {
+                "is_valid": is_valid,
+                "status": "VALID" if is_valid else "INVALID",
+                "agreement_id": str(agreement.id),
                 "reference_code": agreement.reference_code,
-                "is_verified": is_verified,
                 "canonical_hash": agreement.canonical_hash,
-                "signature_algorithm": agreement.signature.signature_algorithm,
-                "signer_email": agreement.signature.signer.email,
-                "signed_at": agreement.signature.created_at.isoformat(),
+                "signed_payload_hash": signature.signed_payload_hash,
+                "hash_match": hash_match,
+                "signature_algorithm": signature.signature_algorithm,
+                "signer_email": signature.signer.email if signature.signer_id else None,
+                "signed_at": (
+                    agreement.signed_at.isoformat()
+                    if agreement.signed_at
+                    else signature.created_at.isoformat()
+                ),
             },
             status=status.HTTP_200_OK,
         )

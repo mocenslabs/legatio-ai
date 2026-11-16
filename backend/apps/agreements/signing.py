@@ -1,7 +1,13 @@
 """
 Cryptographic signing and verification for agreements.
 
-Uses HMAC-SHA256 with the server signing key for MVP.
+MVP approach: HMAC-SHA256 with the server signing key (SERVER_SIGNING_KEY).
+This produces a *server-attested* signature: the platform certifies that the
+agreement content was approved and recorded under its control. It is NOT a
+user-held private-key signature (non-repudiation of the end user).
+
+Phase 9 (Agent Identity & Credentials) will introduce per-agent HMAC credentials
+and, later, optional user-controlled signing.
 
 Source: 04-BUSINESS-FLOW.md Section 10.3
 """

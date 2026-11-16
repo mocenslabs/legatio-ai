@@ -29,5 +29,6 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Default command (will be overridden in docker-compose.yml)
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Default: Daphne (ASGI) so HTTP + WebSockets work the same in every environment.
+# docker-compose may override the command for local convenience.
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "legatio.asgi:application"]

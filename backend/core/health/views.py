@@ -11,10 +11,7 @@ from rest_framework.response import Response
 @throttle_classes([])
 def health_check(request: Request) -> Response:
     """
-    Health check endpoint.
-
-    Returns:
-        JSON response with status "ok".
+    Liveness probe — process is up.
     """
     return Response({"status": "ok", "service": "legatio-backend"})
 
@@ -24,21 +21,18 @@ def health_check(request: Request) -> Response:
 @throttle_classes([])
 def readiness_check(request: Request) -> Response:
     """
-    Readiness check endpoint.
+    Readiness probe — critical dependencies are available.
 
-    Verifies that critical dependencies are available.
-
-    Returns:
-        JSON response with readiness status.
+    Checks: database, cache (Redis), channel_layer (WebSocket Redis layer).
     """
     from django.db import connection
 
-    checks = {
+    checks: dict[str, bool] = {
         "database": False,
         "cache": False,
+        "channel_layer": False,
     }
 
-    # Check database
     try:
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
@@ -46,12 +40,29 @@ def readiness_check(request: Request) -> Response:
     except Exception:
         pass
 
-    # Check cache
     try:
         from django.core.cache import cache
 
         cache.set("health_check", "ok", 10)
         checks["cache"] = cache.get("health_check") == "ok"
+    except Exception:
+        pass
+
+    try:
+        from channels.layers import get_channel_layer
+
+        channel_layer = get_channel_layer()
+        if channel_layer is None:
+            checks["channel_layer"] = False
+        else:
+            module = channel_layer.__class__.__module__.lower()
+            if "inmemory" in module:
+                checks["channel_layer"] = True
+            else:
+                # Redis channel layer: verify underlying client responds to ping
+                # channels_redis exposes .connection_layer / hosts; use cache
+                # success as proxy when both share REDIS_URL, plus layer exists.
+                checks["channel_layer"] = checks["cache"] and channel_layer is not None
     except Exception:
         pass
 

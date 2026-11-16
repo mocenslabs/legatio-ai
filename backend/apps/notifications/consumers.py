@@ -37,6 +37,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):  # type: ignore[misc]
             await self.close()
             return
 
+        if self.channel_layer is None:
+            logger.error("Channel layer is not configured; closing WebSocket")
+            await self.close()
+            return
+
         self.user_room = f"user_{self.user.id}"
         await self.channel_layer.group_add(self.user_room, self.channel_name)
 

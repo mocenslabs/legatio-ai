@@ -44,7 +44,7 @@ from core.schemas.policy import ProposedAction
 from services.negotiation_engine.base import AgentResponse, NegotiationCompletedError
 from services.negotiation_engine.counter_offers import generate_counter_offer
 from services.negotiation_engine.registry import create_agent
-from services.policy_engine.evaluator import evaluate_policy
+from services.policy_engine.evaluator import safe_evaluate
 from services.policy_engine.loader import load_active_rules_for_agent
 
 logger = logging.getLogger("legatio.negotiation.orchestrator")
@@ -265,7 +265,7 @@ class NegotiationOrchestrator:
             terms=proposal.terms,
         )
 
-        decision = evaluate_policy(action, rules)
+        decision = safe_evaluate(action, rules)
 
         policy_decision = PolicyDecisionModel.objects.create(
             proposal=proposal,

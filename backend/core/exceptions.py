@@ -293,6 +293,9 @@ class InvalidTOTPError(AuthenticationError):
 def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | None:
     """
     Custom exception handler that standardizes error responses.
+
+    Shape:
+        {"error": {"code": "...", "message": "...", "details": ...?}}
     """
     response = exception_handler(exc, context)
 
@@ -300,18 +303,33 @@ def custom_exception_handler(exc: Exception, context: dict[str, Any]) -> Respons
         return Response(
             {
                 "error": {
-                    "code": exc.code,
-                    "message": exc.message,
+                    "code": getattr(exc, "code", exc.default_code),
+                    "message": getattr(exc, "message", exc.default_message),
                 }
             },
-            status=exc.default_status,
+            status=getattr(exc, "default_status", status.HTTP_400_BAD_REQUEST),
         )
 
     if response is not None:
+        # Normalize DRF / validation errors
+        detail = getattr(exc, "detail", None)
+        if isinstance(detail, list):
+            message = "; ".join(str(item) for item in detail)
+        elif isinstance(detail, dict):
+            message = "Validation failed"
+        elif detail is not None:
+            message = str(detail)
+        else:
+            message = str(exc)
+
+        code = getattr(exc, "default_code", None) or getattr(exc, "code", None) or "error"
+        if not isinstance(code, str):
+            code = "error"
+
         response.data = {
             "error": {
-                "code": getattr(exc, "default_code", "error"),
-                "message": str(exc.detail) if hasattr(exc, "detail") else str(exc),
+                "code": code,
+                "message": message,
                 "details": response.data,
             }
         }

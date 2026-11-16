@@ -12,6 +12,9 @@ SERVER_SIGNING_KEY = os.environ.get(
     "dev-only-signing-key-change-in-production",
 )
 
+# At-rest encryption key (Fernet / url-safe base64-encoded 32-byte key).
+ENCRYPTION_KEY = os.environ.get("ENCRYPTION_KEY", "")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -39,11 +42,14 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "django_filters",
     "channels",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
     "core",
     "apps.accounts",
+    "apps.organizations",
+    "apps.billing",
     "apps.agents",
     "apps.constitutions",
     "apps.negotiations",
@@ -151,8 +157,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
     ],
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.CursorPagination",
+    "DEFAULT_PAGINATION_CLASS": "core.pagination.StandardCursorPagination",
     "PAGE_SIZE": 50,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
@@ -178,12 +185,18 @@ CSRF_TRUSTED_ORIGINS = os.environ.get(
     "DJANGO_CSRF_TRUSTED_ORIGINS", "http://localhost:5173,http://localhost"
 ).split(",")
 
-# Channels
+# Channels (Redis-backed for multi-process / multi-instance WS)
+# REDIS_URL examples:
+#   redis://redis:6379/0
+#   rediss://:password@host:6380/0   (TLS)
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [os.environ.get("REDIS_URL", "redis://redis:6379/0")],
+            "prefix": os.environ.get("CHANNEL_LAYER_PREFIX", "legatio"),
+            "capacity": int(os.environ.get("CHANNEL_LAYER_CAPACITY", "100")),
+            "expiry": int(os.environ.get("CHANNEL_LAYER_EXPIRY", "60")),
         },
     },
 }
@@ -251,6 +264,10 @@ JWT_ISSUER = os.environ.get("JWT_ISSUER", "legatio")
 JWT_AUDIENCE = os.environ.get("JWT_AUDIENCE", "legatio-clients")
 
 # TOTP Configuration
+# Risk thresholds for Policy Engine (amount-based)
+RISK_HIGH_AMOUNT_THRESHOLD = int(os.environ.get("RISK_HIGH_AMOUNT_THRESHOLD", "500"))
+RISK_CRITICAL_AMOUNT_THRESHOLD = int(os.environ.get("RISK_CRITICAL_AMOUNT_THRESHOLD", "1000"))
+
 TOTP_ISSUER = os.environ.get("TOTP_ISSUER", "LegatioAI")
 TOTP_DIGITS = int(os.environ.get("TOTP_DIGITS", "6"))
 TOTP_INTERVAL = int(os.environ.get("TOTP_INTERVAL", "30"))
@@ -297,3 +314,37 @@ MIDDLEWARE = [
     "core.middleware.RequestTimingMiddleware",
     "core.middleware.SecurityHeadersMiddleware",
 ]
+
+
+# =============================================================================
+# OpenAPI / Swagger (drf-spectacular)
+# =============================================================================
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Legatio AI API",
+    "DESCRIPTION": (
+        "Deterministic negotiation and approval layer for AI agents. "
+        "Policy Engine decisions are fail-closed; agreements are server-attested."
+    ),
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SCHEMA_PATH_PREFIX": r"/api/v1",
+    "SECURITY": [{"bearerAuth": []}],
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+}
+
+
+# =============================================================================
+# Billing (feature flag — enforcement optional until payment provider is wired)
+# =============================================================================
+# When False, organization_has_feature / organization_within_limit allow everything.
+BILLING_ENABLED = os.environ.get("BILLING_ENABLED", "False").lower() in ("true", "1", "yes")
+BILLING_DEFAULT_TRIAL_DAYS = int(os.environ.get("BILLING_DEFAULT_TRIAL_DAYS", "14"))

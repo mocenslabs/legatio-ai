@@ -24,7 +24,10 @@ LLM_CIRCUIT_BREAKER_RECOVERY_TIMEOUT_SECONDS: int = 60
 AUDIT_CHAIN_LOCK_KEY: str = "legatio:audit_chain_lock"
 AUDIT_CHAIN_LOCK_TTL_SECONDS: int = 10
 
-# Risk thresholds
+# Risk thresholds (defaults).
+# Override via settings / env:
+#   RISK_HIGH_AMOUNT_THRESHOLD
+#   RISK_CRITICAL_AMOUNT_THRESHOLD
 RISK_HIGH_AMOUNT_THRESHOLD: int = 500
 RISK_CRITICAL_AMOUNT_THRESHOLD: int = 1000
 

@@ -49,16 +49,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text="Designates whether the user has enabled 2FA via TOTP.",
     )
-    # NOTE: totp_secret will be encrypted in DEL-037 using django-cryptography.
-    # For now, stored as plain CharField. Migration to encrypted field is
-    # handled in DEL-037 (encryption-at-rest).
-    # noqa: DJ001 — null=True is intentional here to allow distinguishing
-    # "not configured" from "empty string" until encryption is implemented.
+    # Stored as a Fernet token (encrypted at rest via core.crypto).
+    # null=True distinguishes "not configured" from an empty value.
+    # max_length=255 holds a standard Fernet token comfortably.
     totp_secret = models.CharField(  # noqa: DJ001
-        max_length=32,
+        max_length=255,
         null=True,
         blank=True,
-        help_text="Encrypted TOTP secret for 2FA. Encrypted at rest (see DEL-037).",
+        help_text="Fernet-encrypted TOTP secret for 2FA (at-rest encryption).",
     )
 
     # Preferences

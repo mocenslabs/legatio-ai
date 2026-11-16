@@ -284,3 +284,44 @@ class ProposalActionType(models.TextChoices):
     RENT = "rent", "Rent"
     BOOK = "book", "Book"
     OTHER = "other", "Other"
+
+
+# =============================================================================
+# 5.x Organization roles
+# =============================================================================
+class OrganizationRole(models.TextChoices):
+    """Roles for organization membership."""
+
+    OWNER = "owner", "Owner"
+    ADMIN = "admin", "Admin"
+    MEMBER = "member", "Member"
+    VIEWER = "viewer", "Viewer"
+
+
+class OrganizationStatus(models.TextChoices):
+    """Lifecycle status of an organization."""
+
+    ACTIVE = "active", "Active"
+    SUSPENDED = "suspended", "Suspended"
+    ARCHIVED = "archived", "Archived"
+
+
+# =============================================================================
+# 5.x Billing / plans
+# =============================================================================
+class SubscriptionStatus(models.TextChoices):
+    """Subscription lifecycle for an organization."""
+
+    TRIALING = "trialing", "Trialing"
+    ACTIVE = "active", "Active"
+    PAST_DUE = "past_due", "Past due"
+    CANCELED = "canceled", "Canceled"
+    INCOMPLETE = "incomplete", "Incomplete"
+
+
+class PlanInterval(models.TextChoices):
+    """Billing interval for a plan."""
+
+    MONTHLY = "monthly", "Monthly"
+    YEARLY = "yearly", "Yearly"
+    LIFETIME = "lifetime", "Lifetime"

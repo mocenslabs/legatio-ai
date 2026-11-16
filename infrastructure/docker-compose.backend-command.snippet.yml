@@ -1,0 +1,6 @@
+# Optional: in infrastructure/docker-compose.yml, set backend command to:
+#
+#   command: ["daphne", "-b", "0.0.0.0", "-p", "8000", "legatio.asgi:application"]
+#
+# With daphne in INSTALLED_APPS, manage.py runserver already uses Daphne's
+# runserver. Explicit daphne is recommended for Northflank / production.

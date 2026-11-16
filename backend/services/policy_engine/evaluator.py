@@ -10,10 +10,16 @@ import time
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
+from django.conf import settings
+
 from core.constants import (
     ENGINE_VERSION,
-    RISK_CRITICAL_AMOUNT_THRESHOLD,
-    RISK_HIGH_AMOUNT_THRESHOLD,
+)
+from core.constants import (
+    RISK_CRITICAL_AMOUNT_THRESHOLD as DEFAULT_RISK_CRITICAL,
+)
+from core.constants import (
+    RISK_HIGH_AMOUNT_THRESHOLD as DEFAULT_RISK_HIGH,
 )
 from core.enums import PolicyDecisionOutcome, RiskLevel, RuleAction, RuleOperator
 from core.exceptions import InvalidActionError, InvalidRuleError
@@ -155,18 +161,28 @@ def evaluate_condition(condition: RuleCondition, action: ProposedAction) -> bool
         ) from exc
 
 
+def _risk_thresholds() -> tuple[int, int]:
+    """Return (high, critical) amount thresholds from settings, with constant fallbacks."""
+    high = getattr(settings, "RISK_HIGH_AMOUNT_THRESHOLD", DEFAULT_RISK_HIGH)
+    critical = getattr(settings, "RISK_CRITICAL_AMOUNT_THRESHOLD", DEFAULT_RISK_CRITICAL)
+    return int(high), int(critical)
+
+
 def assess_risk(action: ProposedAction, matched_rules: list[MatchedRule]) -> RiskLevel:
     """
     Assess the risk level of a proposed action based on matched rules.
+    Amount thresholds are read from Django settings (env-overridable).
     Source: 04-BUSINESS-FLOW.md Section 7.3
     """
     if any(r.action == RuleAction.DENY for r in matched_rules):
         return RiskLevel.CRITICAL
 
+    high_threshold, critical_threshold = _risk_thresholds()
+
     if action.amount is not None:
-        if action.amount >= RISK_CRITICAL_AMOUNT_THRESHOLD:
+        if action.amount >= critical_threshold:
             return RiskLevel.CRITICAL
-        if action.amount >= RISK_HIGH_AMOUNT_THRESHOLD:
+        if action.amount >= high_threshold:
             return RiskLevel.HIGH
 
     if any(r.action == RuleAction.REQUIRE_APPROVAL for r in matched_rules):

@@ -1,0 +1,6 @@
+# Replace the ENCRYPTION_KEY default in development.py with this valid key:
+
+# Deterministic Fernet key for local development and tests only.
+# Never use this value in production.
+if not ENCRYPTION_KEY:  # noqa: F405
+    ENCRYPTION_KEY = "8Pxuyu443UVl4gerNpnL2kduLqKdZ9wTFb-_g7Nv1iA="  # noqa: F405

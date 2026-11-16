@@ -12,6 +12,7 @@ from apps.accounts.services.totp import (
     generate_totp_secret,
     verify_totp_code,
 )
+from core.crypto import decrypt_value, is_encrypted
 from core.exceptions import InvalidTOTPError, TwoFactorRequiredError
 
 User = get_user_model()
@@ -33,14 +34,20 @@ class TestEnable2FA:
         assert isinstance(secret, str)
         assert isinstance(uri, str)
         assert "otpauth://" in uri
-        assert user.totp_secret == secret
+        # Returned secret is plaintext; DB value must be encrypted
+        assert user.totp_secret != secret
+        assert is_encrypted(user.totp_secret)
+        assert decrypt_value(user.totp_secret) == secret
         assert user.two_factor_enabled is False  # Not yet confirmed
 
-    def test_enable_2fa_stores_secret(self) -> None:
+    def test_enable_2fa_stores_encrypted_secret(self) -> None:
         user = register_user(email="test@example.com", password="testpass123")
         secret, _ = enable_2fa(user)
         user.refresh_from_db()
-        assert user.totp_secret == secret
+        assert user.totp_secret is not None
+        assert user.totp_secret != secret
+        assert is_encrypted(user.totp_secret)
+        assert decrypt_value(user.totp_secret) == secret
 
 
 @pytest.mark.django_db
@@ -73,7 +80,7 @@ class TestVerifyTOTPCode:
         secret, _ = enable_2fa(user)
         confirm_2fa_setup(user, pyotp.TOTP(secret).now())
         user.refresh_from_db()
-        code = pyotp.TOTP(user.totp_secret).now()
+        code = pyotp.TOTP(secret).now()
         assert verify_totp_code(user, code) is True
 
     def test_verify_invalid_code(self) -> None:
@@ -96,7 +103,7 @@ class TestDisable2FA:
         secret, _ = enable_2fa(user)
         confirm_2fa_setup(user, pyotp.TOTP(secret).now())
         user.refresh_from_db()
-        code = pyotp.TOTP(user.totp_secret).now()
+        code = pyotp.TOTP(secret).now()
         disable_2fa(user, code)
         user.refresh_from_db()
         assert user.two_factor_enabled is False

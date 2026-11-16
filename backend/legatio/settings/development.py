@@ -28,3 +28,9 @@ PASSWORD_HASHERS = [
 
 # CORS: allow all in development
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Deterministic Fernet key for local development and tests only.
+# Never use this value in production.
+# Use globals().get so a missing ENCRYPTION_KEY in base does not crash startup.
+if not globals().get("ENCRYPTION_KEY"):
+    ENCRYPTION_KEY = "8Pxuyu443UVl4gerNpnL2kduLqKdZ9wTFb-_g7Nv1iA="

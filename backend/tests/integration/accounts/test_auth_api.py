@@ -168,7 +168,8 @@ class TestTwoFactorAPI:
         token = generate_access_token(user, totp_verified=True)
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
-        code = pyotp.TOTP(user.totp_secret).now()
+        # Use plaintext secret from enable_2fa; DB stores Fernet ciphertext
+        code = pyotp.TOTP(secret).now()
         response = client.post("/api/v1/auth/2fa/disable/", {"code": code}, format="json")
         assert response.status_code == status.HTTP_200_OK
         user.refresh_from_db()

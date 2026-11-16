@@ -105,7 +105,7 @@ jobs:
         CELERY_TASK_EAGER_PROPAGATES: "True"
         DJANGO_SECRET_KEY: test-secret-key-not-for-production
         JWT_SECRET_KEY: test-jwt-secret-key-not-for-production
-        ENCRYPTION_KEY: dGVzdC1lbmNyeXB0aW9uLWtleS0xMjM0NTY3OA==
+        ENCRYPTION_KEY: 8Pxuyu443UVl4gerNpnL2kduLqKdZ9wTFb-_g7Nv1iA=
         SERVER_SIGNING_KEY: test-signing-key-not-for-production
     steps:
       - name: Checkout code

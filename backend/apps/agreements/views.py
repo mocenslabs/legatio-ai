@@ -182,10 +182,8 @@ class VerifyAgreementView(APIView):
 
     Endpoint: POST /api/v1/agreements/{id}/verify/
 
-    Returns a structured result suitable for clients and auditors:
-    - is_valid / status (VALID | INVALID | UNSIGNED)
-    - hash_match between canonical_hash and signed_payload_hash
-    - signature algorithm, signer, timestamps
+    Response includes both legacy ``is_verified`` and structured fields
+    (``is_valid``, ``status``, ``hash_match``) for clients and auditors.
     """
 
     permission_classes = [IsAuthenticated]
@@ -215,13 +213,13 @@ class VerifyAgreementView(APIView):
         if not hasattr(agreement, "signature") or agreement.signature is None:
             return Response(
                 {
+                    "error": "Agreement has not been signed yet.",
+                    "is_verified": False,
                     "is_valid": False,
                     "status": "UNSIGNED",
-                    "detail": "Agreement has not been signed yet.",
-                    "agreement_id": str(agreement.id),
                     "reference_code": agreement.reference_code,
                 },
-                status=status.HTTP_200_OK,
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         signature = agreement.signature
@@ -230,6 +228,7 @@ class VerifyAgreementView(APIView):
 
         return Response(
             {
+                "is_verified": is_valid,
                 "is_valid": is_valid,
                 "status": "VALID" if is_valid else "INVALID",
                 "agreement_id": str(agreement.id),

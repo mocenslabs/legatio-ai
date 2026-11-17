@@ -8,7 +8,7 @@ Behind a TLS-terminating proxy: trust X-Forwarded-Proto / Host.
 from __future__ import annotations
 
 import os
-from typing import Any
+from typing import Any, cast
 
 from legatio.settings.base import *  # noqa: F401, F403
 from legatio.settings.base import LOGGING
@@ -60,11 +60,11 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
-# Neon requires SSL
-if os.environ.get("POSTGRES_SSLMODE"):
-    DATABASES["default"]["OPTIONS"]["sslmode"] = os.environ["POSTGRES_SSLMODE"]  # noqa: F405
-else:
-    DATABASES["default"]["OPTIONS"]["sslmode"] = "require"  # noqa: F405
+# Neon / managed Postgres requires SSL (mutate OPTIONS in place for mypy)
+_sslmode = os.environ.get("POSTGRES_SSLMODE", "require")
+_default_db = cast(dict[str, Any], DATABASES["default"])  # noqa: F405
+_options = cast(dict[str, Any], _default_db.setdefault("OPTIONS", {}))
+_options["sslmode"] = _sslmode
 
 # Logging
 _log_config: dict[str, Any] = LOGGING

@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import * as agentsApi from '@/api/agents'
+import EmptyState from '@/components/common/EmptyState.vue'
 import type { Agent } from '@/types/domain'
 import { extractApiMessage } from '@/utils/errors'
 import { formatDate, statusBadgeClass, statusLabelKey } from '@/utils/format'
@@ -109,13 +110,12 @@ onMounted(() => {
           <span class="badge badge--brand">{{ mine.length }}</span>
         </div>
         <div class="card-panel__body">
-          <div
+          <EmptyState
             v-if="mine.length === 0"
-            class="empty-state"
+            :title="t('agents.emptyMine')"
+            :body="t('agents.emptyMineBody')"
           >
-            <strong>{{ t('agents.emptyMine') }}</strong>
-            <p>{{ t('agents.emptyMineBody') }}</p>
-            <div class="empty-state__actions">
+            <template #actions>
               <button
                 type="button"
                 class="btn btn--primary"
@@ -123,8 +123,8 @@ onMounted(() => {
               >
                 {{ t('agents.create') }}
               </button>
-            </div>
-          </div>
+            </template>
+          </EmptyState>
           <div
             v-else
             class="data-table-wrap"

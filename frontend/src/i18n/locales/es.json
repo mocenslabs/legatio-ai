@@ -451,5 +451,16 @@
     "yourAgent": "Tu agente",
     "externalAgent": "Agente externo",
     "simulatedAgent": "Simulado"
+  },
+  "guide": {
+    "aria": "Guía de primeros pasos",
+    "title": "Cómo usar Legatio (4 pasos)",
+    "body": "Seguí este camino una vez. Podés ocultar este aviso; Ayuda queda en el menú.",
+    "stepAgent": "1. Creá tu agente",
+    "stepConstitution": "2. Agregá reglas (constitución)",
+    "stepNegotiate": "3. Iniciá una negociación",
+    "stepApprove": "4. Revisá aprobaciones cuando haga falta",
+    "help": "Abrir Ayuda",
+    "dismiss": "Entendido, ocultar"
   }
 }

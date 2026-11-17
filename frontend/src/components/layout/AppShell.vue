@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 import * as approvalsApi from '@/api/approvals'
 import LocaleSwitch from '@/components/common/LocaleSwitch.vue'
 import ThemeSwitch from '@/components/common/ThemeSwitch.vue'
+import GuideBanner from '@/components/common/GuideBanner.vue'
 import UserAvatar from '@/components/common/UserAvatar.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -165,6 +166,7 @@ function onLogout(): void {
     </header>
 
     <main class="app-shell__main">
+      <GuideBanner />
       <RouterView />
     </main>
   </div>

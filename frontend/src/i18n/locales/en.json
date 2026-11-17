@@ -451,5 +451,16 @@
     "yourAgent": "Your agent",
     "externalAgent": "External agent",
     "simulatedAgent": "Simulated"
+  },
+  "guide": {
+    "aria": "Getting started guide",
+    "title": "How to use Legatio (4 steps)",
+    "body": "Follow this path once. You can hide this banner anytime; Help stays in the sidebar.",
+    "stepAgent": "1. Create your agent",
+    "stepConstitution": "2. Add rules (constitution)",
+    "stepNegotiate": "3. Start a negotiation",
+    "stepApprove": "4. Review approvals when required",
+    "help": "Open Help",
+    "dismiss": "Got it, hide this"
   }
 }

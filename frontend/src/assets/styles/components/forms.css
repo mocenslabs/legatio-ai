@@ -76,6 +76,12 @@
   }
 }
 
+.approval-summary {
+  white-space: pre-wrap;
+  margin: 0.25rem 0 0;
+  font-family: inherit;
+}
+
 .form-hint {
   margin: 0.35rem 0 0;
   font-size: 0.8125rem;

@@ -77,6 +77,10 @@ export interface ApprovalRequest {
   room?: string | NegotiationRoom
   room_id?: string
   risk_level?: string
+  /** Present on list/pending serializers */
+  proposal_amount?: string | number | null
+  proposal_action_type?: string
+  is_expired?: boolean
 }
 
 export interface CreateConstitutionPayload {

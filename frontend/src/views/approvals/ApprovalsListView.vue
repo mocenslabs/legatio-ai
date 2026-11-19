@@ -24,6 +24,27 @@ function labelStatus(status?: string): string {
   return t(key)
 }
 
+function labelRisk(level?: string): string {
+  if (!level) return '—'
+  const u = String(level).toUpperCase()
+  if (u === 'LOW') return t('approvals.riskLow')
+  if (u === 'MEDIUM' || u === 'MED') return t('approvals.riskMedium')
+  if (u === 'HIGH') return t('approvals.riskHigh')
+  if (u === 'CRITICAL') return t('approvals.riskCritical')
+  return level
+}
+
+function amountLabel(item: ApprovalRequest): string {
+  if (item.proposal_amount != null && item.proposal_amount !== '') {
+    return String(item.proposal_amount)
+  }
+  if (item.proposal?.amount != null) {
+    const cur = item.proposal.currency ? ` ${item.proposal.currency}` : ''
+    return `${item.proposal.amount}${cur}`
+  }
+  return '—'
+}
+
 async function load(): Promise<void> {
   loading.value = true
   error.value = null
@@ -39,6 +60,7 @@ async function load(): Promise<void> {
 async function onApprove(id: string): Promise<void> {
   actingId.value = id
   error.value = null
+  success.value = null
   try {
     await approvalsApi.approveRequest(id)
     success.value = t('approvals.approvedOk')
@@ -53,6 +75,7 @@ async function onApprove(id: string): Promise<void> {
 async function onReject(id: string): Promise<void> {
   actingId.value = id
   error.value = null
+  success.value = null
   try {
     await approvalsApi.rejectRequest(id)
     success.value = t('approvals.rejectedOk')
@@ -79,6 +102,16 @@ onMounted(() => {
         <p class="page-header__subtitle">
           {{ t('approvals.subtitle') }}
         </p>
+      </div>
+      <div class="page-header__actions">
+        <button
+          type="button"
+          class="btn btn--secondary btn--sm"
+          :disabled="loading"
+          @click="load"
+        >
+          {{ t('common.refresh') }}
+        </button>
       </div>
     </div>
 
@@ -136,6 +169,17 @@ onMounted(() => {
       v-else
       class="stack"
     >
+      <div class="rules-explainer">
+        <p class="rules-explainer__title">
+          {{ t('approvals.explainerTitle') }}
+        </p>
+        <ol class="rules-explainer__list">
+          <li>{{ t('approvals.explainer1') }}</li>
+          <li>{{ t('approvals.explainer2') }}</li>
+          <li>{{ t('approvals.explainer3') }}</li>
+        </ol>
+      </div>
+
       <div
         v-for="item in items"
         :key="item.id"
@@ -145,10 +189,38 @@ onMounted(() => {
           <div class="meta-grid">
             <div class="meta-item">
               <div class="meta-item__label">
+                {{ t('approvals.colAmount') }}
+              </div>
+              <div class="meta-item__value">
+                {{ amountLabel(item) }}
+              </div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-item__label">
+                {{ t('approvals.colActionType') }}
+              </div>
+              <div class="meta-item__value">
+                {{ item.proposal_action_type || item.proposal?.action_type || '—' }}
+              </div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-item__label">
+                {{ t('approvals.colRisk') }}
+              </div>
+              <div class="meta-item__value">
+                {{ labelRisk(item.risk_level) }}
+              </div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-item__label">
                 {{ t('approvals.colStatus') }}
               </div>
               <div class="meta-item__value">
                 <span :class="statusBadgeClass(item.status)">{{ labelStatus(item.status) }}</span>
+                <span
+                  v-if="item.is_expired"
+                  class="badge badge--danger"
+                >{{ t('approvals.expired') }}</span>
               </div>
             </div>
             <div class="meta-item">
@@ -161,24 +233,27 @@ onMounted(() => {
             </div>
             <div class="meta-item">
               <div class="meta-item__label">
-                {{ t('approvals.colReason') }}
+                {{ t('approvals.colExpires') }}
               </div>
               <div class="meta-item__value">
-                {{ item.summary || '—' }}
+                {{ item.expires_at ? formatDate(item.expires_at) : '—' }}
               </div>
             </div>
           </div>
-          <p class="page-header__subtitle">
+
+          <div class="rule-preview">
+            <strong>{{ t('approvals.colReason') }}</strong>
+            <pre class="form-hint approval-summary">{{ item.summary || t('approvals.noSummary') }}</pre>
+          </div>
+
+          <p class="form-hint">
             {{ t('approvals.decideHint') }}
           </p>
-          <div
-            class="page-header__actions"
-            style="justify-content: flex-start"
-          >
+          <div class="page-header__actions">
             <button
               type="button"
               class="btn btn--primary btn--sm"
-              :disabled="actingId === item.id"
+              :disabled="actingId === item.id || item.is_expired"
               @click="onApprove(item.id)"
             >
               {{ t('approvals.approve') }}
@@ -190,6 +265,13 @@ onMounted(() => {
               @click="onReject(item.id)"
             >
               {{ t('approvals.reject') }}
+            </button>
+            <button
+              type="button"
+              class="btn btn--ghost btn--sm"
+              @click="router.push({ name: 'negotiations' })"
+            >
+              {{ t('approvals.backNegotiations') }}
             </button>
           </div>
         </div>

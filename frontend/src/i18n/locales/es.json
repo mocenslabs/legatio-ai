@@ -384,81 +384,93 @@
     "descriptionHint": "Opcional. Para qué sirve este agente."
   },
   "help": {
-    "title": "Ayuda",
-    "subtitle": "Cómo Legatio te deja el control",
-    "howTitle": "Camino recomendado",
-    "faqTitle": "Preguntas frecuentes",
+    "title": "Cómo funciona",
+    "subtitle": "Guía corta en palabras simples. No hace falta ser técnico.",
+    "intro": "Legatio te ayuda a mantener el control cuando un asistente negocia por vos. Vos ponés los límites. El sistema bloquea lo riesgoso o te pregunta antes.",
+    "promiseTitle": "Qué es esta app (y qué no es)",
+    "promiseBody": "Legatio no es el asistente que reserva viajes o renueva suscripciones solo. Es la capa de control: vos definís reglas simples, la otra parte hace ofertas y cada oferta se revisa. Resultado: permitir, bloquear o preguntarte. Los pasos importantes se pueden registrar para revisarlos después.",
+    "howTitle": "El camino simple (4 pasos)",
     "steps": [
       {
         "title": "Creá tu agente",
-        "body": "Desde el panel o Agentes — negocia por vos."
+        "body": "Pensalo como “quién negocia por mí”. Poné un nombre claro. Usá tu propio agente, no solo los de la demo."
       },
       {
-        "title": "Definí reglas",
-        "body": "Nueva constitución → plantillas → guardar y activar."
+        "title": "Definí tus reglas",
+        "body": "Ejemplos: “si el precio pasa de 200, preguntarme”, “si piden mi teléfono, bloquear”. Usá las plantillas: coinciden con lo que el sistema revisa de verdad."
       },
       {
-        "title": "Negociá",
-        "body": "Iniciá la sala, procesá rounds y mirá propuestas."
+        "title": "Probá una negociación",
+        "body": "Elegí tu agente, una contraparte (a menudo simulada en la demo) y tus reglas. Después iniciá y procesá las rondas de a una."
       },
       {
-        "title": "Decidí cuando te pidan",
-        "body": "El badge en el menú de Aprobaciones significa que Legatio te necesita."
+        "title": "Cuando necesita tu OK",
+        "body": "Si una regla dice “preguntar al humano”, la charla se pausa en Necesitan tu OK. Nada sensible sigue hasta que apruebes o rechaces."
       }
     ],
+    "rulesTitle": "Reglas, sin jerga",
+    "rulesIntro": "Cada regla es: SI pasa algo en una oferta → ENTONCES se bloquea, o se te pide el OK. Si nada coincide, puede permitirse.",
+    "rulesHowTo": "Cómo crearlas",
+    "rulesHowToBody": "Checklist de Inicio → crear agente → agregar reglas → usar una plantilla → cambiar el número si querés → guardar y activar → iniciar negociación → procesar rondas → abrir Necesitan tu OK si te lo pide.",
+    "rulesExampleTitle": "Ejemplo que pide tu OK",
+    "rulesExampleBody": "Plantilla “Preguntarme si precio > X” con valor 200. Si una oferta de demo es 600–800, el sistema debería pausar y esperarte.",
+    "rulesActions": "Usá “preguntarme antes” para zonas grises. Usá “bloquear” para límites duros (datos privados, montos que nunca aceptarías).",
+    "rulesTip": "Si te importa el control, no dejes un agente sin reglas: sin reglas casi todo queda permitido.",
+    "faqTitle": "Preguntas frecuentes",
     "faqs": [
       {
-        "q": "¿Por qué todo salía ALLOWED?",
-        "a": "Casi siempre la constitution no tenía reglas que matchearan (o no tenía reglas). Sumá un umbral de aprobación y activá."
+        "q": "¿Qué hago justo después de registrarme?",
+        "a": "Seguí el checklist de Inicio: creá tu agente, sumá al menos una regla, iniciá una negociación y procesá algunas rondas."
       },
       {
-        "q": "¿Hace falta JSON o código?",
-        "a": "No. Usá las plantillas y solo editá el número."
+        "q": "¿Por qué veo agentes que no creé?",
+        "a": "Suelen ser contrapartes de demo / simuladas. Tus reglas se enganchan a tu propio agente. Al crear reglas o negociaciones, elegí el que creaste vos."
       },
       {
-        "q": "¿Y si no abro Aprobaciones?",
-        "a": "Lo que requiere tu OK queda bloqueado. Es a propósito."
+        "q": "¿Puedo bloquear más de un tipo de dato privado?",
+        "a": "Sí. Cada regla de privacidad bloquea un solo tipo de dato (por ejemplo teléfono o pasaporte). Sumá otra regla de privacidad por cada tipo extra."
       },
       {
-        "q": "¿La contraparte es real?",
-        "a": "En este MVP es simulada para probar el loop de control con seguridad."
+        "q": "¿Qué pasa si una regla me preguntaría y otra bloquearía?",
+        "a": "Gana el bloqueo. Así no sigue algo riesgoso solo porque otra regla pedía confirmación."
+      },
+      {
+        "q": "¿Qué pasa en Necesitan tu OK?",
+        "a": "Ves por qué se pausó y detalles como monto o riesgo cuando están disponibles. Aprobá solo si aceptás la oferta. Rechazar la deja bloqueada."
+      },
+      {
+        "q": "¿La otra parte es una empresa real?",
+        "a": "En esta versión las contrapartes suelen ser simuladas para que pruebes el circuito completo sin dinero ni contratos reales."
+      },
+      {
+        "q": "¿Necesito entender nombres técnicos de campos?",
+        "a": "No para el uso normal: preferí plantillas y chips de sugerencia. Lo avanzado es opcional si ya los conocés."
       }
     ],
-    "rulesTitle": "Reglas en lenguaje claro",
-    "rulesIntro": "Las reglas miran campos de la propuesta (como amount). DENY bloquea. REQUIRE_APPROVAL te espera. Si no, ALLOW.",
-    "rulesHowTo": "Cómo configurarlas",
-    "rulesHowToBody": "Checklist del panel → crear agente → nueva constitución → plantillas → guardar y activar → negociar → process rounds → Aprobaciones si te avisan.",
-    "rulesExampleTitle": "Ejemplo que pide tu OK",
-    "rulesExampleBody": "Plantilla “Pedir mi OK si monto > X” con valor 200. Ofertas de 600–800 se pausan para vos.",
-    "rulesActions": "Usá OK humano en zonas grises; DENY duro para límites absolutos (privacidad, montos extremos).",
-    "rulesTip": "No dejes constitutions sin reglas si te importa el control: vacío ≈ casi todo permitido.",
-    "backDashboard": "Volver al panel",
-    "promiseTitle": "Qué es Legatio",
-    "promiseBody": "Legatio no es el agente que reserva hoteles solo. Es la capa de confianza: definís reglas, los agentes proponen, la policy decide allow / deny / pedirte OK, y todo queda auditado.",
-    "glossaryTitle": "Glosario",
+    "glossaryTitle": "Palabras que vas a ver",
     "glossary": [
       {
         "term": "Agente",
-        "meaning": "Parte en una negociación. El tuyo es “tu agente”; en el MVP la contraparte puede ser simulada."
+        "meaning": "Quién participa en la charla. El tuyo negocia por vos; la otra parte puede ser una empresa de demo."
       },
       {
-        "term": "Constitución",
-        "meaning": "Paquete de reglas de tu agente. Debe estar Activa para negociar."
+        "term": "Reglas (a veces “constitución”)",
+        "meaning": "Los límites colgados de tu agente. Tienen que estar activas para usarse en una negociación."
       },
       {
-        "term": "Propuesta",
-        "meaning": "Oferta de una ronda evaluada por la policy."
+        "term": "Propuesta / ronda",
+        "meaning": "Una oferta del ida y vuelta (precio, datos pedidos, etc.), revisada contra tus reglas."
       },
       {
-        "term": "Aprobación",
-        "meaning": "Pausa para tu sí/no cuando una regla lo exige."
+        "term": "Necesitan tu OK",
+        "meaning": "Una pausa para tu sí o no explícito cuando una regla lo exige."
       },
       {
-        "term": "Agreement / Audit",
-        "meaning": "Resultado firmado e historial inmutable."
+        "term": "Acuerdo firmado / historial",
+        "meaning": "Resultado final aceptado e historial de acciones importantes para revisar después."
       }
     ],
-    "intro": "Legatio te deja el control cuando un agente de IA negocia. Definís reglas; el sistema bloquea o pausa lo riesgoso; vos aprobás cuando hace falta."
+    "backDashboard": "Volver al Inicio"
   },
   "home": {
     "eyebrow": "Capa de confianza para agentes de IA",

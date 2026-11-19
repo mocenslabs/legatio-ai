@@ -384,81 +384,93 @@
     "descriptionHint": "Optional. What this agent is for."
   },
   "help": {
-    "title": "Help",
-    "subtitle": "How Legatio keeps you in control",
-    "howTitle": "Recommended path",
-    "faqTitle": "FAQ",
+    "title": "How it works",
+    "subtitle": "Short guide in everyday words. You do not need to be technical.",
+    "intro": "Legatio helps you stay in control when an assistant negotiates for you. You set the limits. The system blocks risky moves or asks you first.",
+    "promiseTitle": "What this app is (and is not)",
+    "promiseBody": "Legatio is not the assistant that books trips or renews subscriptions by itself. It is the control layer: you write simple rules, the other side makes offers, and each offer is checked. Result: allow, block, or ask you. Important steps can be recorded so you can review them later.",
+    "howTitle": "The simple path (4 steps)",
     "steps": [
       {
         "title": "Create your agent",
-        "body": "From Dashboard or Agents — this is who negotiates for you."
+        "body": "Think of it as “who negotiates for me”. Give it a clear name. Use your own agent, not only the demo ones."
       },
       {
-        "title": "Define rules",
-        "body": "New constitution → templates → save and activate."
+        "title": "Set your rules",
+        "body": "Examples: “if the price is over 200, ask me first”, “if they ask for my phone number, block”. Use the templates — they match what the system really checks."
       },
       {
-        "title": "Negotiate",
-        "body": "Start a room, process rounds, watch proposals and outcomes."
+        "title": "Start a test negotiation",
+        "body": "Pick your agent, a counterpart (often simulated in the demo), and your rules. Then start and process rounds one by one."
       },
       {
-        "title": "Decide when asked",
-        "body": "Approvals badge in the menu means Legatio needs you."
+        "title": "When it needs your OK",
+        "body": "If a rule says “ask the human”, the talk pauses under Needs your OK. Nothing sensitive continues until you approve or reject."
       }
     ],
+    "rulesTitle": "Rules, without jargon",
+    "rulesIntro": "Each rule is: IF something is true in an offer → THEN block it, or ask for your OK. If nothing matches, it can be allowed.",
+    "rulesHowTo": "How to create them",
+    "rulesHowToBody": "Home checklist → create agent → add rules → use a template → change the number if you want → save and turn on → start a negotiation → process rounds → open Needs your OK if asked.",
+    "rulesExampleTitle": "Example that asks for your OK",
+    "rulesExampleBody": "Template “Ask me if price > X” with value 200. If a demo offer is 600–800, the system should pause and wait for you.",
+    "rulesActions": "Use “ask me first” for grey zones. Use “block” for hard limits (private data, amounts you never accept).",
+    "rulesTip": "If you care about control, do not leave an agent with zero rules — empty rules mean almost everything is allowed.",
+    "faqTitle": "Common questions",
     "faqs": [
       {
-        "q": "Why was everything ALLOWED?",
-        "a": "Usually the constitution had no matching rules (or no rules at all). Add an approval threshold and activate."
+        "q": "What should I do right after signing up?",
+        "a": "Follow the checklist on Home: create your agent, add at least one rule, start a negotiation, and process a few rounds."
       },
       {
-        "q": "Do I need JSON or code?",
-        "a": "No. Use the constitution form templates and only edit the number."
+        "q": "Why do I see agents I did not create?",
+        "a": "Those are usually demo / simulated counterparts. Your rules attach to your own agent. When creating rules or negotiations, choose the agent you created."
       },
       {
-        "q": "What if I never open Approvals?",
-        "a": "Actions that require your OK stay blocked. That is intentional."
+        "q": "Can I block more than one private data type?",
+        "a": "Yes. Each privacy rule blocks one data type (for example phone or passport). Add another privacy rule for each extra type."
       },
       {
-        "q": "Is the counterparty real?",
-        "a": "In this MVP counterparties are simulated so you can test the full control loop safely."
+        "q": "What if one rule would ask me and another would block?",
+        "a": "Block wins. That keeps risky actions from continuing just because another rule only wanted a confirmation."
+      },
+      {
+        "q": "What happens in Needs your OK?",
+        "a": "You see why it paused and details like amount or risk when available. Approve only if you accept the offer. Reject keeps it blocked."
+      },
+      {
+        "q": "Is the other party a real company?",
+        "a": "In this version counterparts are usually simulated so you can test the full loop safely without real money or real contracts."
+      },
+      {
+        "q": "Do I need to understand technical field names?",
+        "a": "No for normal use — prefer templates and suggestion chips. Advanced fields are optional for people who already know them."
       }
     ],
-    "rulesTitle": "Rules in plain language",
-    "rulesIntro": "Rules look at proposal fields (like amount). Matching DENY blocks. Matching REQUIRE_APPROVAL waits for you. Otherwise ALLOW.",
-    "rulesHowTo": "How to set them",
-    "rulesHowToBody": "Dashboard checklist → create agent → new constitution → use templates → save and activate → negotiate → process rounds → open Approvals if asked.",
-    "rulesExampleTitle": "Example that triggers human OK",
-    "rulesExampleBody": "Template “Ask my OK if amount > X” with value 200. Simulated offers of 600–800 will pause for you.",
-    "rulesActions": "Prefer human OK for grey zones; hard DENY for absolute limits (privacy, extreme amounts).",
-    "rulesTip": "Never leave a constitution with zero rules if you care about control — empty means almost everything is allowed.",
-    "backDashboard": "Back to dashboard",
-    "promiseTitle": "What Legatio is",
-    "promiseBody": "Legatio is not the agent that books hotels or renews subscriptions by itself. It is the trust layer: you define rules, agents propose, policy decides allow / deny / ask you, and everything is audited.",
-    "glossaryTitle": "Glossary",
+    "glossaryTitle": "Words you will see",
     "glossary": [
       {
         "term": "Agent",
-        "meaning": "A party in a negotiation. Yours is “your agent”; counterparties may be simulated in the MVP."
+        "meaning": "Who takes part in the talk. Yours negotiates for you; the other side may be a demo company."
       },
       {
-        "term": "Constitution",
-        "meaning": "The rule pack attached to your agent. Must be Active to negotiate."
+        "term": "Rules (sometimes called constitution)",
+        "meaning": "The limits attached to your agent. They must be active before a negotiation uses them."
       },
       {
-        "term": "Proposal",
-        "meaning": "An offer in a round (amount, type, etc.) evaluated by policy."
+        "term": "Proposal / round",
+        "meaning": "One offer in the back-and-forth (price, data requested, etc.), checked against your rules."
       },
       {
-        "term": "Approval",
-        "meaning": "A pause for your explicit yes/no when a rule requires it."
+        "term": "Needs your OK",
+        "meaning": "A pause for your explicit yes or no when a rule requires it."
       },
       {
-        "term": "Agreement / Audit",
-        "meaning": "Signed outcome and immutable history of what happened."
+        "term": "Signed deal / activity log",
+        "meaning": "Final accepted outcome and a history of important actions you can review later."
       }
     ],
-    "intro": "Legatio keeps you in control when an AI agent negotiates. You define rules; the system blocks or pauses unsafe actions; you approve when needed."
+    "backDashboard": "Back to Home"
   },
   "home": {
     "eyebrow": "Trust layer for AI agents",

@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 
 
 import * as agreementsApi from '@/api/agreements'
+import EmptyState from '@/components/common/EmptyState.vue'
 import type { Agreement } from '@/types/domain'
 import { extractApiMessage } from '@/utils/errors'
 import { formatDate, statusBadgeClass } from '@/utils/format'
@@ -70,13 +71,21 @@ onMounted(() => {
       v-else
       class="card-panel"
     >
-      <div
+      <EmptyState
         v-if="items.length === 0"
-        class="empty-state"
+        :title="t('agreements.emptyTitle')"
+        :body="t('agreements.emptyBody')"
       >
-        <strong>{{ t('agreements.emptyTitle') }}</strong>
-        {{ t('agreements.emptyBody') }}
-      </div>
+        <template #actions>
+          <button
+            type="button"
+            class="btn btn--secondary"
+            @click="router.push({ name: 'negotiations' })"
+          >
+            {{ t('nav.negotiations') }}
+          </button>
+        </template>
+      </EmptyState>
       <div
         v-else
         class="data-table-wrap"

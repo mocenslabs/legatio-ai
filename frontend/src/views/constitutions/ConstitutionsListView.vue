@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import * as constitutionsApi from '@/api/constitutions'
+import EmptyState from '@/components/common/EmptyState.vue'
 import type { Constitution } from '@/types/domain'
 import { extractApiMessage } from '@/utils/errors'
 import { formatDate, statusBadgeClass, statusLabelKey } from '@/utils/format'
@@ -86,13 +87,12 @@ onMounted(() => {
       v-else
       class="card-panel"
     >
-      <div
+      <EmptyState
         v-if="items.length === 0"
-        class="empty-state"
+        :title="t('constitutions.emptyTitle')"
+        :body="t('constitutions.emptyBody')"
       >
-        <strong>{{ t('constitutions.emptyTitle') }}</strong>
-        <p>{{ t('constitutions.emptyBody') }}</p>
-        <div class="empty-state__actions">
+        <template #actions>
           <button
             type="button"
             class="btn btn--primary"
@@ -107,8 +107,8 @@ onMounted(() => {
           >
             {{ t('nav.agents') }}
           </button>
-        </div>
-      </div>
+        </template>
+      </EmptyState>
       <div
         v-else
         class="data-table-wrap"

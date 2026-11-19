@@ -77,14 +77,18 @@ async function onSubmit(): Promise<void> {
           <label
             class="form-label"
             for="a-name"
-          >{{ t('agents.colName') }}</label>
+          >{{ t('agents.nameLabel') }}</label>
           <input
             id="a-name"
             v-model="form.name"
             class="form-input"
             required
             maxlength="100"
+            :placeholder="t('agents.nameHint')"
           >
+          <p class="form-hint">
+            {{ t('agents.nameHint') }}
+          </p>
         </div>
         <div class="form-field">
           <label
@@ -95,9 +99,13 @@ async function onSubmit(): Promise<void> {
             id="a-desc"
             v-model="form.description"
             class="form-textarea"
+            :placeholder="t('agents.descriptionHint')"
           />
+          <p class="form-hint">
+            {{ t('agents.descriptionHint') }}
+          </p>
         </div>
-        <p class="page-header__subtitle">
+        <p class="form-hint">
           {{ t('agents.createHint') }}
         </p>
         <button

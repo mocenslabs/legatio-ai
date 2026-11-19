@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 import * as approvalsApi from '@/api/approvals'
+import EmptyState from '@/components/common/EmptyState.vue'
 import type { ApprovalRequest } from '@/types/domain'
 import { extractApiMessage } from '@/utils/errors'
 import { formatDate, statusBadgeClass, statusLabelKey } from '@/utils/format'
@@ -106,18 +107,28 @@ onMounted(() => {
       v-else-if="items.length === 0"
       class="card-panel"
     >
-      <div class="card-panel__body empty-state">
-        <strong>{{ t('approvals.emptyTitle') }}</strong>
-        <p class="page-header__subtitle">
-          {{ t('approvals.emptyBody') }}
-        </p>
-        <button
-          type="button"
-          class="btn btn--secondary btn--sm"
-          @click="router.push({ name: 'negotiations' })"
+      <div class="card-panel__body">
+        <EmptyState
+          :title="t('approvals.emptyTitle')"
+          :body="t('approvals.emptyBody')"
         >
-          {{ t('approvals.emptyCta') }}
-        </button>
+          <template #actions>
+            <button
+              type="button"
+              class="btn btn--secondary btn--sm"
+              @click="router.push({ name: 'negotiations' })"
+            >
+              {{ t('approvals.emptyCta') }}
+            </button>
+            <button
+              type="button"
+              class="btn btn--secondary btn--sm"
+              @click="router.push({ name: 'help' })"
+            >
+              {{ t('nav.help') }}
+            </button>
+          </template>
+        </EmptyState>
       </div>
     </div>
 

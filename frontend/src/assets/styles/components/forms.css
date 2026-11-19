@@ -75,3 +75,10 @@
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
+
+.form-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}

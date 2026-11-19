@@ -147,11 +147,6 @@ You don't need to be a senior developer to contribute. You don't need to work fu
 - **GitHub Discussions** — Questions, ideas, community conversation
 - **Pull Requests** — Code contributions
 
-### Secondary channel (announcements):
-
-- **Telegram channel** — Project updates, milestone announcements
-  - Join: [[LINK]](https://t.me/+rAUUypI4EcgyZmUx)
-  - Note: This is a low-traffic announcement channel, not a support chat.
 
 ### Not available:
 

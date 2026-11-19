@@ -25,6 +25,16 @@ interface RuleFormRow {
 }
 
 const agents = ref<Agent[]>([])
+/** Only agents the user owns — external/seed agents are not selectable here. */
+const myAgents = computed(() =>
+  agents.value.filter((a) =>
+    String(a.agent_type || '').toUpperCase().includes('USER'),
+  ),
+)
+
+const privacyRulesCount = computed(
+  () => rules.value.filter((r) => r.template === 'deny_privacy' || r.field === 'data_fields_requested').length,
+)
 const loading = ref(false)
 const error = ref<string | null>(null)
 const successHint = ref<string | null>(null)
@@ -36,6 +46,27 @@ const form = reactive({
 })
 
 const rules = ref<RuleFormRow[]>([])
+
+/** Canonical tokens for data_fields_requested CONTAINS (exact match vs list items). */
+const PRIVACY_FIELD_SUGGESTIONS = [
+  'phone_number',
+  'email',
+  'passport',
+  'national_id',
+  'credit_card',
+] as const
+
+function applyPrivacySuggestion(row: RuleFormRow, token: string): void {
+  row.template = 'deny_privacy'
+  row.field = 'data_fields_requested'
+  row.operator = 'CONTAINS'
+  row.action = 'DENY'
+  row.category = 'PRIVACY'
+  row.value = token
+  if (!row.name.trim() || row.name === t('constitutions.tplDenyPrivacyName')) {
+    row.name = t('constitutions.tplDenyPrivacyName')
+  }
+}
 
 function applyTemplate(row: RuleFormRow): void {
   if (row.template === 'approval_amount') {
@@ -82,6 +113,13 @@ function addRule(template: RuleFormRow['template'] = 'approval_amount'): void {
   rules.value.push(row)
 }
 
+function rowTemplateHint(row: RuleFormRow): string {
+  if (row.template === 'approval_amount') return t('constitutions.hintApproval')
+  if (row.template === 'deny_amount') return t('constitutions.hintDenyAmount')
+  if (row.template === 'deny_privacy') return t('constitutions.hintDenyPrivacy')
+  return t('constitutions.hintCustom')
+}
+
 function removeRule(key: string): void {
   if (rules.value.length <= 1) return
   rules.value = rules.value.filter((r) => r.key !== key)
@@ -126,7 +164,10 @@ function toPayload(): RuleInputPayload[] {
 async function loadAgents(): Promise<void> {
   try {
     agents.value = await agentsApi.listAgents()
-    if (agents.value.length) form.agent_id = agents.value[0].id
+    const mine = agents.value.filter((a) =>
+      String(a.agent_type || '').toUpperCase().includes('USER'),
+    )
+    if (mine.length) form.agent_id = mine[0].id
   } catch (err) {
     error.value = extractApiMessage(err, t('errors.unknown'))
   }
@@ -260,13 +301,25 @@ onMounted(() => {
                 {{ t('constitutions.selectAgent') }}
               </option>
               <option
-                v-for="a in agents"
+                v-for="a in myAgents"
                 :key="a.id"
                 :value="a.id"
               >
                 {{ a.name }}
               </option>
             </select>
+            <p
+              v-if="!myAgents.length"
+              class="form-hint"
+            >
+              {{ t('constitutions.noUserAgents') }}
+            </p>
+            <p
+              v-else
+              class="form-hint"
+            >
+              {{ t('constitutions.agentHint') }}
+            </p>
           </div>
         </div>
       </div>
@@ -277,7 +330,21 @@ onMounted(() => {
           <span class="badge badge--brand">{{ rules.length }}</span>
         </div>
         <div class="card-panel__body stack">
-          <p class="page-header__subtitle">
+          <div class="rules-explainer">
+            <p class="rules-explainer__title">
+              {{ t('constitutions.rulesExplainerTitle') }}
+            </p>
+            <ol class="rules-explainer__list">
+              <li>{{ t('constitutions.rulesExplainer1') }}</li>
+              <li>{{ t('constitutions.rulesExplainer2') }}</li>
+              <li>{{ t('constitutions.rulesExplainer3') }}</li>
+            </ol>
+            <p class="rules-explainer__priority">
+              {{ t('constitutions.rulesPriorityNote') }}
+            </p>
+          </div>
+
+          <p class="form-hint">
             {{ t('constitutions.rulesBuilderHint') }}
           </p>
 
@@ -285,6 +352,7 @@ onMounted(() => {
             class="rule-preview"
             role="status"
           >
+            <strong>{{ t('constitutions.previewLabel') }}</strong>
             {{ livePreview }}
           </div>
 
@@ -313,7 +381,21 @@ onMounted(() => {
             >
               + {{ t('constitutions.tplDenyPrivacy') }}
             </button>
+            <button
+              type="button"
+              class="btn btn--secondary btn--sm"
+              @click="addRule('deny_privacy')"
+            >
+              + {{ t('constitutions.addAnotherPrivacy') }}
+            </button>
           </div>
+
+          <p class="form-hint">
+            {{ t('constitutions.privacyMultiHint') }}
+            <template v-if="privacyRulesCount > 0">
+              {{ t('constitutions.privacyMultiCount', { n: privacyRulesCount }) }}
+            </template>
+          </p>
 
           <div
             v-for="(row, idx) in rules"
@@ -345,17 +427,54 @@ onMounted(() => {
                   </select>
                 </div>
                 <div class="form-field">
-                  <label class="form-label">{{ t('constitutions.ruleValue') }}</label>
+                  <label class="form-label">{{
+                    row.template === 'deny_privacy'
+                      ? t('constitutions.ruleValuePrivacy')
+                      : t('constitutions.ruleValue')
+                  }}</label>
                   <input
                     v-model="row.value"
                     class="form-input"
                     required
+                    :placeholder="
+                      row.template === 'deny_privacy'
+                        ? t('constitutions.privacyValuePlaceholder')
+                        : ''
+                    "
                   >
+                  <div
+                    v-if="row.template === 'deny_privacy'"
+                    class="chip-row"
+                  >
+                    <button
+                      v-for="token in PRIVACY_FIELD_SUGGESTIONS"
+                      :key="token"
+                      type="button"
+                      class="chip"
+                      :class="{ 'chip--active': row.value === token }"
+                      @click="applyPrivacySuggestion(row, token)"
+                    >
+                      {{ t(`constitutions.privacyChip.${token}`) }}
+                    </button>
+                  </div>
+                  <p
+                    v-if="row.template === 'deny_privacy'"
+                    class="form-hint"
+                  >
+                    {{ t('constitutions.privacyValueHint') }}
+                  </p>
                 </div>
               </div>
 
+              <p class="form-hint">
+                {{ rowTemplateHint(row) }}
+              </p>
+
               <details v-if="row.template === 'custom'">
                 <summary>{{ t('constitutions.advanced') }}</summary>
+                <p class="form-hint">
+                  {{ t('constitutions.advancedHint') }}
+                </p>
                 <div
                   class="stack"
                   style="margin-top: 0.75rem"
@@ -400,13 +519,13 @@ onMounted(() => {
                       class="form-select"
                     >
                       <option value="REQUIRE_APPROVAL">
-                        REQUIRE_APPROVAL
+                        {{ t('constitutions.actionAsk') }}
                       </option>
                       <option value="DENY">
-                        DENY
+                        {{ t('constitutions.actionDeny') }}
                       </option>
                       <option value="ALLOW">
-                        ALLOW
+                        {{ t('constitutions.actionAllow') }}
                       </option>
                     </select>
                   </div>
@@ -435,7 +554,7 @@ onMounted(() => {
       <button
         class="btn btn--primary"
         type="submit"
-        :disabled="loading"
+        :disabled="loading || !myAgents.length"
       >
         {{ loading ? t('common.saving') : t('constitutions.saveAndActivate') }}
       </button>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-
+import { useRouter } from 'vue-router'
 
 import * as agreementsApi from '@/api/agreements'
 import EmptyState from '@/components/common/EmptyState.vue'
@@ -10,6 +10,7 @@ import { extractApiMessage } from '@/utils/errors'
 import { formatDate, statusBadgeClass } from '@/utils/format'
 
 const { t } = useI18n()
+const router = useRouter()
 
 const items = ref<Agreement[]>([])
 const loading = ref(true)

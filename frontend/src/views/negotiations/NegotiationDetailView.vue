@@ -15,6 +15,8 @@ const router = useRouter()
 const room = ref<NegotiationRoom | null>(null)
 const proposals = ref<Proposal[]>([])
 const lastOutcome = ref<string | null>(null)
+const lastPolicyReason = ref<string | null>(null)
+const lastPolicyOutcome = ref<string | null>(null)
 const loading = ref(true)
 const acting = ref(false)
 const error = ref<string | null>(null)
@@ -34,7 +36,7 @@ const nextHint = computed(() => {
   if (canStart.value) return t('negotiations.nextStart')
   if (isAwaiting.value) return t('negotiations.nextApproval')
   if (canProcess.value) return t('negotiations.nextRound')
-  if (['COMPLETED', 'SIGNED', 'EXECUTED'].includes(String(room.value.status))) {
+  if (['COMPLETED', 'SIGNED', 'EXECUTED', 'FAILED', 'REJECTED', 'CANCELLED'].includes(String(room.value.status))) {
     return t('negotiations.nextDone')
   }
   return t('negotiations.nextIdle')
@@ -51,6 +53,22 @@ function labelStatus(status?: string): string {
   const key = statusLabelKey(status)
   if (key === 'status.raw') return status || '—'
   return t(key)
+}
+
+function humanOutcome(raw?: string | null): string {
+  if (!raw) return '—'
+  const u = String(raw).toUpperCase()
+  if (u.includes('REQUIRE') || u.includes('APPROVAL')) return t('negotiations.outcomeAsk')
+  if (u.includes('DENY') || u.includes('REJECT')) return t('negotiations.outcomeDeny')
+  if (u.includes('ALLOW') || u.includes('ACCEPT')) return t('negotiations.outcomeAllow')
+  if (u.includes('ERROR')) return t('negotiations.outcomeError')
+  return raw
+}
+
+function formatDataFields(p: Proposal): string {
+  const fields = p.data_fields_requested
+  if (!fields || !fields.length) return t('negotiations.noPrivateData')
+  return fields.join(', ')
 }
 
 async function load(): Promise<void> {
@@ -79,6 +97,7 @@ async function onStart(): Promise<void> {
   try {
     room.value = await negotiationsApi.startNegotiation(room.value.id)
     success.value = t('negotiations.started')
+    await load()
   } catch (err) {
     error.value = extractApiMessage(err, t('errors.unknown'))
   } finally {
@@ -92,15 +111,19 @@ async function onProcessRound(): Promise<void> {
   error.value = null
   success.value = null
   try {
-    const result = await negotiationsApi.processRound(room.value.id)
-    room.value = result.room
-    lastOutcome.value = result.round_result?.outcome ?? null
-    const human = labelStatus(lastOutcome.value || undefined)
-    success.value = t('negotiations.roundProcessedHuman', { outcome: human })
+    const res = await negotiationsApi.processRound(room.value.id)
+    room.value = res.room
+    const outcome = res.round_result?.outcome || res.round_result?.policy_decision?.outcome
+    lastOutcome.value = outcome || null
+    lastPolicyOutcome.value = res.round_result?.policy_decision?.outcome || outcome || null
+    lastPolicyReason.value = res.round_result?.policy_decision?.reason || null
+    success.value = t('negotiations.roundProcessedHuman', {
+      outcome: humanOutcome(outcome),
+    })
     try {
       proposals.value = await negotiationsApi.listProposals(room.value.id)
     } catch {
-      /* ignore */
+      /* keep previous */
     }
   } catch (err) {
     error.value = extractApiMessage(err, t('errors.unknown'))
@@ -122,7 +145,7 @@ onMounted(() => {
           {{ room?.title || t('negotiations.detailTitle') }}
         </h1>
         <p class="page-header__subtitle">
-          {{ room?.reference_code || '' }}
+          {{ t('negotiations.detailSubtitle') }}
         </p>
       </div>
       <div class="page-header__actions">
@@ -176,6 +199,7 @@ onMounted(() => {
     >
       {{ success }}
     </div>
+
     <div
       v-if="loading"
       class="loading-block"
@@ -187,25 +211,44 @@ onMounted(() => {
       v-else-if="room"
       class="stack"
     >
-      <div class="next-step-card">
-        <div class="next-step-card__label">
-          {{ t('negotiations.nextLabel') }}
+      <div class="card-panel">
+        <div class="card-panel__body stack">
+          <div class="rules-explainer">
+            <p class="rules-explainer__title">
+              {{ t('negotiations.nextLabel') }}
+            </p>
+            <p
+              class="form-hint"
+              style="margin: 0"
+            >
+              {{ nextHint }}
+            </p>
+            <p
+              v-if="lastProposal"
+              class="form-hint"
+            >
+              {{
+                t('negotiations.lastProposal', {
+                  amount: lastProposal.amount ?? '—',
+                  currency: lastProposal.currency || '',
+                  status: labelStatus(lastProposal.status),
+                })
+              }}
+            </p>
+            <p
+              v-if="lastPolicyOutcome"
+              class="rules-explainer__priority"
+            >
+              {{ t('negotiations.lastPolicy', { outcome: humanOutcome(lastPolicyOutcome) }) }}
+            </p>
+            <p
+              v-if="lastPolicyReason"
+              class="form-hint"
+            >
+              {{ lastPolicyReason }}
+            </p>
+          </div>
         </div>
-        <p class="attention-banner__title">
-          {{ nextHint }}
-        </p>
-        <p
-          v-if="lastProposal"
-          class="attention-banner__body"
-        >
-          {{
-            t('negotiations.lastProposal', {
-              amount: lastProposal.amount ?? '—',
-              currency: lastProposal.currency || '',
-              status: labelStatus(lastProposal.status),
-            })
-          }}
-        </p>
       </div>
 
       <div class="card-panel">
@@ -254,11 +297,15 @@ onMounted(() => {
           <span class="badge badge--brand">{{ proposals.length }}</span>
         </div>
         <div class="card-panel__body">
+          <p class="form-hint">
+            {{ t('negotiations.proposalsHint') }}
+          </p>
           <div
             v-if="proposals.length === 0"
             class="empty-state"
           >
-            {{ t('negotiations.noProposals') }}
+            <strong>{{ t('negotiations.noProposals') }}</strong>
+            <p>{{ t('negotiations.noProposalsBody') }}</p>
           </div>
           <div
             v-else
@@ -269,6 +316,7 @@ onMounted(() => {
                 <tr>
                   <th>{{ t('negotiations.colRound') }}</th>
                   <th>{{ t('negotiations.colAmount') }}</th>
+                  <th>{{ t('negotiations.colData') }}</th>
                   <th>{{ t('negotiations.colStatus') }}</th>
                   <th>{{ t('negotiations.colType') }}</th>
                 </tr>
@@ -287,6 +335,7 @@ onMounted(() => {
                       —
                     </template>
                   </td>
+                  <td>{{ formatDataFields(p) }}</td>
                   <td>
                     <span :class="statusBadgeClass(p.status)">{{ labelStatus(p.status) }}</span>
                   </td>

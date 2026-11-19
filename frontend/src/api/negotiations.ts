@@ -42,8 +42,12 @@ export interface ProcessRoundResult {
       outcome: string
       risk_level?: string
       reason?: string
+      matched_rules?: unknown[]
     }
-    counter_offer?: unknown
+    counter_offer?: {
+      adjustments?: unknown
+      reasoning?: string
+    } | null
   }
 }
 

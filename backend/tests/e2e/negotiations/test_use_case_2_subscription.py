@@ -129,11 +129,12 @@ class TestUseCase2SubscriptionNegotiation:
         self, user, user_agent, isp_agent, subscription_constitution
     ) -> None:
         """
-        Complete flow via API:
+        Complete flow via API against expanded ISP playbook:
         1. Create negotiation room
         2. Start negotiation
-        3. Process round 1: €60, 24 months, auto-renewal → DENY (contract > 12)
-        4. Process round 2: €70, 12 months, no auto-renewal → REQUIRE_APPROVAL
+        3. Round 1: €129, 24 months, auto-renewal → DENY (contract > 12)
+        4. Round 2: €99, 24 months, phone → DENY (contract > 12)
+        5. Round 3: €99, 12 months, auto-renewal → REQUIRE_HUMAN_APPROVAL
         """
         token = generate_access_token(user)
         client = APIClient()
@@ -148,6 +149,7 @@ class TestUseCase2SubscriptionNegotiation:
                 "constitution_id": str(subscription_constitution.id),
                 "title": "ISP Subscription",
                 "user_instruction": "Negotiate my internet bill. Max €100/month, no auto-renewal.",
+                "max_rounds": 10,
             },
             format="json",
         )
@@ -159,24 +161,33 @@ class TestUseCase2SubscriptionNegotiation:
         assert response.status_code == status.HTTP_200_OK
         assert response.data["status"] == NegotiationStatus.IN_PROGRESS
 
-        # 3. Process round 1: €60, 24 months, auto-renewal → DENY
+        # 3. Round 1 → DENY
         response = client.post(f"/api/v1/negotiations/{room_id}/process_round/")
         assert response.status_code == status.HTTP_200_OK
         round1 = response.data["round_result"]
-        assert round1["proposal"]["amount"] == "60.00"
+        assert round1["proposal"]["amount"] == "129.00"
         assert round1["proposal"]["contract_length_months"] == 24
         assert round1["proposal"]["auto_renewal"] is True
         assert round1["outcome"] == "DENY"
         assert round1["policy_decision"]["outcome"] == PolicyDecisionOutcome.DENY
 
-        # 4. Process round 2: €70, 12 months, no auto-renewal → REQUIRE_APPROVAL
+        # 4. Round 2 → DENY (still long contract)
         response = client.post(f"/api/v1/negotiations/{room_id}/process_round/")
         assert response.status_code == status.HTTP_200_OK
         round2 = response.data["round_result"]
-        assert round2["proposal"]["amount"] == "70.00"
-        assert round2["proposal"]["contract_length_months"] == 12
-        assert round2["proposal"]["auto_renewal"] is False
-        assert round2["outcome"] == "REQUIRE_HUMAN_APPROVAL"
+        assert round2["proposal"]["amount"] == "99.00"
+        assert round2["proposal"]["contract_length_months"] == 24
+        assert "phone_number" in (round2["proposal"].get("data_fields_requested") or [])
+        assert round2["outcome"] == "DENY"
+
+        # 5. Round 3 → REQUIRE_HUMAN_APPROVAL
+        response = client.post(f"/api/v1/negotiations/{room_id}/process_round/")
+        assert response.status_code == status.HTTP_200_OK
+        round3 = response.data["round_result"]
+        assert round3["proposal"]["amount"] == "99.00"
+        assert round3["proposal"]["contract_length_months"] == 12
+        assert round3["proposal"]["auto_renewal"] is True
+        assert round3["outcome"] == "REQUIRE_HUMAN_APPROVAL"
 
         # Verify final state
         response = client.get(f"/api/v1/negotiations/{room_id}/")

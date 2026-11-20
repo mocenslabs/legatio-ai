@@ -1,15 +1,14 @@
 """
 End-to-end test for Use Case 2: Subscription Negotiation (MVP).
 
-Aligned with SimulatedISPAgent (exactly 2 rounds) and working
+Aligned with SimulatedISPAgent multi-round playbook and
 tests/e2e/negotiations/test_use_case_2_subscription.py.
 
-Flow:
-  Round 1: €60, 24 months, auto-renewal → DENY (contract > 12)
-  Round 2: €70, 12 months, no auto-renewal → REQUIRE_HUMAN_APPROVAL → APPROVED
+Flow (with subscription constitution rules):
+  Round 1: €129, 24 months, auto-renewal → DENY (contract > 12)
+  Round 2: €99, 24 months, phone asked → DENY (contract > 12)
+  Round 3: €99, 12 months, auto-renewal → REQUIRE_HUMAN_APPROVAL → APPROVED
   Agreement created + signed
-
-DO NOT call process_round a third time — ISP agent only has 2 scripted rounds.
 
 Source: 04-BUSINESS-FLOW.md §5 · 05-ROADMAP.md §10.3 · DEL-036
 """
@@ -132,25 +131,34 @@ class TestUseCase2SubscriptionNegotiationE2E:
         assert response.status_code == status.HTTP_200_OK, response.data
         assert response.data["status"] == NegotiationStatus.IN_PROGRESS
 
-        # Round 1: €60, 24 months, auto-renewal → DENY
+        # Round 1: €129, 24 months, auto-renewal → DENY (contract > 12)
         response = client.post(f"/api/v1/negotiations/{room_id}/process_round/")
         assert response.status_code == status.HTTP_200_OK, response.data
         round1 = response.data["round_result"]
-        assert round1["proposal"]["amount"] == "60.00"
+        assert round1["proposal"]["amount"] == "129.00"
         assert round1["proposal"]["contract_length_months"] == 24
         assert round1["proposal"]["auto_renewal"] is True
         assert round1["outcome"] == PolicyDecisionOutcome.DENY
 
-        # Round 2: €70, 12 months, no auto-renewal → REQUIRE_HUMAN_APPROVAL
+        # Round 2: €99, 24 months, phone → DENY (contract still > 12)
         response = client.post(f"/api/v1/negotiations/{room_id}/process_round/")
         assert response.status_code == status.HTTP_200_OK, response.data
         round2 = response.data["round_result"]
-        assert round2["proposal"]["amount"] == "70.00"
-        assert round2["proposal"]["contract_length_months"] == 12
-        assert round2["proposal"]["auto_renewal"] is False
-        assert round2["outcome"] == PolicyDecisionOutcome.REQUIRE_HUMAN_APPROVAL
+        assert round2["proposal"]["amount"] == "99.00"
+        assert round2["proposal"]["contract_length_months"] == 24
+        assert "phone_number" in (round2["proposal"].get("data_fields_requested") or [])
+        assert round2["outcome"] == PolicyDecisionOutcome.DENY
 
-        # Approve — then STOP (no third process_round)
+        # Round 3: €99, 12 months, auto-renewal, no phone → REQUIRE_HUMAN_APPROVAL
+        response = client.post(f"/api/v1/negotiations/{room_id}/process_round/")
+        assert response.status_code == status.HTTP_200_OK, response.data
+        round3 = response.data["round_result"]
+        assert round3["proposal"]["amount"] == "99.00"
+        assert round3["proposal"]["contract_length_months"] == 12
+        assert round3["proposal"]["auto_renewal"] is True
+        assert round3["outcome"] == PolicyDecisionOutcome.REQUIRE_HUMAN_APPROVAL
+
+        # Approve — then STOP
         response = client.get("/api/v1/approvals/pending/")
         assert response.status_code == status.HTTP_200_OK, response.data
         pending = _extract_results(response)
@@ -166,7 +174,7 @@ class TestUseCase2SubscriptionNegotiationE2E:
         assert response.data["decision"] == ApprovalStatus.APPROVED
 
         final_proposal = (
-            Proposal.objects.filter(room_id=room_id, amount="70.00")
+            Proposal.objects.filter(room_id=room_id, amount="99.00")
             .order_by("-round_number")
             .first()
         )

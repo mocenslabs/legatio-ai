@@ -54,8 +54,7 @@ class SimulatedISPAgent(SimulatedAgent):
                 "category": "subscription",
             },
             "summary": (
-                "Opening offer: €129/month for 24 months with auto-renewal "
-                "(600 Mbps fibre)."
+                "Opening offer: €129/month for 24 months with auto-renewal " "(600 Mbps fibre)."
             ),
         },
         # Round 2: slight concession but requests phone (privacy trigger)
@@ -89,9 +88,7 @@ class SimulatedISPAgent(SimulatedAgent):
                 "speed": "600Mbps",
                 "category": "subscription",
             },
-            "summary": (
-                "No phone needed. €99/month for 12 months, auto-renewal still on."
-            ),
+            "summary": ("No phone needed. €99/month for 12 months, auto-renewal still on."),
         },
         # Round 4: better price, auto-renewal remains (human grey zone)
         {

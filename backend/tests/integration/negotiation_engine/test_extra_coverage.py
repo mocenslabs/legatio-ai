@@ -283,19 +283,20 @@ class TestSimulatedAgentBaseCoverage:
         """Cover ISP agent respond for round 1."""
         agent = SimulatedISPAgent()
         response = agent.respond(1, "Negotiate ISP", [])
-        assert response.action.amount == Decimal("60.00")
+        assert response.action.amount == Decimal("129.00")
 
     def test_isp_agent_respond_round_2(self) -> None:
-        """Cover ISP agent respond for round 2."""
+        """Cover ISP agent respond for round 2 (privacy phone ask)."""
         agent = SimulatedISPAgent()
         response = agent.respond(2, "Negotiate ISP", [])
-        assert response.action.amount == Decimal("70.00")
+        assert response.action.amount == Decimal("99.00")
+        assert "phone_number" in response.action.data_fields_requested
 
     def test_isp_agent_completed_error(self) -> None:
-        """Line 64: ISP agent raises NegotiationCompletedError when round > 2."""
+        """ISP agent raises NegotiationCompletedError when past playbook."""
         agent = SimulatedISPAgent()
         with pytest.raises(NegotiationCompletedError):
-            agent.respond(3, "Negotiate ISP", [])
+            agent.respond(6, "Negotiate ISP", [])
 
     def test_isp_agent_reset(self) -> None:
         """Line 104: ISP agent reset() resets _round to 0."""

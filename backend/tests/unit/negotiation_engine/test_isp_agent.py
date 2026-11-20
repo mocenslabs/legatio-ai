@@ -1,9 +1,5 @@
 """
-Unit tests for the SimulatedISPAgent.
-
-Verifies the Use Case 2: Subscription Negotiation flow.
-
-Source: 04-BUSINESS-FLOW.md Section 5
+Unit tests for the SimulatedISPAgent multi-round subscription playbook.
 """
 
 from decimal import Decimal
@@ -16,78 +12,101 @@ from services.negotiation_engine.simulated.isp_agent import SimulatedISPAgent
 
 class TestSimulatedISPAgent:
     def test_agent_properties(self) -> None:
-        """Agent has correct name and type."""
         agent = SimulatedISPAgent()
         assert agent.agent_name == "Simulated ISP Agent"
         assert agent.agent_type == "isp"
 
-    def test_round_1_long_contract(self) -> None:
-        """Round 1: €60/month, 24 months, auto-renewal."""
+    def test_playbook_length(self) -> None:
+        assert len(SimulatedISPAgent.RESPONSES) == 5
+
+    def test_round_1_high_price_lock_in(self) -> None:
         agent = SimulatedISPAgent()
-        response = agent.respond(
-            round_number=1,
-            user_instruction="Negotiate internet bill",
-            previous_proposals=[],
-        )
+        response = agent.respond(1, "Negotiate internet bill", [])
         assert response.action.action_type == "subscribe"
-        assert response.action.amount == Decimal("60.00")
+        assert response.action.amount == Decimal("129.00")
         assert response.action.contract_length_months == 24
         assert response.action.auto_renewal is True
+        assert response.action.data_fields_requested == []
 
-    def test_round_2_acceptable_offer(self) -> None:
-        """Round 2: €70/month, 12 months, no auto-renewal."""
+    def test_round_2_requests_phone(self) -> None:
         agent = SimulatedISPAgent()
-        response = agent.respond(
-            round_number=2,
-            user_instruction="Negotiate internet bill",
-            previous_proposals=[],
-        )
-        assert response.action.amount == Decimal("70.00")
+        response = agent.respond(2, "Negotiate internet bill", [])
+        assert response.action.amount == Decimal("99.00")
+        assert "phone_number" in response.action.data_fields_requested
+        assert response.action.auto_renewal is True
+
+    def test_round_3_no_phone_shorter_term(self) -> None:
+        agent = SimulatedISPAgent()
+        response = agent.respond(3, "Negotiate internet bill", [])
+        assert response.action.amount == Decimal("99.00")
+        assert response.action.contract_length_months == 12
+        assert response.action.data_fields_requested == []
+        assert response.action.auto_renewal is True
+
+    def test_round_4_lower_price_still_auto_renew(self) -> None:
+        agent = SimulatedISPAgent()
+        response = agent.respond(4, "Negotiate internet bill", [])
+        assert response.action.amount == Decimal("85.00")
+        assert response.action.auto_renewal is True
+        assert response.action.data_fields_requested == []
+
+    def test_round_5_clean_compromise(self) -> None:
+        agent = SimulatedISPAgent()
+        response = agent.respond(5, "Negotiate internet bill", [])
+        assert response.action.amount == Decimal("72.00")
         assert response.action.contract_length_months == 12
         assert response.action.auto_renewal is False
+        assert response.action.data_fields_requested == []
 
-    def test_round_3_raises_completed_error(self) -> None:
-        """Round 3 raises NegotiationCompletedError."""
+    def test_round_6_raises_completed_error(self) -> None:
         agent = SimulatedISPAgent()
         with pytest.raises(NegotiationCompletedError):
-            agent.respond(3, "test", [])
+            agent.respond(6, "test", [])
+
+    def test_round_zero_raises(self) -> None:
+        agent = SimulatedISPAgent()
+        with pytest.raises(NegotiationCompletedError):
+            agent.respond(0, "test", [])
 
     def test_responses_are_deterministic(self) -> None:
-        """Same input produces same output."""
         agent = SimulatedISPAgent()
-        r1 = agent.respond(1, "test", [])
-        r2 = agent.respond(1, "test", [])
+        r1 = agent.respond(2, "test", [])
+        r2 = agent.respond(2, "test", [])
         assert r1.action.amount == r2.action.amount
-        assert r1.action.contract_length_months == r2.action.contract_length_months
+        assert r1.action.data_fields_requested == r2.action.data_fields_requested
 
     def test_reset_clears_state(self) -> None:
-        """reset() allows reusing the agent."""
         agent = SimulatedISPAgent()
         agent.respond(1, "test", [])
         agent.reset()
         response = agent.respond(1, "test", [])
-        assert response.action.amount == Decimal("60.00")
+        assert response.action.amount == Decimal("129.00")
 
 
-class TestISPAgentUseCase2Flow:
-    """Integration test for the full Use Case 2 flow."""
+class TestISPAgentDemoCoverageFlow:
+    """Full script order: price pressure → privacy → concessions → clean offer."""
 
-    def test_full_negotiation_flow(self) -> None:
-        """
-        Full flow from 04-BUSINESS-FLOW.md Section 5.2:
-          Round 1: €60, 24 months, auto-renewal → DENY (contract > 12)
-          Round 2: €70, 12 months, no auto-renewal → REQUIRE_APPROVAL
-        """
+    def test_full_five_round_flow(self) -> None:
         agent = SimulatedISPAgent()
+        previous: list = []
 
-        # Round 1
-        r1 = agent.respond(1, "Negotiate internet bill", [])
-        assert r1.action.amount == Decimal("60.00")
-        assert r1.action.contract_length_months == 24
-        assert r1.action.auto_renewal is True
+        r1 = agent.respond(1, "Pay less, no phone, no auto-renew", previous)
+        previous.append(r1.action)
+        assert r1.action.amount == Decimal("129.00")
 
-        # Round 2
-        r2 = agent.respond(2, "Negotiate internet bill", [r1.action])
-        assert r2.action.amount == Decimal("70.00")
-        assert r2.action.contract_length_months == 12
-        assert r2.action.auto_renewal is False
+        r2 = agent.respond(2, "Pay less, no phone, no auto-renew", previous)
+        previous.append(r2.action)
+        assert "phone_number" in r2.action.data_fields_requested
+
+        r3 = agent.respond(3, "Pay less, no phone, no auto-renew", previous)
+        previous.append(r3.action)
+        assert r3.action.data_fields_requested == []
+
+        r4 = agent.respond(4, "Pay less, no phone, no auto-renew", previous)
+        previous.append(r4.action)
+        assert r4.action.amount == Decimal("85.00")
+
+        r5 = agent.respond(5, "Pay less, no phone, no auto-renew", previous)
+        assert r5.action.amount == Decimal("72.00")
+        assert r5.action.auto_renewal is False
+        assert r5.action.data_fields_requested == []
